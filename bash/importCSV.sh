@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "This import assumes the data is in csv format one number per line."
-echo "-------------------------------------------------------------------"
+echo "         -------------------------------------------------------------------"
 
 
 
