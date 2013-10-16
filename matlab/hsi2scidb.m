@@ -15,7 +15,7 @@ if fid ~= -1
     for i = 1:size(hsi_img,1)
         for j = 1:size(hsi_img,2)
             for k = 1:size(hsi_img,3)
-                 fprintf(fid,'%d,%d,%d,%f\r\n',i,j,k,hsi_img(i,j,k));  
+                 fprintf(fid,'%d,%d,%d,%d\r\n',i,j,k,hsi_img(i,j,k));  
             end
         end
     end

@@ -16,3 +16,12 @@ project/plugins/project/
 *~
 *.swp
 *.swo
+
+# data files
+*.csv
+*.scidb
+*.jpg
+
+#propietary uf code
+matlab/PCBootstrapSPICE/
+matlab/fast_spice/
