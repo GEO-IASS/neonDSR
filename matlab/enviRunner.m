@@ -8,7 +8,7 @@ envi = enviread('/home/scidb/neon/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON
 
 % Generate RGB
 hsi_img = envi.z;
-iRGB(hsi_img);
+rgb = iRGB(hsi_img);
 
 % Generate RGB of subimg
 % subimg = hsi_img(1330:1430 , 450:500, :);
@@ -19,12 +19,43 @@ iRGB(subimg);
 % Display hsi_img at differnet bands.
 
 [n_row,n_col,n_band] = size(hsi_img);
-for i=1:n_band
+for i=40:n_band
    figure(10);
-   imagesc(hsi_img(:,:,i));
+   imagesc(hsi_img(:,:,i)); % creates heat map of that frequency
+   % imshow(hsi_img(:,:,i)) % will only create grey image - not good
    title(sprintf('Band %f', envi.info.wavelength(i)));    
    pause(0.05);
+   %pause(1);
 end
+
+%%
+% NDVI
+
+nir = double(hsi_img(:,:,42));
+red = double(hsi_img(:,:,37));
+ndvi_numerator = nir - red;
+max(ndvi_numerator(:))
+min(ndvi_numerator(:))
+ndvi_denominator = nir + red;
+ndvi =  ndvi_numerator ./ ndvi_denominator;
+
+   ndvi2560 = 2560 * ndvi;
+   f = floor(ndvi2560);
+   figure(8);
+   imagesc(f );
+
+   figure(9);
+   imshow( ndvi);
+   colorbar;
+
+   figure(10);
+   imagesc(ndvi_numerator);
+   
+   figure(11);
+   imagesc(ndvi_denominator);
+   
+  % title(sprintf('Band %f', envi.info.wavelength(i)));    
+  % pause(0.05);
 
 %%
 % Generate 1-D csv file
@@ -40,8 +71,8 @@ addpath('/home/scidb/zproject/neonDSR/matlab/uf/fast_spice');
 
 spice_params = SPICEParameters();
 spice_params.produceDisplay = 1;
-spice_params.endmemberPruneThreshold = 1e-3;
-spice_params.iterationCap=50;
+spice_params.endmemberPruneThreshold = 1e-2;
+%spice_params.iterationCap=50;
 spice_params.gamma = 1;
 parameters.M = 20; %Initial number of endmembers
 parameters.u = 0.0001; %Trade-off parameter between RSS and V term
