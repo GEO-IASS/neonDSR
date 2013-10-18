@@ -21,6 +21,7 @@ project/plugins/project/
 *.csv
 *.scidb
 *.jpg
+*.bak
 
 #propietary uf code
 matlab/uf/
