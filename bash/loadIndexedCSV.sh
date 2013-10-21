@@ -2,9 +2,6 @@
 
 #DATA_PATH=/home/scidb/zproject/neonDSR/matlab
 
-echo "Convert .csv to .scidb"
-echo "----------------------------------------------------------------"
-
 if [ -z "$1" ] 
 then
   echo "Error calling script."
@@ -17,9 +14,17 @@ then
   echo "Usage: \$ scirpt scdb_array_name"
 fi
 
-DATA_PATH=$(dirname $1)
-FILE_NAME=$(basename $1)
-echo "$1 to .scidb"
+
+ABSOLUTE_PATH=$(cd $(dirname $1); pwd)/$(basename $1)
+DATA_PATH=$(dirname $ABSOLUTE_PATH)
+BASE_NAME=$(basename $ABSOLUTE_PATH)
+# Use regrex to remove extension from file name 
+# http://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash
+FILE_NAME="${BASE_NAME%%.*}" 
+
+echo "Convert $1 to $FILE_NAME.scidb"
+echo "----------------------------------------------------------------"
+
 time csv2scidb -s 1 -p NNNN < $1 > $DATA_PATH"/"$FILE_NAME".scidb"
 
 
@@ -35,6 +40,7 @@ time iquery -anq "load($2_flat, '$DATA_PATH/$FILE_NAME.scidb');"
 echo "Remove $2 array from scidb if exists"
 iquery -aq "remove($2);"
 
+echo "Extracting range of X, Y, W"
 X_MAX=$( cat $1 | cut -f1 -d "," | sort -nr | head -1)
 Y_MAX=$( cat $1 | cut -f2 -d "," | sort -nr | head -1)
 W_MAX=$( cat $1 | cut -f3 -d "," | sort -nr | head -1)
@@ -45,9 +51,11 @@ CHUNK_SIZE=1000
 echo "Create $2 array"
 echo "create array $2 <val:int32> [x=0:$X_MAX,$CHUNK_SIZE,0, y=0:$Y_MAX,$CHUNK_SIZE,0, w=0:$W_MAX,$CHUNK_SIZE,0];"
 
+# TODO: make sure indexing should not start from 1 or remove 1 from max.
 time iquery -aq "create array $2 <val:int32> [x=0:$X_MAX,$CHUNK_SIZE,0, y=0:$Y_MAX,$CHUNK_SIZE,0, w=$W_MIN:$W_MAX,$CHUNK_SIZE,0];"
 
-time iquery -aq "redimension_store($2_flat, $2)";
+time iquery -anq "redimension_store($2_flat, $2)";
 
 # Clean-up
-iquery -aq "remove($2_flat);
+iquery -aq "remove($2_flat)";
+
