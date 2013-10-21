@@ -33,28 +33,33 @@ show(
 "
 
 # I'm adding a new attribute to move x,y from dimension as attributes and sort for printing purposes to be in order
+# I can't add an attribute, hence I add new dimension
 
 time iquery -aq "
 show('
     redimension(
-        project(
-            apply(
-                    join(
-                        attribute_rename(
-                            slice($1, w, 42),
-                            val,
-                            nir
-                        ),
-                        attribute_rename(
-                            slice($1, w, 37),
-                            val,
-                            red
-                        )
-                    ), 
-                    ndvi, (nir - red) / (nir + red) 
-                )
-        ,ndvi ),
-        <x:int64,y:int64, ndvi:int32>[i=0:*,1,0])
+        adddim(
+            project(
+                apply(
+                        join(
+                            attribute_rename(
+                                slice($1, w, 42),
+                                val,
+                                nir
+                            ),
+                            attribute_rename(
+                                slice($1, w, 37),
+                                val,
+                                red
+                            )
+                        ), 
+                        ndvi, (nir - red) / (nir + red) 
+                    )
+            ,ndvi ),
+            i
+        ),    
+    <x:int64,y:int64, ndvi:int32>[i=0:0,1,0]
+     )    
 ', 'afl')
     "
-
+#
