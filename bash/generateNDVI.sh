@@ -11,6 +11,41 @@ fi
 
 echo "Calculating NDVI values..."
 
-time iquery -anq "
-    
+time iquery -aq "
+apply(
+    join(
+        attribute_rename(
+            slice(subimg, w, 42),
+            val,
+            nir
+        ),
+        attribute_rename(
+            slice(subimg, w, 37),
+            val,
+            red
+        )
+    ), 
+    ndvi, (nir - red) / (nir + red) 
+)  
 "
+
+#time iquery -anq "
+#between(
+#    apply(
+#        join(
+#            attribute_rename(
+#                subimg,val,val_a
+#            ),
+#            attribute_rename(
+#                subimg,val,val_b
+#            )
+#        ),
+#        ndvi, (val_a - val_b) / (val_a + val_b)
+#     ),
+#     0, 0, 42,
+
+     
+
+ 
+ #)
+#"

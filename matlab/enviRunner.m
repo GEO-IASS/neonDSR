@@ -72,10 +72,10 @@ addpath('/home/scidb/zproject/neonDSR/matlab/uf/fast_spice');
 spice_params = SPICEParameters();
 spice_params.produceDisplay = 1;
 spice_params.endmemberPruneThreshold = 1e-2;
-%spice_params.iterationCap=50;
+spice_params.iterationCap=200;
 spice_params.gamma = 1;
-parameters.M = 20; %Initial number of endmembers
-parameters.u = 0.0001; %Trade-off parameter between RSS and V term
+spice_params.M = 20; %Initial number of endmembers
+spice_params.u = 0.0001; %Trade-off parameter between RSS and V term
 % Try many values of u until you find something
 % that works. Maybe try values logarithmically spaced from 10^-6 to 1.
 
@@ -85,10 +85,11 @@ sub_data = reshape(subimg,n_row*n_col,n_band)';
 
 [E,P] = SPICE(double(sub_data),spice_params);
 
-figure(10); plot(E); xlabel('wavelength'); ylabel('reflectance');
+figure(10); plot(E); xlabel('wavelength'); ylabel('reflectance');  
+% TODO: don't forget legend.
+% x-axis should be wavelength, not wavelength index.
 
-
-for i=1:10
+for i=1:spice_params.M
     figure(10+i);     p1 = P(:,i);     imagesc(reshape(p1,n_row,n_col));    colorbar;
 end
 
