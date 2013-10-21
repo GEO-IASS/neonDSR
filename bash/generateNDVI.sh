@@ -38,7 +38,7 @@ show(
 time iquery -aq "
 
         
-            
+             adddim(
                 apply(
                         join(
                             attribute_rename(
@@ -54,6 +54,10 @@ time iquery -aq "
                         ), 
                         ndvi, (nir - red) / (nir + red) 
                     )
+                , i
+            )
+    
+                
             
             
             
