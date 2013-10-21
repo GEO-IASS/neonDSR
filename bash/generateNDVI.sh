@@ -36,10 +36,9 @@ show(
 # I can't add an attribute, hence I add new dimension
 
 time iquery -aq "
-show('
-    redimension(
-        adddim(
-            project(
+
+        
+            
                 apply(
                         join(
                             attribute_rename(
@@ -55,11 +54,9 @@ show('
                         ), 
                         ndvi, (nir - red) / (nir + red) 
                     )
-            ,ndvi ),
-            i
-        ),    
-    <x:int64,y:int64, ndvi:int32>[i=0:0,1,0]
-     )    
-', 'afl')
+            
+            
+            
+
     "
 #
