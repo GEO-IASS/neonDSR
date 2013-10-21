@@ -32,6 +32,7 @@ show(
 ','afl' )  
 "
 
+# I'm adding a new attribute to move x,y from dimension as attributes and sort for printing purposes to be in order
 
 time iquery -aq "
 show('
@@ -53,7 +54,7 @@ show('
                     ndvi, (nir - red) / (nir + red) 
                 )
         ,ndvi ),
-        <x:int64,y:int64>[i=0:*,1,0])
+        <x:int64,y:int64, ndvi:int32>[i=0:*,1,0])
 ', 'afl')
     "
 
