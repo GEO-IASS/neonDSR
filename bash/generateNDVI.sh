@@ -37,7 +37,7 @@ show(
 
 time iquery -aq "
 
-        
+redimension(        
              adddim(
                 apply(
                         join(
@@ -56,8 +56,8 @@ time iquery -aq "
                     )
                 , i
             )
-    
-                
+     ,  
+)             
             
             
             
