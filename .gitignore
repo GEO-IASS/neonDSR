@@ -21,6 +21,7 @@ project/plugins/project/
 *.csv
 *.scidb
 *.jpg
+*.png
 *.bak
 
 #propietary uf code
