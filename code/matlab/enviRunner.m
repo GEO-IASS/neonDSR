@@ -132,22 +132,28 @@ addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/PCBootstrapSPICE/qpc');
 [n_row,n_col,n_band] = size(subimg); %size(X.Data)
 
 sub_data = reshape(subimg,n_row*n_col,n_band)';
+subdata = double(sub_data);
+
+max_num = max(subdata(:));
+  min_num = min(subdata(:));
+  normalizedSubdata = double((subdata - min_num)) / double((max_num - min_num));
+
 
 % Try many values of u until you find something that works. Maybe try values logarithmically spaced from 10^-6 to 1.
 spice_params = SPICEParameters();
 %spice_params.endmemberPruneThreshold = 1e-2;
 %spice_params.u = 0.0001; %Trade-off parameter between RSS and V term 
-[E,P] = SPICE(double(sub_data),spice_params);
+[E,P] = SPICE(normalizedSubdata, spice_params);
 
 figure(10); plot(E); xlabel('wavelength'); ylabel('reflectance');  
 
 for i=1:size(P,2)   % only show non-pruned endmembers
     h = figure; subplot(2,1,1),     p1 = P(:,i);     imagesc(reshape(p1,n_row,n_col)); axis image;   colorbar;  xlabel('Latitude'); ylabel('Longtitude'); title (sprintf('Heat-map of Endmember #%d',i));
     % print(fig, '-djpeg', sprintf('%d'), i);
-  %  saveas(h,sprintf('heatmap-%1d', i),'png');
+    saveas(h,sprintf('heatmap-%1d', i),'png');
   %  h = figure; 
     subplot(2,1,2), plot(envi.info.wavelength, E(:, i)); xlabel('Wavelength(nm)'); ylabel('Reflectance'); title (sprintf('Reflectance-Wavelength intensity of Endmember #%d',i));
-   % saveas(h,sprintf('endmember-%1d', i),'png');
+    saveas(h,sprintf('endmember-%1d', i),'png');
 end
 
 close all;

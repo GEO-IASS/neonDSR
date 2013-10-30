@@ -48,12 +48,12 @@ function [parameters] = SPICEParameters()
 % OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 % SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-parameters.u = 0.0001; %Trade-off parameter between RSS and V term
-parameters.gamma = 100000; %Sparsity parameter
+parameters.u = 0.01; %Trade-off parameter between RSS and V term
+parameters.gamma = 10; %Sparsity parameter
 parameters.M = 20; %Initial number of endmembers
 parameters.endmemberPruneThreshold = 1e-9;
 
-parameters.changeThresh = 1e-4; %Used as the stopping criterion
+parameters.changeThresh = 1e-6; %Used as the stopping criterion
 parameters.iterationCap = 100; %Alternate stopping criterion
 
 parameters.produceDisplay = 1;
