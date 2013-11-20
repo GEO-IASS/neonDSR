@@ -53,8 +53,8 @@ parameters.gamma = 10; %Sparsity parameter
 parameters.M = 20; %Initial number of endmembers
 parameters.endmemberPruneThreshold = 1e-9;
 
-parameters.changeThresh = 1e-6; %Used as the stopping criterion
-parameters.iterationCap = 100; %Alternate stopping criterion
+parameters.changeThresh = 1e-5; %Used as the stopping criterion
+parameters.iterationCap = 300; %Alternate stopping criterion
 
 parameters.produceDisplay = 1;
 parameters.initEM = nan; %This randomly selects parameters.M initial endmembers from the input data

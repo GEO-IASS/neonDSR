@@ -135,9 +135,8 @@ sub_data = reshape(subimg,n_row*n_col,n_band)';
 subdata = double(sub_data);
 
 max_num = max(subdata(:));
-  min_num = min(subdata(:));
-  normalizedSubdata = double((subdata - min_num)) / double((max_num - min_num));
-
+min_num = min(subdata(:));
+normalizedSubdata = double((subdata - min_num)) / double((max_num - min_num));
 
 % Try many values of u until you find something that works. Maybe try values logarithmically spaced from 10^-6 to 1.
 spice_params = SPICEParameters();

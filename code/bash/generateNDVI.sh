@@ -62,4 +62,10 @@ time iquery -aq "
       
 
   " > $1.scidb
-#
+
+  FORMATTED_NAME=$1.formatted.scidb 
+  cat $1.scidb | sed 's/[(]/\n(/g' > $FORMATTED_NAME  
+  echo scidb | sudo -S chown morteza $FORMATTED_NAME
+  echo scidb | sudo -S cp $1.formatted.scidb /home/morteza/temp/
+  
+  #

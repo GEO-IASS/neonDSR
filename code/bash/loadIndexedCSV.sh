@@ -5,17 +5,18 @@
 if [ -z "$1" ] 
 then
   echo "Error calling script."
-  echo "Usage: \$ scirpt file_name scdb_array_name"
+  echo "Usage: \$ scirpt csv_file_name scdb_array_name"
   exit 0
 fi
 
 if [ -z "$2" ] 
 then
   echo "Error calling script."
-  echo "Usage: \$ scirpt scdb_array_name"
+  echo "Usage: \$ scirpt csv_file_name scdb_array_name"
   exit 0
 fi
 
+echo $1 $2 >> loadIndexedCSV.log
 
 ABSOLUTE_PATH=$(cd $(dirname $1); pwd)/$(basename $1)
 DATA_PATH=$(dirname $ABSOLUTE_PATH)
@@ -36,7 +37,8 @@ iquery -aq "remove($2_flat);"
 echo "Create $2_flat array"
 time iquery -aq "create array $2_flat <x:int64, y:int64, wave_length:int32, val:int32> [i=0:*,1000000,0];"
 
-echo "Load $DATA_PATH/$FILE_NAME.scidb to $2_flat array"
+echo "Load $DATA_PATH/$FILE_NAME.scidb to $2_flat arra
+y"
 time iquery -anq "load($2_flat, '$DATA_PATH/$FILE_NAME.scidb');"
 
 echo "Remove $2 array from scidb if exists"
