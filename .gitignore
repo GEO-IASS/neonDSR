@@ -23,6 +23,7 @@ project/plugins/project/
 *.jpg
 *.png
 *.bak
+.DS_STORE
 
 #propietary uf code
 matlab/uf/
