@@ -22,4 +22,4 @@ echo ""
 time iquery -aq "create array rule_relation<rule_id:int64, relation_id:string, entity_type:int64> [i=0:*,1000000,0];"
 
 echo "Grounding"
-time iquery -aq ""
+#time iquery -aq ""

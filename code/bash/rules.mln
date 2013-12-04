@@ -1,0 +1,12 @@
+0.98  tree_growrate(Turkey Oak) : fast
+0.93  tree_life(Turkey Oak) : short
+0.85  tree_ maxHeight(Turkey Oak) : 25
+0.88  tree_maxDbh(Turkey Oak) : 0.66
+0.76  tree_maxCrown(Turkey Oak) : 20
+0.87  tree_ maxHeight(Longleaf pine) : 36
+1.1   tree_coassociative(Turkey Oak) : Longleaf Pine
+0.6   tree_coassociative(Turkey Oak) : Apple
+
+0.2   (atree_neighbor(a1, a2) ^ atree_height(a1) < atree_height(a2) ^ tree_shadeToleranceLevel(a2)="shade tolerance" -> tree_shadeToleranceLevel(a1)="shade intolerance")
+0.93  (atree_neighbor(a1, a2) ^ tree_successionalLevel(a1)="Early Successional Specie" -> tree_successionalLevel(a2)="Early Successional Specie")
+1.8   (tree_successionalLevel(a1) = tree_successionalLevel(a2) ^ ((atree_latitude(a1) - atree_latitude(a2))^2 + (atree_longtitude(a1) - atree_longtitude(a2))^2) < 3)
