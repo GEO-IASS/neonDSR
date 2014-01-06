@@ -1,4 +1,5 @@
 
+%% Load ENVI file
 
 %enviread('/home/morteza/zproject/neon/envi/f100910t01p00r02rdn_b_NEON-L1B/f100910t01p00r02rdn_b_flaashreflectance_img');
 %envi = enviread('/home/morteza/zproject/neon/fulldataset/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON-L1G/f100910t01p00r02rdn_b_sc01_ort_flaashreflectance_img');
@@ -14,8 +15,7 @@ subimg = hsi_img(1200:1400 , 400:600, :);
 iRGB(hsi_img);
 iRGB(subimg);
 
-%%
-% Display hsi_img at differnet bands.
+%% Display hsi_img at differnet bands.
 
 [n_row,n_col,n_band] = size(hsi_img);
 for i=40:n_band
@@ -27,8 +27,7 @@ for i=40:n_band
    %pause(1);
 end
 
-%%
-% NDVI
+%% Generate NDVI
 
 nir = double(hsi_img(:,:,42));
 red = double(hsi_img(:,:,37));
@@ -56,22 +55,38 @@ ndvi =  ndvi_numerator ./ ndvi_denominator;
   % title(sprintf('Band %f', envi.info.wavelength(i)));    
   % pause(0.05);
 
-%%
-% Generate 1-D csv file
+%% Generate 1-D csv file
+ 
 hsi2scidb(subimg, 'subimg.csv');
 hsi2scidb(hsi_img, 'hsi_img.csv');
 
-%%
-% SPICE: linear (not suitable for neon??)
+%% load LiDAR data (LIght Detection And Ranging)
 
-addpath('/home/scidb/zproject/neonDSR/matlab/uf/PCBootstrapSPICE');
-addpath('/home/scidb/zproject/neonDSR/matlab/uf/PCBootstrapSPICE/qpc');
-addpath('/home/scidb/zproject/neonDSR/matlab/uf/fast_spice');
+addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/');
+mode = 1; % | 2
+[DataPoints, Coords] = readLAS('/home/scidb/neon/f100910t01p00r02rdn/lidar/lidar/DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las', mode);
+
+numel(unique(Coords(:, 1))) % Unique X's
+numel(unique(Coords(:, 2))) % Unique Y's
+
+hist(Coords(:,3), 200) % histogram of heights
+title (sprintf('Histogram of Lidar data')); xlabel('Height'); ylabel('# of Points in Histogram Bin');
+
+temp = Coords(Coords < 100);
+temp = temp(temp > -1);
+hist(temp, 200)
+title (sprintf('Histogram of Lidar Data - After Removing Outliers')); xlabel('Height'); ylabel('# of Points in Histogram Bin');
+
+%% SPICE: linear unmixing - not suitable for neon dataset
+
+addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/PCBootstrapSPICE');
+addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/PCBootstrapSPICE/qpc');
+addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/fast_spice');
 
 spice_params = SPICEParameters();
 spice_params.produceDisplay = 1;
 spice_params.endmemberPruneThreshold = 1e-2;
-spice_params.iterationCap=100;
+spice_params.iterationCap=10;
 spice_params.gamma = 1;
 spice_params.M = 5; %Initial number of endmembers
 spice_params.u = 0.0001; %Trade-off parameter between RSS and V term
@@ -98,8 +113,7 @@ end
 
 
 
-%%
-% PCOMMEND: linear should be more applicable. 
+%% PCOMMEND: non-linear unmixing, well suited for neon dataset
 
 addpath('/home/scidb/zproject/neonDSR/matlab/uf/PCOMMEND');
 
@@ -120,14 +134,11 @@ for b = 1:length(E)
 end
 
 
-%%
-% SPICEE: linear (not suitable for neon??)
+%% SPICEE: The correct version of Spice by Taylor
 
 addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/spicee');
 addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/PCBootstrapSPICE/qpc');
 %addpath('/home/scidb/zproject/neonDSR/matlab/uf/fast_spice');
-
-
 
 [n_row,n_col,n_band] = size(subimg); %size(X.Data)
 
