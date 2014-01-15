@@ -64,13 +64,21 @@ hsi2scidb(hsi_img, 'hsi_img.csv');
 
 addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/');
 mode = 1; % | 2
+datestr(now, 'HH:MM:SS')
 [DataPoints, Coords] = readLAS('/home/scidb/neon/f100910t01p00r02rdn/lidar/lidar/DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las', mode);
+datestr(now, 'HH:MM:SS')
 
+% Unique items in data
 numel(unique(Coords(:, 1))) % Unique X's
 numel(unique(Coords(:, 2))) % Unique Y's
+size(unique(Coords(:, [1,2]), 'rows')) % Unique X,Y combinations
+
+hist(DataPoints(:,[2]))
+title (sprintf('Histogram of Lidar Returns')); xlabel('Lidar Return #'); ylabel('# of Points');
+
 
 hist(Coords(:,3), 200) % histogram of heights
-title (sprintf('Histogram of Lidar data')); xlabel('Height'); ylabel('# of Points in Histogram Bin');
+title (sprintf('Histogram of Lidar Data')); xlabel('Height'); ylabel('# of Points in Histogram Bin');
 
 temp = Coords(Coords < 100);
 temp = temp(temp > -1);

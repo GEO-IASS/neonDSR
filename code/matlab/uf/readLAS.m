@@ -322,7 +322,7 @@ for i=1:PublicHeaderBlock.NumberOfPointRecords
         DataPoints(i).PointSourceID = PointSourceID;
         DataPoints(i).GPSTime = GPSTime;
     elseif mode == 2
-        warning off all;
+        warning off all;   % Neon data lied in this category
         DataPoints(i,:) = [intensity, returnNumber, NumberOfReturns, EdgeOfFlightLine];
         Coords(i,:) = [XCoord, YCoord, ZCoord];
        
