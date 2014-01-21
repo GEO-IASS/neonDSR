@@ -38,3 +38,7 @@ plot(x,y,'.r')
 
 COEFF  % translation will not change result of principal component analysis
 R
+
+varlist = {'x','y','G', 'R', 'COEFF', 'a', 'b'};
+clear(varlist{:});
+clear varlist;
