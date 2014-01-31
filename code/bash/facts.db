@@ -1,0 +1,9 @@
+# facts
+0.98  tree_growrate(Turkey Oak) : fast
+0.93  tree_life(Turkey Oak) : short
+0.85  tree_ maxHeight(Turkey Oak) : 25
+0.88  tree_maxDbh(Turkey Oak) : 0.66
+0.76  tree_maxCrown(Turkey Oak) : 20
+0.87  tree_ maxHeight(Longleaf pine) : 36
+1.1   tree_coassociative(Turkey Oak) : Longleaf Pine
+0.6   tree_coassociative(Turkey Oak) : Apple
