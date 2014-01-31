@@ -1,0 +1,33 @@
+
+
+706 SW 16th Ave Apt 207
+Gainesville,
+FL 32601
+
+
+vvertica l layout> textveiw > bottom >    'activity' class tell it to use the layout > local variables  for text view cintet and, find view by id of activity 
+ redimension(
+        adddim(
+            project(
+                apply(
+                        join(
+                            attribute_rename(
+                                slice($1, w, 42),
+                                val,
+                                nir
+                            ),
+                            attribute_rename(
+                                slice($1, w, 37),
+                                val,
+                                red
+                            )
+                        ), 
+                        ndvi, (nir - red) / (nir + red) 
+                    )
+            ,ndvi ),
+            i
+        ),    
+    <x:int64,y:int64, ndvi:int32>[i=0:0,1,0]
+     )    
+
+    "
