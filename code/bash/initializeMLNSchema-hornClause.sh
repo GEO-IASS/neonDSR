@@ -23,7 +23,7 @@ echo "Create attribute array..."
 # a fact such as    tree_growthrate("Turkey Oak") : fast
 
 echo "A ground relation. Contains id of the relation. Contains id of the specific entity it belongs to." 
-echo "Value and weight of relationship"
+echo "Value and weight of relationship --- relationship(entity, attribute)"
 time iquery -aq "create array relationship<id:int64, 
                         relation_id:int64, 
                         entity_id: int64, 
