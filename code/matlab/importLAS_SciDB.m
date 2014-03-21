@@ -43,7 +43,7 @@ fid = fopen(LASinputfile, 'r');
 
 PublicHeaderBlock.FileSignature = fread(fid, 4, 'uchar=>char')';
 if strcmp(PublicHeaderBlock.FileSignature, 'LASF')
-    fprintf( 'Passed validation check:  File Signature (%s)\n',  PublicHeaderBlock.FileSignature);
+    %fprintf( 'Passed validation check:  File Signature (%s)\n',  PublicHeaderBlock.FileSignature);
 else
     numErrors = numErrors + 1;
     fprintf( 'Failed validation check:  File Signature (%s)\nTotal Errors Found:  %i\n',  PublicHeaderBlock.FileSignature,numErrors);
@@ -54,7 +54,7 @@ PublicHeaderBlock.FileSourceID = fread(fid, 1, 'uint16=>uint16');
 %positions 0,1,2,3 being set (bits 4-15 not used in this spec)
 PublicHeaderBlock.GlobalEncoding = fread(fid, 1, 'uint16=>uint16');
 if PublicHeaderBlock.GlobalEncoding == 0 || PublicHeaderBlock.GlobalEncoding == 1
-    fprintf( 'Passed validation check:  Global Encoding\n');
+    %fprintf( 'Passed validation check:  Global Encoding\n');
 else
     numErrors = numErrors + 1;
     fprintf( 'Failed validation check:  Global Encoding\nTotal Errors Found:  %i\n',  numErrors);
@@ -82,14 +82,14 @@ PublicHeaderBlock.OffsetToPointData = fread(fid, 1, 'uint32=>uint32');
 PublicHeaderBlock.NumberOfVariableLengthRecords = fread(fid, 1, 'uint32=>uint32');
 PublicHeaderBlock.PointDataFormatID = fread(fid, 1, 'uchar=>uchar');
 if PublicHeaderBlock.PointDataFormatID == 1
-    fprintf( 'Passed validation check:  Point Data Format ID (%i)\n',  PublicHeaderBlock.PointDataFormatID);
+    %fprintf( 'Passed validation check:  Point Data Format ID (%i)\n',  PublicHeaderBlock.PointDataFormatID);
 else
     numErrors = numErrors + 1;
     fprintf( 'Failed validation check:  Point Data Format ID (%i)\nTotal Errors Found:  %i\n',  PublicHeaderBlock.PointDataFormatID, numErrors);
 end
 PublicHeaderBlock.PointDataRecordLength = fread(fid, 1, 'uint16=>uint32');
 if PublicHeaderBlock.PointDataRecordLength == 28
-    fprintf( 'Passed validation check:  Point Data Record Length 1/2 \n');
+    %fprintf( 'Passed validation check:  Point Data Record Length 1/2 \n');
 else
     numErrors = numErrors + 1;
     fprintf( 'Failed validation check:  Point Data Record Length 1/2 (%i)\nTotal Errors Found:  %i\n',  PublicHeaderBlock.PointDataRecordLength, numErrors);
@@ -100,7 +100,7 @@ PublicHeaderBlock.NumberOfPointRecords = fread(fid, 1, 'uint32=>uint32');
 listing = dir(LASinputfile);
 estimatedFileSize = PublicHeaderBlock.PointDataRecordLength*PublicHeaderBlock.NumberOfPointRecords + PublicHeaderBlock.OffsetToPointData;
 if  estimatedFileSize == listing.bytes
-    fprintf( 'Passed validation check:  Point Data Record Length 2/2 \n');
+    %fprintf( 'Passed validation check:  Point Data Record Length 2/2 \n');
 else
     numErrors = numErrors + 1;
     fprintf( 'Failed validation check:  Point Data Record Length 2/2 (file size:  %i, estimated file size:  %i)\nTotal Errors Found:  %i\n',  listing.bytes, estimatedFileSize, numErrors);
@@ -126,46 +126,46 @@ PublicHeaderBlock.MaxZ = fread(fid, 1, 'real*8=>double');
 PublicHeaderBlock.MinZ = fread(fid, 1, 'real*8=>double');
 
 if ftell(fid) == PublicHeaderBlock.HeaderSize
-    fprintf( 'Passed validation check:  Public Header Size\n');
+    %fprintf( 'Passed validation check:  Public Header Size\n');
 else
     numErrors = numErrors + 1;
     fprintf( 'Failed validation check:  Public Header Size (ftell:  %i, header size:  %i)\nTotal Errors Found:  %i\n',  ftell(fid), PublicHeaderBlock.HeaderSize, numErrors);
 end
 
 if numErrors == 0
-    fprintf( 'Public Header Block passed all validation checks!!!\n\n');
+    %fprintf( 'Public Header Block passed all validation checks!!!\n\n');
 else
     fprintf( 'Public Header Block FAILED validation checks!!!\nExiting!!!\n');
     return
 end
 
 if PublicHeaderBlock.FileSourceID == 0
-    fprintf('A Flight Line Number was not assigned\n');
+    %fprintf('A Flight Line Number was not assigned\n');
 else
     fprintf('Flight Line Number:  %i\n', PublicHeaderBlock.FileSourceID);
 end
 
 if PublicHeaderBlock.GlobalEncoding == 0
-    fprintf('GPS Time in the point records fields is in GPS Week Time\n');
+    %fprintf('GPS Time in the point records fields is in GPS Week Time\n');
 else
     fprintf('GPS Time is standard GPS Time minus 1x10^9\n');
 end
 
-fprintf('Format Specification used:  %s\n', PublicHeaderBlock.FormatSpecificationNumber);
-fprintf('System Identifier:  %s\n', PublicHeaderBlock.SystemIdentifier);
-fprintf('Generating Software:  %s\n', PublicHeaderBlock.GeneratingSoftware);
-fprintf('Number of Data Points:  %i\n', PublicHeaderBlock.NumberOfPointRecords);
+%fprintf('Format Specification used:  %s\n', PublicHeaderBlock.FormatSpecificationNumber);
+%fprintf('System Identifier:  %s\n', PublicHeaderBlock.SystemIdentifier);
+%fprintf('Generating Software:  %s\n', PublicHeaderBlock.GeneratingSoftware);
+%fprintf('Number of Data Points:  %i\n', PublicHeaderBlock.NumberOfPointRecords);
 
-fprintf( 'Min X:  %8.4f\n', PublicHeaderBlock.MinX);
-fprintf( 'Max X:  %8.4f\n', PublicHeaderBlock.MaxX);
+%fprintf( 'Min X:  %8.4f\n', PublicHeaderBlock.MinX);
+%fprintf( 'Max X:  %8.4f\n', PublicHeaderBlock.MaxX);
 
-fprintf( 'Min Y:  %8.4f\n', PublicHeaderBlock.MinY);
-fprintf( 'Max Y:  %8.4f\n', PublicHeaderBlock.MaxY);
+%fprintf( 'Min Y:  %8.4f\n', PublicHeaderBlock.MinY);
+%fprintf( 'Max Y:  %8.4f\n', PublicHeaderBlock.MaxY);
 
-fprintf( 'Min Z:  %8.4f\n', PublicHeaderBlock.MinZ);
-fprintf( 'Max Z:  %8.4f\n', PublicHeaderBlock.MaxZ);
+%fprintf( 'Min Z:  %8.4f\n', PublicHeaderBlock.MinZ);
+%fprintf( 'Max Z:  %8.4f\n', PublicHeaderBlock.MaxZ);
 
-fprintf( '\n');
+%fprintf( '\n');
 
 %for LAS 1.3 spec
 % PublicHeaderBlock.StartOfWaveformDataPacketRecord = fread(fid, 1, 'uint64=>uint64');
@@ -175,17 +175,17 @@ for i =1:PublicHeaderBlock.NumberOfVariableLengthRecords
     
     VariableLengthRecords(i).Reserved = fread(fid, 1, 'uint16=>uint16');
     if VariableLengthRecords(i).Reserved == 43707
-        fprintf( 'Passed validation check:  Variable Length Record Signature \n');
+        %fprintf( 'Passed validation check:  Variable Length Record Signature \n');
     else
         numErrors = numErrors + 1;
         fprintf( 'Failed validation check:  Variable Length Record Signature (%i)\nTotal Errors Found:  %i\n',  VariableLengthRecords(i).Reserved, numErrors);
     end
     
     VariableLengthRecords(i).UserID = fread(fid, 16, 'uchar=>char')';
-    fprintf( 'User ID:  %s\n', VariableLengthRecords(i).UserID);
+    %fprintf( 'User ID:  %s\n', VariableLengthRecords(i).UserID);
     
     VariableLengthRecords(i).RecordID = fread(fid, 1, 'uint16=>uint16');
-    fprintf( 'Record ID:  %i\n', VariableLengthRecords(i).RecordID);
+    %fprintf( 'Record ID:  %i\n', VariableLengthRecords(i).RecordID);
     
     VariableLengthRecords(i).RecordLengthAfterHeader = fread(fid, 1, 'uint16=>uint16');
     VariableLengthRecords(i).Description = fread(fid, 32, 'uchar=>char')';
@@ -194,10 +194,10 @@ for i =1:PublicHeaderBlock.NumberOfVariableLengthRecords
 end
 
 if numErrors == 0
-    fprintf( 'Variable Length Record Header Block passed all validation checks!!!\n\n');
-    fprintf( 'Visually inspect User ID and Record ID fields to ensure proper settings!!!\n');
-    fprintf( 'User ID field can be set to multiple things, however it commonly is used for the 1 mandatory and 2 optional LASF_Projection records\n');
-    fprintf( 'Record ID field can be set to multiple things, 34735 is a mandatory LASF_Projection record and 34736 and 34737 are optional LASF_Projection records\n');
+    %fprintf( 'Variable Length Record Header Block passed all validation checks!!!\n\n');
+    %fprintf( 'Visually inspect User ID and Record ID fields to ensure proper settings!!!\n');
+    %fprintf( 'User ID field can be set to multiple things, however it commonly is used for the 1 mandatory and 2 optional LASF_Projection records\n');
+    %fprintf( 'Record ID field can be set to multiple things, 34735 is a mandatory LASF_Projection record and 34736 and 34737 are optional LASF_Projection records\n');
 else
     fprintf( 'Variable Length Record Header Block FAILED validation checks!!!\nExiting!!!\n');
     return
@@ -207,14 +207,14 @@ fprintf('\n');
 
 dataPointBlockSignature = fread(fid, 1, 'uint16=>uint16');
 if dataPointBlockSignature == 52445
-    fprintf( 'Passed validation check:  Point Data Record Signature \n');
+    %fprintf( 'Passed validation check:  Point Data Record Signature \n');
 else
     numErrors = numErrors + 1;
     fprintf( 'Failed validation check:  Point Data Record Signature (%i)\nTotal Errors Found:  %i\n', dataPointBlockSignature, numErrors);
 end
 
 if ftell(fid) == PublicHeaderBlock.OffsetToPointData
-    fprintf( 'Passed validation check:  Point Data Record Offset \n');
+    %fprintf( 'Passed validation check:  Point Data Record Offset \n');
 else
     numErrors = numErrors + 1;
     fprintf( 'Failed validation check:  Point Data Record Offset (file position:  %i, point data offset:  %i)\nTotal Errors Found:  %i\n', ftell(fid), PublicHeaderBlock.OffsetToPointData, numErrors);
@@ -259,17 +259,20 @@ LASinputfile = '/home/scidb/neon/f100910t01p00r02rdn/lidar/lidar/DL20100901_osbs
 scidbArrayName = strrep(name, '-', '_');
 
 command = ['iquery -aq "remove(' scidbArrayName ')"'];
-%[status, cmdout] = system(command)
+[status, cmdout] = system(command);
 
 command = ['time iquery -aq ' , '"create array ', scidbArrayName, ...
     ' <XCoord:double, YCoord:double, ZCoord:double, ' , ... % Coordinates array
     'intensity:int64, returnNumber:int64, NumberOfReturns:int64, EdgeOfFlightLine:int64' , ... % Datapoints array
-    '>[x=0:*, 100, 0, y=0:*, 100, 0, z=0:*, 100, 0, i=0:*, 100, 0, r=0:*, 100, 0, n=0:*, 100, 0, e=0:*, 100, 0];"'];    % chunk size 1000 and overlap is 0
-%[status, cmdout] = system(command)
+    '>[x=0:*, 1, 0, y=0:*, 1, 0, z=0:*, 1, 0, i=0:*, 1, 0, r=0:*, 1, 0, n=0:*, 1, 0, e=0:*, 1, 0];"'];    % chunk size 1000 and overlap is 0
+[status, cmdout] = system(command);
 
 
-%% Load each record
-for i=1:PublicHeaderBlock.NumberOfPointRecords
+%% Create CSV output and Load each record
+
+%fprintf('XCoord, YCoord, ZCoord, intensity, returnNumber, NumberOfReturns, EdgeOfFlightLine\n');
+
+for i=1:2 %PublicHeaderBlock.NumberOfPointRecords
     
     counter = counter + 1;
    % if counter > 10000
@@ -351,9 +354,11 @@ for i=1:PublicHeaderBlock.NumberOfPointRecords
         DataPoints(i).GPSTime = GPSTime;
     elseif mode == 2
         warning off all;   % Neon data lied in this category
-        DataPoints(i,:) = [intensity, returnNumber, NumberOfReturns, EdgeOfFlightLine];
-        Coords(i,:) = [XCoord, YCoord, ZCoord];
+        %DataPoints(i,:) = [intensity, returnNumber, NumberOfReturns, EdgeOfFlightLine];
+        %Coords(i,:) = [XCoord, YCoord, ZCoord];
        
+        fprintf( '%f, %f, %f, %d, %d ,%d, %d\n', XCoord, YCoord, ZCoord, intensity, returnNumber, NumberOfReturns, EdgeOfFlightLine);
+
     end
     
     if dataPointRecordError
@@ -365,32 +370,32 @@ for i=1:PublicHeaderBlock.NumberOfPointRecords
 end
 
 %close(h); % waitbar
-fread(fid,1,'ubit1=>char');
+fread(fid,1,'ubit1=>char');   % these last errors are suppressed when debugging (we stop before reaching end of file
 if feof(fid)
-    fprintf( 'Passed validation check:  End Of File \n');
+    %fprintf( 'Passed validation check:  End Of File \n');
 else
     numErrors = numErrors + 1;
-    fprintf( 'Failed validation check:  End Of File (file size:  %i, current position:  %i)\nTotal Errors Found:  %i\n',  listing.bytes, ftell(fid), numErrors);
+    %fprintf( 'Failed validation check:  End Of File (file size:  %i, current position:  %i)\nTotal Errors Found:  %i\n',  listing.bytes, ftell(fid), numErrors);
 end
 
 if numErrors == 0
-    fprintf( 'Point Data Records passed all validation checks!!!\n');
+    %fprintf( 'Point Data Records passed all validation checks!!!\n');
 else
-    fprintf( 'Point Data Records FAILED the validation checks!!!\nExiting!!!\n');
-    return
+    %fprintf( 'Point Data Records FAILED the validation checks!!!\nExiting!!!\n');
+    %return
 end
 
-fprintf('\nMaximum Intensity in file:  %i\n', maxIntensity);
-fprintf('Minimum Intensity in file:  %i\n', minIntensity);
-fprintf('Number of 1st returns:  %i, 2nd returns:  %i, 3rd returns:  %i, 4th returns:  %i, 5th returns:  %i\n', returnsCount(1), returnsCount(2), returnsCount(3), returnsCount(4), returnsCount(5));
-fprintf('Number of 1 return records:  %i, 2 returns records:  %i, 3 returns records:  %i, 4 returns records:  %i, 5 returns records:  %i\n', numberOfReturns(1), numberOfReturns(2), numberOfReturns(3), numberOfReturns(4), numberOfReturns(5));
-fprintf('Number of classification 1:  %i, classification 2:  %i, classification 3:  %i, classification 4:  %i, classification 5:  %i\n\n', classificationNumber(1), classificationNumber(2), classificationNumber(3), classificationNumber(4), classificationNumber(5));
+%fprintf('\nMaximum Intensity in file:  %i\n', maxIntensity);
+%fprintf('Minimum Intensity in file:  %i\n', minIntensity);
+%fprintf('Number of 1st returns:  %i, 2nd returns:  %i, 3rd returns:  %i, 4th returns:  %i, 5th returns:  %i\n', returnsCount(1), returnsCount(2), returnsCount(3), returnsCount(4), returnsCount(5));
+%fprintf('Number of 1 return records:  %i, 2 returns records:  %i, 3 returns records:  %i, 4 returns records:  %i, 5 returns records:  %i\n', numberOfReturns(1), numberOfReturns(2), numberOfReturns(3), numberOfReturns(4), numberOfReturns(5));
+%fprintf('Number of classification 1:  %i, classification 2:  %i, classification 3:  %i, classification 4:  %i, classification 5:  %i\n\n', classificationNumber(1), classificationNumber(2), classificationNumber(3), classificationNumber(4), classificationNumber(5));
 
 if numErrors == 0
-    fprintf( 'All validation checks have been passed, enjoy your data!!!\n');
+%    fprintf( 'All validation checks have been passed, enjoy your data!!!\n');
 else
-    fprintf( 'Some validation checks have FAILED!!!\nExiting!!!\n');
-    return
+    %fprintf( 'Some validation checks have FAILED!!!\nExiting!!!\n');
+    %return
 end
 
 fclose(fid);

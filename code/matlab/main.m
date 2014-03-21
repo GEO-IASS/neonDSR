@@ -1,4 +1,5 @@
-
+cd('/home/scidb/zproject/neonDSR/code/matlab/');
+ 
 %% Load ENVI file
 
 %enviread('/home/morteza/zproject/neon/envi/f100910t01p00r02rdn_b_NEON-L1B/f100910t01p00r02rdn_b_flaashreflectance_img');
@@ -26,6 +27,33 @@ for i=40:n_band
    pause(0.05);
    %pause(1);
 end
+
+%% Ensure Seamless stepsize
+first_Step = envi.x(2) - envi.x(1);
+for i=2:size(envi.x')
+   if envi.x(i) - envi.x(i-1) == first_Step
+           disp('=')  
+   else
+       disp('not equal')
+
+   end
+end
+
+first_Step = envi.y(2) - envi.y(1);
+for i=2:5 %size(envi.y')
+   diff = envi.x(i) - envi.x(i-1);
+   if (diff == first_Step)
+     disp('=')  
+   else
+     disp(diff)
+   end
+end
+
+a0 = envi.y(2) - envi.y(1)
+
+a1=envi.y(3) - envi.y(2)
+
+a2 = envi.y(4) - envi.y(3)
 
 %% Generate NDVI
 

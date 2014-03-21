@@ -11,7 +11,8 @@ matlab_exec=/opt/matlab2013a/bin/matlab
 X="${1}(${2})"
 echo "cd('/home/scidb/zproject/neonDSR/code/matlab/');" >>  matlab_command.m
 echo "addpath('/home/scidb/zproject/neonDSR/code/matlab/');" >>  matlab_command.m 
-echo ${X} >> matlab_command.m
-cat matlab_command.m
+echo ${X}";" >> matlab_command.m
+echo "exit(0)" >> matlab_command.m
+#cat matlab_command.m
 ${matlab_exec} -nojvm -nodisplay -nosplash < matlab_command.m
 rm matlab_command.m
