@@ -1,4 +1,4 @@
-function rgb = iRGB(hsi_img)
+function [rgb, hsi_figure, h] = iRGB(hsi_img)
 % wavelength = {
 % 365.929810,  375.593994,  385.262512,  394.935486,  404.612915,  414.294586,
 % 423.980804,  433.671295,  443.366211,  453.065491,  462.769196,  472.477295,
@@ -49,8 +49,9 @@ function rgb = iRGB(hsi_img)
   normalizedRGB = double((rgb - min_num)) / double((max_num - min_num));
 
   intensityFixedRGB = sqrt(normalizedRGB);
-  figure
+  %intensityFixedRGB = sqrt(rgb);
+  hsi_figure = figure;
   %image(intensityFixedRGB);
-  imshow(intensityFixedRGB);
+  h = imshow(intensityFixedRGB);
   colorbar
 end
