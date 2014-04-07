@@ -8,18 +8,19 @@ rcd('/home/scidb/zproject/neonDSR/code/matlab/');
 format long g; % avoid scientific notation
 
 % Read ENVI file
-envi = enviread('/home/scidb/neon/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON-L1G/f100910t01p00r02rdn_b_sc01_ort_flaashreflectance_img');
+%envi = enviread('/home/scidb/neon/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON-L1G/f100910t01p00r02rdn_b_sc01_ort_flaashreflectance_img');
+%hsi_img = envi.z;
+%subimg = double(hsi_img(1200:1400 , 400:600, :));
 
-% Work on sub-image to save memory
-hsi_img = envi.z;
+envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
+subimg = double(envi.z(2000:2450 , 630:770, :));
 
-subimg = double(hsi_img(1200:1400 , 400:600, :));
+
 %subimg = hsi_img;
 %clear hsi_img;
 %subimg = double(subimg + 0);
 %subimg(subimg<0) = 0; % filter out negative noises
 %subimg(subimg>10000) = 10000; % filter out large noises
-
 
 %subimg_mean = mean(subimg(:));
 %subimg_std = std(double(subimg(:)));
@@ -32,9 +33,9 @@ subimg = double(hsi_img(1200:1400 , 400:600, :));
 
 %subimg = subimg/2.0;
 
-clearvars subimg subimg_mean subimg_std max_num min_num;
+%clearvars subimg subimg_mean subimg_std max_num min_num;
 
-[rgb0, hsi_figure0, h0] = iRGB(hsi_img); %Normalize for it, memory faced in normalizin
+[rgb0, hsi_figure0, h0] = iRGB(envi.z); %Normalize for it, memory faced in normalizin
 [rgb, hsi_figure, h] = iRGB(subimg);
 
 %figure, hist(normalized_subimg(:));
@@ -100,31 +101,31 @@ end
 
 %% Generate NDVI
 
-nir = double(hsi_img(:,:,42));
-red = double(hsi_img(:,:,37));
+nir = double(subimg(:,:,42));
+red = double(subimg(:,:,37));
+
 ndvi_numerator = nir - red;
-max(ndvi_numerator(:))
-min(ndvi_numerator(:))
 ndvi_denominator = nir + red;
 ndvi =  ndvi_numerator ./ ndvi_denominator;
 
-   ndvi2560 = 2560 * ndvi;
-   f = floor(ndvi2560);
-   figure(8);
-   imagesc(f );
+%max(ndvi_numerator(:))
+%min(ndvi_numerator(:))
+
+
+   %ndvi2560 = 2560 * ndvi;
+   %f = floor(ndvi2560);
+   %figure(8);
+   %imagesc(f );
 
    figure(9);
    imshow( ndvi);
    colorbar;
 
-   figure(10);
-   imagesc(ndvi_numerator);
+   %figure(10);
+   %imagesc(ndvi_numerator);
    
-   figure(11);
-   imagesc(ndvi_denominator);
-   
-  % title(sprintf('Band %f', envi.info.wavelength(i)));    
-  % pause(0.05);
+   %figure(11);
+   %imagesc(ndvi_denominator);
 
 %% Generate 1-D csv file
  
