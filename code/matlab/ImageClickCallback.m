@@ -20,7 +20,7 @@ function ImageClickCallback(obj,event, wavelengths_titles, hsi_img, hsi_figure, 
   
   plot(wavelengths_titles, reflectance);  xlabel('Wavelength(nm)'); ylabel('Reflectance');
   title (sprintf('Reflectance-Wavelength'));
-  set(gca,'YTick',[0:500:1])%max(reflectance)])
+  set(gca,'YTick',[0:0.2:1])%max(reflectance)])
   set(gca,'XTick',[0:100:max(wavelengths_titles)]);
   grid on;
   

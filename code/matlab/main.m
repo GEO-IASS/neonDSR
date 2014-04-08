@@ -1,4 +1,4 @@
-rcd('/home/scidb/zproject/neonDSR/code/matlab/');
+cd('/home/scidb/zproject/neonDSR/code/matlab/');
  
 %% Load ENVI file
 
@@ -11,6 +11,7 @@ format long g; % avoid scientific notation
 %envi = enviread('/home/scidb/neon/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON-L1G/f100910t01p00r02rdn_b_sc01_ort_flaashreflectance_img');
 %hsi_img = envi.z;
 %subimg = double(hsi_img(1200:1400 , 400:600, :));
+envi = enviread('/cise/homes/msnia/neon/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
 
 envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
 subimg = double(envi.z(2000:2450 , 630:770, :));
@@ -28,6 +29,9 @@ subimg(subimg>(subimg_mean + 2 *subimg_std))=0; % filter outlier 95 percentile
 max_num = max(subimg(:));
 min_num = min(subimg(:));
 subimg = double((subimg - min_num)) / double((max_num - min_num));
+
+% max of envi.x = 32724, min = -32762 setting negative values to zero and 
+% scaling others by max resulted in everything being <0.2
 
 %subimg = subimg/2.0;
 
