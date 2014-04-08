@@ -15,28 +15,26 @@ format long g; % avoid scientific notation
 envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
 subimg = double(envi.z(2000:2450 , 630:770, :));
 
+std = std(envi.z(:));
 
-%subimg = hsi_img;
-%clear hsi_img;
-%subimg = double(subimg + 0);
-%subimg(subimg<0) = 0; % filter out negative noises
+subimg(subimg<0) = 0; % filter out negative noises
 %subimg(subimg>10000) = 10000; % filter out large noises
 
-%subimg_mean = mean(subimg(:));
-%subimg_std = std(double(subimg(:)));
-%subimg(subimg>(subimg_mean + 2 *subimg_std))=0; % filter outlier 95 percentile
+subimg_mean = mean(subimg(:));
+subimg_std = std(subimg(:));
+subimg(subimg>(subimg_mean + 2 *subimg_std))=0; % filter outlier 95 percentile
 
 % Normalize: rflectance should be [0, 1]
-%max_num = max(subimg(:));
-%min_num = min(subimg(:));
-%subimg = double((subimg - min_num)) / double((max_num - min_num));
+max_num = max(subimg(:));
+min_num = min(subimg(:));
+subimg = double((subimg - min_num)) / double((max_num - min_num));
 
 %subimg = subimg/2.0;
 
 %clearvars subimg subimg_mean subimg_std max_num min_num;
 
-[rgb0, hsi_figure0, h0] = iRGB(envi.z); %Normalize for it, memory faced in normalizin
-[rgb, hsi_figure, h] = iRGB(subimg);
+[rgb0, hsi_figure0, h0] = iRGB(envi.z, 1); %Normalize for it, memory faced in normalizin
+[rgb, hsi_figure, h] = iRGB(subimg, 0);
 
 %figure, hist(normalized_subimg(:));
 
@@ -108,24 +106,9 @@ ndvi_numerator = nir - red;
 ndvi_denominator = nir + red;
 ndvi =  ndvi_numerator ./ ndvi_denominator;
 
-%max(ndvi_numerator(:))
-%min(ndvi_numerator(:))
-
-
-   %ndvi2560 = 2560 * ndvi;
-   %f = floor(ndvi2560);
-   %figure(8);
-   %imagesc(f );
-
-   figure(9);
-   imshow( ndvi);
-   colorbar;
-
-   %figure(10);
-   %imagesc(ndvi_numerator);
-   
-   %figure(11);
-   %imagesc(ndvi_denominator);
+figure(9);
+imshow( ndvi);
+colorbar;
 
 %% Generate 1-D csv file
  
@@ -145,7 +128,7 @@ numel(unique(Coords(:, 1))) % Unique X's
 numel(unique(Coords(:, 2))) % Unique Y's
 size(unique(Coords(:, [1,2]), 'rows')) % Unique X,Y combinations
 
-hist(DataPoints(:,[2]))+---------------
+hist(DataPoints(:,[2]))%---------------
 title (sprintf('Histogram of Lidar Returns')); xlabel('Lidar Return #'); ylabel('# of Points');
 
 

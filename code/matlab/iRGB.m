@@ -1,4 +1,4 @@
-function [rgb, hsi_figure, h] = iRGB(hsi_img)
+function [rgb, hsi_figure, h] = iRGB(hsi_img, normalize)
 % wavelength = {
 % 365.929810,  375.593994,  385.262512,  394.935486,  404.612915,  414.294586,
 % 423.980804,  433.671295,  443.366211,  453.065491,  462.769196,  472.477295,
@@ -44,11 +44,16 @@ function [rgb, hsi_figure, h] = iRGB(hsi_img)
   blue = hsi_img(:,:,10);
   rgb = cat(3, red, green, blue);
 
-  max_num = max(rgb(:));
-  min_num = min(rgb(:));
-  normalizedRGB = double((rgb - min_num)) / double((max_num - min_num));
-
-  intensityFixedRGB = sqrt(normalizedRGB);
+  if normalize 
+    max_num = max(rgb(:));
+    min_num = min(rgb(:));
+    rgb = double((rgb - min_num)) / double((max_num - min_num));
+    
+    subimg_mean = mean(rgb(:));
+    subimg_std = std(rgb(:));
+    rgb(rgb>(subimg_mean + 2 *subimg_std))=0; % filter outlier 95 percentile
+  end
+  intensityFixedRGB = sqrt(rgb);
   %intensityFixedRGB = sqrt(rgb);
   hsi_figure = figure;
   %image(intensityFixedRGB);
