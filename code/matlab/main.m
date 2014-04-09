@@ -1,24 +1,39 @@
-cd('/home/scidb/zproject/neonDSR/code/matlab/');
+
 format long g; % avoid scientific notation
- 
+global setting
+setting = struct('RED_INDEX', 34, 'NIR_INDEX', 41, 'GREEN_INDEX', 20, ...
+                 'BLUE_INDEX', 10);
+   
+
 %% Read ENVI file
 
 %envi = enviread('/home/scidb/neon/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON-L1G/f100910t01p00r02rdn_b_sc01_ort_flaashreflectance_img');
 %subimg = double(hsi_img(1200:1400 , 400:600, :));
 
-envi = enviread('/cise/homes/msnia/neon/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
-envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
-
+if exist('/cise/', 'file')
+  cd('/cise/homes/msnia/zproject/neonDSR/code/matlab');
+  envi = enviread('/cise/homes/msnia/neon/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
+else
+  cd('/home/scidb/zproject/neonDSR/code/matlab/');
+  envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
+  subimg = double(envi.z(2000:2450 , 630:770, :));
+end
 Check_XY_Have_Uniform_Step_Sizes(envi);
-subimg = double(envi.z(2000:2450 , 630:770, :));
-
 %% Clean Data 
 % max of envi.x = 32724, min = -32762 setting negative values to zero and 
 % scaling others by max itself resulted in everything being <0.2
 
-subimg(subimg<0) = 0; % filter out negative noises
+envi.z(envi.z<0) = 0; % filter out negative noises
+max_num = max(rgb(:));
+min_num = min(rgb(:));
+envi.z = double((envi.z - min_num)) / double((max_num - min_num));
+envi.z = sqrt(envi.z);
+
+subimg = envi.z;
 subimg(subimg>10000) = 10000; % filter out large noises
 subimg = double(subimg) / 10000.1;
+%subimg(subimg<0) = 0; % filter out negative noises
+%subimg = sqrt(double(subimg));
 
 %subimg(subimg>(subimg_mean + 2 *subimg_std))=0; % Remove 95% normal distribution outliers
 % Normalize: rflectance should be [0, 1]
@@ -27,15 +42,38 @@ subimg = double(subimg) / 10000.1;
 %subimg = double((subimg - min_num)) / double((max_num - min_num));
 %subimg = subimg/2.0;
 
+%% Generate NDVI
+
+ndvi = NDVI(subimg);
+
+figure(9);
+imshow( ndvi);
+colorbar;
+
+%% Remove Clouds and Shaddows
+[x, y] = size(ndvi);
+for i=1:x
+   for j=1:y
+      if ndvi(i, j) < 0.5
+         subimg(i, j, :)  = 0;
+      end
+      
+      if subimg(i,j,setting.NIR_INDEX) <0.2
+         subimg(i, j, :)  = 0;
+      end
+   end
+end
+
 %% Visualize the data
-[rgb0, hsi_figure0, h0] = iRGB(envi.z, 1); %Normalize for it, memory faced in normalizin
-[rgb, hsi_figure, h] = iRGB(subimg, 0);
+[rgb0, envi_figure, envi_h] = iRGB(envi.z, 1); %Normalize for it, memory faced in normalizin
+[rgb,subimg_figure, subimg_h] = iRGB(subimg, 0);
 
 %% Reflectance mouse picker
 
 wavelength_titles = envi.info.wavelength';
 reflectance_figure = figure;
-set(h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, subimg, hsi_figure, reflectance_figure});
+set(envi_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, envi.z, envi_figure, reflectance_figure});
+set(subimg_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, subimg, subimg_figure, reflectance_figure});
 
 %% Mark an already known spot in image
 
@@ -54,25 +92,6 @@ for i=40:n_band
    pause(0.05);
    %pause(1);
 end
-
-%% Generate NDVI
-
-ndvi = NDVI(subimg);
-
-figure(9);
-imshow( ndvi);
-colorbar;
-
-%% Remove Shaddow and Clouds
-[x, y] = size(ndvi);
-for i=1:x
-   for j=1:y
-      if ndvi(i, j) < 0.5
-         subimg(i, j, :)  = 0;
-      end
-   end
-end
-
 
 %% Generate 1-D csv file
  

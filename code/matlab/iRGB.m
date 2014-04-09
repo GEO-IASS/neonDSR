@@ -39,24 +39,14 @@ function [rgb, hsi_figure, h] = iRGB(hsi_img, normalize)
 % 2426.758057, 2436.689941, 2446.620117, 2456.548096, 2466.472900, 2476.395996,
 % 2486.316895, 2496.236084}
 
-  red = hsi_img(:,:,37);
-  green = hsi_img(:,:,20);
-  blue = hsi_img(:,:,10);
+  global setting
+
+  red = hsi_img(:,:,setting.RED_INDEX);
+  green = hsi_img(:,:,setting.GREEN_INDEX);
+  blue = hsi_img(:,:,setting.BLUE_INDEX);
   rgb = cat(3, red, green, blue);
 
-  if normalize 
-    max_num = max(rgb(:));
-    min_num = min(rgb(:));
-    rgb = double((rgb - min_num)) / double((max_num - min_num));
-    
-    subimg_mean = mean(rgb(:));
-    subimg_std = std(rgb(:));
-    rgb(rgb>(subimg_mean + 2 *subimg_std))=0; % filter outlier 95 percentile
-  end
-  intensityFixedRGB = sqrt(rgb);
-  %intensityFixedRGB = sqrt(rgb);
   hsi_figure = figure;
-  %image(intensityFixedRGB);
-  h = imshow(intensityFixedRGB);
+  h = imshow(rgb);
   colorbar
 end

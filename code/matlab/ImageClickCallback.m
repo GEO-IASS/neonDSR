@@ -2,7 +2,8 @@ function ImageClickCallback(obj,event, wavelengths_titles, hsi_img, hsi_figure, 
 %IMAGECLICKCALLBACK Summary of this function goes here
 % figures passed to draw red line and draw reflectance diagram
 
-  %disp('Click!!');
+  global setting
+  
   a = get(gca, 'CurrentPoint');
   assignin('caller', 'x',  a(1) );
   assignin('caller', 'y',  a(2) ); 
@@ -16,6 +17,12 @@ function ImageClickCallback(obj,event, wavelengths_titles, hsi_img, hsi_figure, 
   
  figure(reflectance_figure);
  reflectance = reshape(hsi_img(x_index, y_index, :), 1,224);
+ 
+ nir = double(reflectance(setting.NIR_INDEX));  
+ red = double(reflectance(setting.RED_INDEX)); 
+ ndvi = (nir-red)/(nir+red);
+ fprintf('NIR: %f   --  RED: %f --- NDVI:%f\n',nir, red, ndvi);
+
  % wavelength = envi.info.wavelength';
   
   plot(wavelengths_titles, reflectance);  xlabel('Wavelength(nm)'); ylabel('Reflectance');
