@@ -1,46 +1,35 @@
 cd('/home/scidb/zproject/neonDSR/code/matlab/');
- 
-%% Load ENVI file
-
-%enviread('/home/morteza/zproject/neon/envi/f100910t01p00r02rdn_b_NEON-L1B/f100910t01p00r02rdn_b_flaashreflectance_img');
-%envi = enviread('/home/morteza/zproject/neon/fulldataset/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON-L1G/f100910t01p00r02rdn_b_sc01_ort_flaashreflectance_img');
-
 format long g; % avoid scientific notation
+ 
+%% Read ENVI file
 
-% Read ENVI file
 %envi = enviread('/home/scidb/neon/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON-L1G/f100910t01p00r02rdn_b_sc01_ort_flaashreflectance_img');
-%hsi_img = envi.z;
 %subimg = double(hsi_img(1200:1400 , 400:600, :));
-envi = enviread('/cise/homes/msnia/neon/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
 
+envi = enviread('/cise/homes/msnia/neon/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
 envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
+
+Check_XY_Have_Uniform_Step_Sizes(envi);
 subimg = double(envi.z(2000:2450 , 630:770, :));
 
-std = std(envi.z(:));
+%% Clean Data 
+% max of envi.x = 32724, min = -32762 setting negative values to zero and 
+% scaling others by max itself resulted in everything being <0.2
 
 subimg(subimg<0) = 0; % filter out negative noises
-%subimg(subimg>10000) = 10000; % filter out large noises
+subimg(subimg>10000) = 10000; % filter out large noises
+subimg = double(subimg) / 10000.1;
 
-subimg_mean = mean(subimg(:));
-subimg_std = std(subimg(:));
-subimg(subimg>(subimg_mean + 2 *subimg_std))=0; % filter outlier 95 percentile
-
+%subimg(subimg>(subimg_mean + 2 *subimg_std))=0; % Remove 95% normal distribution outliers
 % Normalize: rflectance should be [0, 1]
-max_num = max(subimg(:));
-min_num = min(subimg(:));
-subimg = double((subimg - min_num)) / double((max_num - min_num));
-
-% max of envi.x = 32724, min = -32762 setting negative values to zero and 
-% scaling others by max resulted in everything being <0.2
-
+%max_num = max(subimg(:));
+%min_num = min(subimg(:));
+%subimg = double((subimg - min_num)) / double((max_num - min_num));
 %subimg = subimg/2.0;
 
-%clearvars subimg subimg_mean subimg_std max_num min_num;
-
+%% Visualize the data
 [rgb0, hsi_figure0, h0] = iRGB(envi.z, 1); %Normalize for it, memory faced in normalizin
 [rgb, hsi_figure, h] = iRGB(subimg, 0);
-
-%figure, hist(normalized_subimg(:));
 
 %% Reflectance mouse picker
 
@@ -54,7 +43,6 @@ markCoordinate(hsi_figure, envi, 402579.16,  3283733.50 )
 %building in subimg
 %markCoordinate(hsi_figure, envi, 402579.16, 3286162.00000000 )
 
-
 %% Display hsi_img at differnet bands.
 
 [n_row,n_col,n_band] = size(hsi_img);
@@ -67,52 +55,24 @@ for i=40:n_band
    %pause(1);
 end
 
-%% Ensure Seamless stepsize
-first_StepX = envi.x(2) - envi.x(1);
-consistent_x_step = true;
-for i=2:size(envi.x')
-   if envi.x(i) - envi.x(i-1) == first_StepX
-      %     disp('=')  
-   else
-     consistent_x_step = false
-
-   end
-end
-if consistent_x_step == false
-    disp('INCONSISTENT step size')
-else
-    disp('X step sizes, OK')
-end
-
-first_StepY = envi.y(2) - envi.y(1);
-consistent_y_step = true;
-for i=2:size(envi.y')
-   diff = envi.y(i) - envi.y(i-1);
-   if (diff == first_StepY)
-     %disp('=')  
-   else
-     consistent_y_step = false
-   end
-end
-if consistent_y_step == false
-    disp('INCONSISTENT step size')
-else
-    disp('Y step sizes, OK')
-end
-
-
 %% Generate NDVI
 
-nir = double(subimg(:,:,42));
-red = double(subimg(:,:,37));
-
-ndvi_numerator = nir - red;
-ndvi_denominator = nir + red;
-ndvi =  ndvi_numerator ./ ndvi_denominator;
+ndvi = NDVI(subimg);
 
 figure(9);
 imshow( ndvi);
 colorbar;
+
+%% Remove Shaddow and Clouds
+[x, y] = size(ndvi);
+for i=1:x
+   for j=1:y
+      if ndvi(i, j) < 0.5
+         subimg(i, j, :)  = 0;
+      end
+   end
+end
+
 
 %% Generate 1-D csv file
  
