@@ -2,7 +2,7 @@
 format long g; % avoid scientific notation
 global setting
 setting = struct('RED_INDEX', 34, 'NIR_INDEX', 41, 'GREEN_INDEX', 20, ...
-                 'BLUE_INDEX', 10);
+                 'BLUE_INDEX', 10, 'NDVI_THRESHOLD', 0.4, 'NIR_THRESHOLD', 0.33);
    
 
 %% Read ENVI file
@@ -24,16 +24,12 @@ Check_XY_Have_Uniform_Step_Sizes(envi);
 % scaling others by max itself resulted in everything being <0.2
 
 envi.z(envi.z<0) = 0; % filter out negative noises
-max_num = max(rgb(:));
-min_num = min(rgb(:));
-envi.z = double((envi.z - min_num)) / double((max_num - min_num));
-envi.z = sqrt(envi.z);
+envi.z(envi.z >10000) = 10000; % filter out large noises
+envi.z = double(envi.z) / 10000.1;
+envi.z = sqrt(double(envi.z));
+%envi.z = double((envi.z - min_num)) / double((max_num - min_num)); % scale envi.z
 
 subimg = envi.z;
-subimg(subimg>10000) = 10000; % filter out large noises
-subimg = double(subimg) / 10000.1;
-%subimg(subimg<0) = 0; % filter out negative noises
-%subimg = sqrt(double(subimg));
 
 %subimg(subimg>(subimg_mean + 2 *subimg_std))=0; % Remove 95% normal distribution outliers
 % Normalize: rflectance should be [0, 1]
@@ -54,11 +50,11 @@ colorbar;
 [x, y] = size(ndvi);
 for i=1:x
    for j=1:y
-      if ndvi(i, j) < 0.5
+      if ndvi(i, j) < setting.NDVI_THRESHOLD
          subimg(i, j, :)  = 0;
       end
       
-      if subimg(i,j,setting.NIR_INDEX) <0.2
+      if subimg(i,j,setting.NIR_INDEX) < setting.NIR_THRESHOLD
          subimg(i, j, :)  = 0;
       end
    end
