@@ -12,6 +12,7 @@ setting = struct('RED_INDEX', 34, 'NIR_INDEX', 41, 'GREEN_INDEX', 20, ...
 
 if exist('/cise/', 'file')
   cd('/cise/homes/msnia/zproject/neonDSR/code/matlab');
+  addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/uf/');
   envi = enviread('/cise/homes/msnia/neon/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
 else
   cd('/home/scidb/zproject/neonDSR/code/matlab/');
@@ -95,12 +96,17 @@ hsi2scidb(normalized_subimg, 'normalized_subimg.csv');
 hsi2scidb(hsi_img, 'hsi_img.csv');
 
 %% load LiDAR data (LIght Detection And Ranging)
-
-addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/');
 mode = 1; % | 2
 datestr(now, 'HH:MM:SS')
-[DataPoints, Coords] = readLAS('/home/scidb/neon/f100910t01p00r02rdn/lidar/lidar/DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las', mode);
+if exist('/cise/', 'file')
+  addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/uf/');
+  [DataPoints, Coords] = readLAS('/cise/homes/msnia/neon/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las', mode);
+else
+  [DataPoints, Coords] = readLAS('/home/scidb/neon/f100910t01p00r02rdn/lidar/lidar/DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las', mode);
+end
 datestr(now, 'HH:MM:SS')
+
+
 
 % Unique items in data
 numel(unique(Coords(:, 1))) % Unique X's
