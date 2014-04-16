@@ -125,6 +125,17 @@ temp = temp(temp > -1);
 hist(temp, 200)
 title (sprintf('Histogram of Lidar Data - After Removing Outliers')); xlabel('Height'); ylabel('# of Points in Histogram Bin');
 
+%% try lasread - AWESOME!!!
+
+datestr(now, 'HH:MM:SS')
+[s, h, v] = lasread('/cise/homes/msnia/neon/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las', 'A');
+zmean= mean(s.Z);
+zstd = std(s.Z);
+lidar = s.Z(s.Z <zmean + 3 * zstd );
+hist(lidar, 200);
+lasview(lastrim(s,50000),'z'); %sam
+datestr(now, 'HH:MM:SS')
+
 %% SPICE: linear unmixing - not suitable for neon dataset
 
 addpath('/home/scidb/zproject/neonDSR/code/matlab/uf/PCBootstrapSPICE');
