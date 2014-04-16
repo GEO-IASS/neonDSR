@@ -25,23 +25,10 @@ function [ imageindex ] = markCoordinate(hsi_figure, envi, XCoord, YCoord )
      disp('Coordinates are out of bounds.') 
   end
 
-  hold on
   figure(hsi_figure);
-
+  hold on
   plot(x_index,y_index,'r.','MarkerSize',20) 
-  
-  reflectance_figure = figure
-  reflectance = reshape(envi.z(y_index, x_index, :), 1,224);
-  wavelength = envi.info.wavelength';
-  
-  plot(wavelength, reflectance);  xlabel('Wavelength(nm)'); ylabel('Reflectance');
-  title (sprintf('Reflectance-Wavelength intensity of Endmember #%d',i));
-  set(gca,'YTick',[0:500:max(reflectance)])
-  set(gca,'XTick',[0:100:max(wavelength)])
-  grid on;
-  
-  set(reflectance_figure, 'Position', [100 100 900 400])
-
+  hold off
   imageindex= [x_index y_index];
 
   

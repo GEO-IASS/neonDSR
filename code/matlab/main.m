@@ -26,7 +26,7 @@ Check_XY_Have_Uniform_Step_Sizes(envi);
 
 envi.z(envi.z<0) = 0; % filter out negative noises
 envi.z(envi.z >10000) = 10000; % filter out large noises
-envi.z = double(envi.z) / 10000.1;
+envi.z = double(double(envi.z) / 10000.1);
 envi.z = sqrt(double(envi.z));
 %envi.z = double((envi.z - min_num)) / double((max_num - min_num)); % scale envi.z
 
@@ -62,7 +62,7 @@ for i=1:x
 end
 
 %% Visualize the data
-[rgb0, envi_figure, envi_h] = iRGB(envi.z, 1); %Normalize for it, memory faced in normalizin
+[rgb0, envi_figure, envi_h] = iRGB(envi.z, 0); %Normalize for it, memory faced in normalizin
 [rgb,subimg_figure, subimg_h] = iRGB(subimg, 0);
 
 %% Reflectance mouse picker
@@ -74,10 +74,55 @@ set(subimg_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, subimg, su
 
 %% Mark an already known spot in image
 
-markCoordinate(hsi_figure, envi, 402579.16,  3283733.50 )
+markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
 %building in subimg
 %markCoordinate(hsi_figure, envi, 402579.16, 3286162.00000000 )
 
+%% read ROI csv files, extract relevant reflectance
+% multi-line plot with legend http://www.mathworks.com/matlabcentral/answers/31510-help-with-plotting-multiple-line-complete-with-legends
+[rgb0, envi_figure, envi_h] = iRGB(envi.z, 0); %Normalize for it, memory faced in normalizin
+
+roi = csvread('/cise/homes/msnia/zproject/neonDSR/docs/field_trip_28022014/roi1.csv')
+coordinates = roi(: , [4,5]);
+pointCount = size(roi,1);
+reflectance_figure = figure;
+for i=1:pointCount
+  imageIndex = markCoordinate(envi_figure, envi, coordinates(i,1),  coordinates(i,2) );
+  
+  reflectance = reshape(envi.z(imageIndex(2), imageIndex(1), :), 1,224);
+  wavelength = envi.info.wavelength';
+  
+  figure(reflectance_figure);
+  plot(wavelength, reflectance);  
+  hold on
+end
+  hold off
+
+  figure(reflectance_figure)
+  xlabel('Wavelength(nm)'); ylabel('Reflectance');
+  title (sprintf('Reflectance-Wavelength intensity of Endmember #%d',i));
+  set(gca,'YTick',[0:0.1:max(reflectance)])
+  set(gca,'XTick',[0:100:max(wavelength)])
+  grid on;
+  
+  set(reflectance_figure, 'Position', [100 100 900 400])
+
+  
+  
+  
+  x = 1 : 50;
+y = rand(11,50); % 11 traces, 50 samples long
+h = zeros(11,1); % initialize handles for 11 plots
+figure;
+h(1)=plot(x,y(1,:),'color',[rand(1),rand(1),rand(1)]); hold on;
+for ii = 2 : 11
+  h(ii)=plot(x,y(ii,:),'color',[rand(1),rand(1),rand(1)]);
+end
+hold off;
+legend(h,'plot1','plot2','plot3','plot4','plot5','plot6','plot7',...
+       'plot8','plot9','plot10','plot11');
+  
+  
 %% Display hsi_img at differnet bands.
 
 [n_row,n_col,n_band] = size(hsi_img);
