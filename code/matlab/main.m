@@ -3,26 +3,21 @@ format long g; % avoid scientific notation
 global setting
 setting = struct('RED_INDEX', 34, 'NIR_INDEX', 41, 'GREEN_INDEX', 20, ...
                  'BLUE_INDEX', 10, 'NDVI_THRESHOLD', 0.4, 'NIR_THRESHOLD', 0.33);
-   
 
 %% Read ENVI file
 
-%envi = enviread('/home/scidb/neon/f100910t01p00r02rdn/f100910t01p00r02rdn_b_NEON-L1G/f100910t01p00r02rdn_b_sc01_ort_flaashreflectance_img');
-%subimg = double(hsi_img(1200:1400 , 400:600, :));
-
+flightDetails = 'Morning f100904t01p00r04rdn_b: ATCOR4r';
 if exist('/cise/', 'file')
   cd('/cise/homes/msnia/zproject/neonDSR/code/matlab');
-  addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/uf/');
-  envi = enviread('/cise/homes/msnia/neon/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
+  addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/');
+  envi = enviread('/cise/homes/msnia/neon/morning/f100904t01p00r04rdn_b/f100904t01p00r04rdn_b_sc01_ort_img_atm.bsq');
 else
   cd('/home/scidb/zproject/neonDSR/code/matlab/');
   envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
-  subimg = double(envi.z(2000:2450 , 630:770, :));
 end
 Check_XY_Have_Uniform_Step_Sizes(envi);
-%% Clean Data 
-% max of envi.x = 32724, min = -32762 setting negative values to zero and 
-% scaling others by max itself resulted in everything being <0.2
+
+%% Normalize ata reflectance range = [-32724, +32762] 
 
 envi.z(envi.z<0) = 0; % filter out negative noises
 envi.z(envi.z >10000) = 10000; % filter out large noises
@@ -32,22 +27,10 @@ envi.z = sqrt(double(envi.z));
 
 subimg = envi.z;
 
-%subimg(subimg>(subimg_mean + 2 *subimg_std))=0; % Remove 95% normal distribution outliers
-% Normalize: rflectance should be [0, 1]
-%max_num = max(subimg(:));
-%min_num = min(subimg(:));
-%subimg = double((subimg - min_num)) / double((max_num - min_num));
-%subimg = subimg/2.0;
+%% NDVI Filter Clouds and Shaddows
 
-%% Generate NDVI
+ndvi = toNDVI(subimg);
 
-ndvi = NDVI(subimg);
-
-figure(9);
-imshow( ndvi);
-colorbar;
-
-%% Remove Clouds and Shaddows
 [x, y] = size(ndvi);
 for i=1:x
    for j=1:y
@@ -61,9 +44,10 @@ for i=1:x
    end
 end
 
-%% Visualize the data
-[rgb0, envi_figure, envi_h] = iRGB(envi.z, 0); %Normalize for it, memory faced in normalizin
-[rgb,subimg_figure, subimg_h] = iRGB(subimg, 0);
+%% Plot the actual image and the subimg
+
+[rgb0, envi_figure, envi_h] = toRGB(envi.z, flightDetails); %Normalize for it, memory faced in normalizin
+[rgb,subimg_figure, subimg_h] = toRGB(subimg, flightDetails);
 
 %% Reflectance mouse picker
 
@@ -72,6 +56,10 @@ reflectance_figure = figure;
 set(envi_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, envi.z, envi_figure, reflectance_figure});
 set(subimg_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, subimg, subimg_figure, reflectance_figure});
 
+%%
+%%
+%%
+%%
 %% Mark an already known spot in image
 
 markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
@@ -80,14 +68,13 @@ markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
 
 %% read ROI csv files, extract relevant reflectance
 % multi-line plot with legend http://www.mathworks.com/matlabcentral/answers/31510-help-with-plotting-multiple-line-complete-with-legends
-[rgb0, envi_figure, envi_h] = iRGB(envi.z, 0); %Normalize for it, memory faced in normalizin
-
-plotROI(envi_figure, 1);
-
+[rgb0, envi_figure, envi_h] = toRGB(envi.z, flightDetails); %Normalize for it, memory faced in normalizin
+for i = 1:13
+  plotROI(envi_figure, envi, i);
+end
   
-  
-  
-  x = 1 : 50;
+%% Random Legended multi-line plot code snippet  
+x = 1 : 50;
 y = rand(11,50); % 11 traces, 50 samples long
 h = zeros(11,1); % initialize handles for 11 plots
 figure;
@@ -99,7 +86,7 @@ hold off;
 legend(h,'plot1','plot2','plot3','plot4','plot5','plot6','plot7',...
        'plot8','plot9','plot10','plot11');
   
-  
+
 %% Display hsi_img at differnet bands.
 
 [n_row,n_col,n_band] = size(hsi_img);

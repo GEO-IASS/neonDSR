@@ -5,11 +5,12 @@ function Check_XY_Have_Uniform_Step_Sizes( envi )
 first_StepX = envi.x(2) - envi.x(1);
 consistent_x_step = true;
 for i=2:size(envi.x')
-   if envi.x(i) - envi.x(i-1) == first_StepX
+    diff = envi.x(i) - envi.x(i-1);
+   if diff == first_StepX
       %     disp('=')  
    else
-     consistent_x_step = false
-
+     consistent_x_step = false;
+     sprintf('Expected %d but found %d', first_StepX, diff)
    end
 end
 if consistent_x_step == false
@@ -25,7 +26,7 @@ for i=2:size(envi.y')
    if (diff == first_StepY)
      %disp('=')  
    else
-     consistent_y_step = false
+     consistent_y_step = false;
    end
 end
 if consistent_y_step == false

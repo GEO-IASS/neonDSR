@@ -1,6 +1,5 @@
-% markCoordinate(hsi_figure, envi, 399523.000000000, 3286162.00000000 )
 function [ imageindex ] = markCoordinate(hsi_figure, envi, XCoord, YCoord )
-%MARKCOORDINATE marks the point with coordinate XCoord and YCoord in image
+% marks the point with coordinate XCoord and YCoord in image
 % as a red pixel, prints ERROR if the range is not proper.
 
   x_step_size = abs(envi.x(2) - envi.x(1));  

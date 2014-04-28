@@ -1,4 +1,17 @@
-function [rgb, hsi_figure, h] = iRGB(hsi_img, normalize)
+function [rgb, hsi_figure, h] = toRGB(hsi_img, message)
+  global setting
+
+  red = hsi_img(:,:,setting.RED_INDEX);
+  green = hsi_img(:,:,setting.GREEN_INDEX);
+  blue = hsi_img(:,:,setting.BLUE_INDEX);
+  rgb = cat(3, red, green, blue);
+
+  hsi_figure = figure;
+  h = imshow(rgb);
+  title (sprintf(message));
+  colorbar
+end
+
 % wavelength = {
 % 365.929810,  375.593994,  385.262512,  394.935486,  404.612915,  414.294586,
 % 423.980804,  433.671295,  443.366211,  453.065491,  462.769196,  472.477295,
@@ -38,15 +51,3 @@ function [rgb, hsi_figure, h] = iRGB(hsi_img, normalize)
 % 2367.114990, 2377.061035, 2387.004883, 2396.947021, 2406.885986, 2416.822998,
 % 2426.758057, 2436.689941, 2446.620117, 2456.548096, 2466.472900, 2476.395996,
 % 2486.316895, 2496.236084}
-
-  global setting
-
-  red = hsi_img(:,:,setting.RED_INDEX);
-  green = hsi_img(:,:,setting.GREEN_INDEX);
-  blue = hsi_img(:,:,setting.BLUE_INDEX);
-  rgb = cat(3, red, green, blue);
-
-  hsi_figure = figure;
-  h = imshow(rgb);
-  colorbar
-end
