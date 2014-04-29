@@ -60,39 +60,78 @@ set(subimg_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, subimg, su
 %%
 %%
 %%
+%% SVM 
+
+load fisheriris
+xdata = meas(51:end,3:4);
+group = species(51:end);
+svmStruct = svmtrain(xdata,group,'ShowPlot',true);
+
+figure
+species = svmclassify(svmStruct,[5 2],'ShowPlot',true)
+hold on;
+plot(5,2,'ro','MarkerSize',12);
+hold off
+
+
+
+
+figure
+gscatter(meas(51:end,3), meas(51:end,4), species(51:end),'rgb','osd');
+xlabel('petal length');
+ylabel('petal width');
+
+%====================================
+figure
+gscatter(meas(:,1), meas(:,2), species,'rgb','osd');
+xlabel('Sepal length');
+ylabel('Sepal width');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %% Mark an already known spot in image
 
 markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
-%building in subimg
-%markCoordinate(hsi_figure, envi, 402579.16, 3286162.00000000 )
 
 %% read ROI csv files, extract relevant reflectance
-% multi-line plot with legend http://www.mathworks.com/matlabcentral/answers/31510-help-with-plotting-multiple-line-complete-with-legends
+
 [rgb0, envi_figure, envi_h] = toRGB(envi.z, flightDetails); %Normalize for it, memory faced in normalizin
 for i = 1:13
   plotROI(envi_figure, envi, i);
 end
-  
-%% Random Legended multi-line plot code snippet  
-x = 1 : 50;
-y = rand(11,50); % 11 traces, 50 samples long
-h = zeros(11,1); % initialize handles for 11 plots
-figure;
-h(1)=plot(x,y(1,:),'color',[rand(1),rand(1),rand(1)]); hold on;
-for ii = 2 : 11
-  h(ii)=plot(x,y(ii,:),'color',[rand(1),rand(1),rand(1)]);
-end
-hold off;
-legend(h,'plot1','plot2','plot3','plot4','plot5','plot6','plot7',...
-       'plot8','plot9','plot10','plot11');
-  
 
 %% Display hsi_img at differnet bands.
 
-[n_row,n_col,n_band] = size(hsi_img);
+[n_row,n_col,n_band] = size(subimg);
 for i=40:n_band
    figure(10);
-   imagesc(hsi_img(:,:,i)); % creates heat map of that frequency
+   imagesc(subimg(:,:,i)); % creates heat map of that frequency
    % imshow(hsi_img(:,:,i)) % will only create grey image - not good
    title(sprintf('Band %f', envi.info.wavelength(i)));    
    pause(0.05);
