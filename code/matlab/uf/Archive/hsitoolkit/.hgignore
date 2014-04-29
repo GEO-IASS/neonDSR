@@ -1,0 +1,13 @@
+syntax: glob
+*~
+*.bak
+\#*
+*.tmp
+*.asv
+.DS_Store
+*/.DS_Store
+MPE/ExperimentStruct.mat
+MPE/TrueNonLinEndmems.mat
+fast_spice/SPICE.m.orig
+fast_spice/tempData.mat
+fast_spice/unmix_qpas_correct.m.orig

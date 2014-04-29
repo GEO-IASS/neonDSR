@@ -32,4 +32,4 @@ bin/
 .DS_STORE
 
 #propietary uf code
-matlab/uf/
+#matlab/uf/
