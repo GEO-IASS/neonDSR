@@ -62,6 +62,17 @@ set(subimg_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, subimg, su
 %%
 %% SVM 
 
+fieldData = '/cise/homes/msnia/zproject/neonDSR/docs/field_trip_28022014/crowns_osbs_atcor_flight4_morning.csv';
+[header, matrix] = csvreadh(fieldData);
+
+orderedArray = matrix;
+shuffledArray = orderedArray(randperm(size(orderedArray,1)),:);
+
+features = shuffledArray(:, 11:end);
+classes = shuffledArray(:, 2);
+
+
+
 load fisheriris
 xdata = meas(51:end,3:4);
 group = species(51:end);
