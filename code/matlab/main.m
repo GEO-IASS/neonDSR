@@ -56,76 +56,22 @@ reflectance_figure = figure;
 set(envi_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, envi.z, envi_figure, reflectance_figure});
 set(subimg_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, subimg, subimg_figure, reflectance_figure});
 
-%%
-%%
-%%
-%%
 %% SVM 
 
-fieldData = '/cise/homes/msnia/zproject/neonDSR/docs/field_trip_28022014/crowns_osbs_atcor_flight4_morning.csv';
-[header, matrix] = csvreadh(fieldData);
-
-orderedArray = matrix;
-shuffledArray = orderedArray(randperm(size(orderedArray,1)),:);
-
-features = shuffledArray(:, 11:end);
-classes = shuffledArray(:, 2);
+specie_svm;
 
 
-
-load fisheriris
-xdata = meas(51:end,3:4);
-group = species(51:end);
-svmStruct = svmtrain(xdata,group,'ShowPlot',true);
-
-figure
-species = svmclassify(svmStruct,[5 2],'ShowPlot',true)
-hold on;
-plot(5,2,'ro','MarkerSize',12);
-hold off
+fileID = fopen('test.csv');
+C = textscan(fileID,'%f %f %f %f %u8 %f',...
+'delimiter',',','EmptyValue',-Inf);
+fclose(fileID);
+column4 = C{4}, column5 = C{5}
 
 
 
 
-figure
-gscatter(meas(51:end,3), meas(51:end,4), species(51:end),'rgb','osd');
-xlabel('petal length');
-ylabel('petal width');
-
-%====================================
-figure
-gscatter(meas(:,1), meas(:,2), species,'rgb','osd');
-xlabel('Sepal length');
-ylabel('Sepal width');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+%%
+%%
 %% Mark an already known spot in image
 
 markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
@@ -156,14 +102,14 @@ hsi2scidb(hsi_img, 'hsi_img.csv');
 
 %% load LiDAR data (LIght Detection And Ranging)
 mode = 1; % | 2
-datestr(now, 'HH:MM:SS')
+disp(['Time: ' datestr(now, 'HH:MM:SS')])
 if exist('/cise/', 'file')
   addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/uf/');
   [DataPoints, Coords] = readLAS('/cise/homes/msnia/neon/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las', mode);
 else
   [DataPoints, Coords] = readLAS('/home/scidb/neon/f100910t01p00r02rdn/lidar/lidar/DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las', mode);
 end
-datestr(now, 'HH:MM:SS')
+disp(['Time: ' datestr(now, 'HH:MM:SS')])
 
 
 
@@ -186,14 +132,14 @@ title (sprintf('Histogram of Lidar Data - After Removing Outliers')); xlabel('He
 
 %% try lasread - AWESOME!!!
 
-datestr(now, 'HH:MM:SS')
+disp(['Time: ' datestr(now, 'HH:MM:SS')])
 [s, h, v] = lasread('/cise/homes/msnia/neon/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las', 'A');
 zmean= mean(s.Z);
 zstd = std(s.Z);
 lidar = s.Z(s.Z <zmean + 3 * zstd );
 hist(lidar, 200);
 lasview(lastrim(s,50000),'z'); %sam
-datestr(now, 'HH:MM:SS')
+disp(['Time: ' datestr(now, 'HH:MM:SS')])
 
 %% SPICE: linear unmixing - not suitable for neon dataset
 

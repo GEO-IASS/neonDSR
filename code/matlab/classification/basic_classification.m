@@ -1,5 +1,8 @@
 %% BASIC classification
 
+%# command to split training/testing sets
+% [trainIdx testIdx] = crossvalind('HoldOut', species, 1/3);
+
 % load and draw the group-scatter plot of the data
 
 load fisheriris
