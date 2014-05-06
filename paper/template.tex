@@ -1,0 +1,218 @@
+%  LaTeX support: latex@mdpi.com
+%  In case you need support, please attach any log files that you could have, and specify the details of your LaTeX setup (which operating system and LaTeX version / tools you are using).
+
+%=================================================================
+
+% LaTeX Class File and Rendering Mode (choose one)
+% You will need to save the "mdpi.cls" and "mdpi.bst" files into the same folder as this template file.
+
+%=================================================================
+
+\documentclass[journal,article,accept,moreauthors,pdftex,12pt,a4paper]{mdpi} 
+%--------------------
+% Class Options:
+%--------------------
+% journal
+%----------
+% Choose between the following MDPI journals:
+% actuators, administrativesciences, aerospace, agriculture, agronomy, algorithms, animals, antibiotics, antibodies, antioxidants, appliedsciences, arts, atmosphere, atoms, axioms, behavioralsciences, bioengineering, biology, biomedicines, biomolecules, biosensors, brainsciences, buildings, cancers, catalysts, cells, challenges, chemosensors, children, chromatography, climate, coatings, computation, computers, cosmetics, crystals, dentistryjournal, diagnostics, diseases, diversity, econometrics, economies, education, electronics, energies, entropy, environmentalsciences, environments, fibers, foods, forests, futureinternet, galaxies, games, genes, geosciences, healthcare, humanities, informatics, information, inorganics, insects, ijerph, ijfs, ijms, ijgi, jcdd, jcm, jdb, jfb, joi, jlpea, jmse, jpcg, jpm, jrfm, jsan, land, laws, life, lubricants, machines, marinedrugs, materials, mathematics, medicalsciences, membranes, metabolites, metals, microarrays, micromachines, microorganisms, minerals, molbank, molecules, nanomaterials, ncrna, nutrients, pathogens, pharmaceuticals, pharmaceutics, pharmacy, photonics, plants, polymers, processes, proteomes, publications, religions, remotesensing, resources, risks, robotics, sensors, socialsciences, societies, sports, sustainability, symmetry, systems, technologies, toxics, toxins, vaccines, veterinarysciences, viruses, water
+%---------
+% article
+%---------
+% The default type of manuscript is article, but could be replaced by using one of the class options: 
+% article, review, communication, commentary, bookreview, correction, addendum, editorial, changes, supfile, casereport, comment, conceptpaper, conferencereport, meetingreport, discussion, essay, letter, newbookreceived, opinion, projectreport, reply, retraction, shortnote, technicalnote, creative
+%----------
+% submit
+%----------
+% The class option "submit" will be changed to "accept" by the Editorial Office when the paper is accepted. This will only make changes to the frontpage (e.g. the logo of the journal will get visible), the headings, and the copyright information. Journal info and pagination for accepted papers will also be assigned by the Editorial Office.
+% Please insert a blank line is before and after all equation and eqnarray environments to ensure proper line numbering when option submit is chosen
+%------------------
+% moreauthors
+%------------------
+% If there is only one author the class option oneauthor should be used. Otherwise use the class option moreauthors.
+%---------
+% pdftex
+%---------
+% The option "pdftex" is for use with pdfLaTeX only. If eps figure are used, use the optioin "dvipdfm", with LaTeX and dvi2pdf only.
+
+%=================================================================
+\setcounter{page}{1}
+\lastpage{x}
+\doinum{10.3390/------}
+\pubvolume{xx}
+\pubyear{2014}
+\history{Received: xx / Accepted: xx / Published: xx}
+%------------------------------------------------------------------
+% The following line should be uncommented if the LaTeX file is uploaded to arXiv.org
+%\pdfoutput=1
+
+%=================================================================
+
+% Add packages and commands to include here
+% The amsmath, amsthm, amssymb, hyperref, caption, float and color packages are loaded by the MDPI class.
+%\usepackage{graphicx}
+%\usepackage{subfigure,psfig}
+
+%=================================================================
+%% Please use the following mathematics environments:
+%\theoremstyle{mdpi}
+%\newcounter{thm}
+%\setcounter{thm}{0}
+%\newcounter{ex}
+%\setcounter{ex}{0}
+%\newcounter{re}
+%\setcounter{re}{0}
+%\newtheorem{Theorem}[thm]{Theorem}
+%\newtheorem{Lemma}[thm]{Lemma}
+%\newtheorem{Characterization}[thm]{Characterization}
+%\newtheorem{Proposition}[thm]{Proposition}
+%\newtheorem{Property}[thm]{Property}
+%\newtheorem{Problem}[thm]{Problem}
+%\newtheorem{Example}[ex]{Example}
+%\newtheorem{Remark}[re]{Remark}
+%\newtheorem{Corollary}[thm]{Corollary}
+%\newtheorem{Definition}[thm]{Definition}
+%% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
+
+%=================================================================
+
+% Full title of the paper (Capitalized)
+\Title{Title of Article}
+
+% Authors (Add full first names)
+\Author{Firstname Lastname $^{1,}$*, Firstname Lastname $^{1}$ and Firstname Lastname $^{2}$}
+
+% Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
+\address{%
+$^{1}$ Institute 1, University 1, Full Address, City, Country\\
+$^{2}$ Institute 2, University 2, Full Address, City, Country}
+
+% Contact information of the corresponding author (Add [2] after \corres if there are more than one corresponding author.)
+\corres{e-mail, telephone and fax number of the corresponding author.}
+
+% Abstract (Do not use inserted blank lines, i.e. \\) 
+\abstract{This is the abstract section. The abstract should be one section and count less than 200 words.}
+
+% Keywords: add 3 to 10 keywords
+\keyword{keyword; keyword; keyword}
+
+% The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
+%\PACS{}
+%\MSC{}
+%\JEL{}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+
+Main text paragraph. Citing a journal paper \cite{ref-journal}. And now citing a book reference \cite{ref-book}.
+
+Main text paragraph.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Experimental Section}
+%% Only for the Journal of Physical and Chemical Gels: Please place the Experimental Section after the Conclusions
+
+Main text paragraph.
+
+Main text paragraph.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{This is a Subsection Heading}
+
+Main text paragraph.
+
+Main text paragraph.
+
+
+\subsubsection{This is a Subsubsection Heading}
+
+Main text paragraph.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Results and Discussion}
+
+Main text paragraph.
+
+%% Example of a theorem:
+%\begin{Theorem}
+%Text text text
+%\end{Theorem}
+
+The document text continues here.
+
+%% Example of a proof:
+%\begin{proof}[Proof of Theorem 1]
+%Text text text
+%\end{proof}
+
+The document text continues here.
+
+\subsection{This is a Subsection Heading}
+
+Main text paragraph.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Conclusions}
+
+Main text paragraph.
+
+
+Main text paragraph.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\acknowledgements{Acknowledgements}
+
+Main text.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\authorcontributions{Author Contributions}
+
+Main text.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\conflictofinterests{Conflicts of Interest}
+
+State any potential conflicts of interest here or ``The authors declare no conflict of interest''. 
+
+%=================================================================
+% References: Variant A
+%=================================================================
+% Back Matter (References and Notes)
+%----------------------------------------------------------
+% Style and layout of the references
+\bibliographystyle{mdpi}
+\makeatletter
+\renewcommand\@biblabel[1]{#1. }
+\makeatother
+
+\begin{thebibliography}{999} % if there are less than 10 entries, enter a one digit number
+
+% Reference 1
+\bibitem{ref-journal}
+Lastname, F.; Author, T. The title of the cited article. {\em Journal Abbreviation} {\bf 2008}, {\em 10}, 142-149.
+
+% Reference 2
+\bibitem{ref-book}
+Lastname, F.F.; Author, T. The title of the cited contribution. In {\em The Book Title}; Editor, F., Meditor, A., Eds.; Publishing House: City, Country, 2007; pp. 32-58.
+
+\end{thebibliography}
+
+%=================================================================
+% References:  Variant B
+%=================================================================
+% Use the following option to include external BibTeX files:
+%\bibliography{lite}
+%\bibliographystyle{mdpi}
+
+\end{document}
+
