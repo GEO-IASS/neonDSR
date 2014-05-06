@@ -8,7 +8,7 @@
 
 %=================================================================
 
-\documentclass[journal,article,accept,moreauthors,pdftex,12pt,a4paper]{mdpi} 
+\documentclass[remotesensing,article,accept,moreauthors,pdftex,12pt,a4paper]{mdpi} 
 %--------------------
 % Class Options:
 %--------------------
@@ -77,24 +77,27 @@
 %=================================================================
 
 % Full title of the paper (Capitalized)
-\Title{Title of Article}
+\Title{Hyperspectral Classification of Savanah Tree Species Using $k$-fold Cross-Validated Non-linear Support Vector Machines }
 
 % Authors (Add full first names)
-\Author{Firstname Lastname $^{1,}$*, Firstname Lastname $^{1}$ and Firstname Lastname $^{2}$}
+\Author{Morteza Shahriari Nia $^{1,}$*, Daisy Zhe Wang $^{1}$, Milenko Petrovic $^{2}$, Stephanie Ann Bohlman $^{3}$ and Paul Gader $^{2}$}
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
-$^{1}$ Institute 1, University 1, Full Address, City, Country\\
-$^{2}$ Institute 2, University 2, Full Address, City, Country}
+$^{1}$ Department of Computer and Information Science and Engineering, University of Florida, 432 Newell Dr., Gainesville, Florida 32611, USA\\
+$^{2}$ Institute for Human and Machine Cognition, 15 SE Osceola Ave, Ocala, Florida 34471, USA\\
+$^{3}$ School of Forest Resources and
+Conservation, 349 Newins Ziegler Hall, Gainesville, Florida
+32611, USA}
 
 % Contact information of the corresponding author (Add [2] after \corres if there are more than one corresponding author.)
-\corres{e-mail, telephone and fax number of the corresponding author.}
+\corres{msnia@cise.ufl.edu}
 
 % Abstract (Do not use inserted blank lines, i.e. \\) 
-\abstract{This is the abstract section. The abstract should be one section and count less than 200 words.}
+\abstract{Identifiying savannah species at ecological scale is major mile-stone in measuring biomass, carbon reserves, drought and invasive specie spread predictions. In this paper we perform classification and geo-mapping of tree species from hyperspectral imagery collected using AVRIS airborne sensors and atmospherically corrected using ATCOR. This study classifies four common savannah tree species in Ordway-Swisher Biological Station in north-central Florida, USA. Among predictors we found NDVI, the NIR wavelngths (0.73$\mu m$) and removal of water absorption bands (1.36$\mu m$ - 1.44$\mu m$) and (1.8$\mu m$ - 1.96$\mu m$) to be most useful. Gaussian filter was used to avoid sensor measurements and calibration errors in reflectance data. We employed various classification techniques out of which Support Vector Machines with a third degree polynomial kernel outperformed others. Our classification scheme produces accurate predictions of 80.02\% at pixel level. This research was performed as a pilot study for the National Ecological Observatory Network-Airborne Observation Platform protocols.}
 
 % Keywords: add 3 to 10 keywords
-\keyword{keyword; keyword; keyword}
+\keyword{Specie classification; Hyperspectral; Savannah; Support Vector Machines; Ordway-Swisher Biological Station; High spatial and spectral resolution; Pixel-level classification; National Ecological Observatory Network; Airborne Observation Platform protocols; NEON-AOP}
 
 % The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
 %\PACS{}
@@ -107,13 +110,15 @@ $^{2}$ Institute 2, University 2, Full Address, City, Country}
 
 \section{Introduction}
 
-Main text paragraph. Citing a journal paper \cite{ref-journal}. And now citing a book reference \cite{ref-book}.
+National Ecological Observatory Network (NEON) is a long term ecology monitoring project for for discovering, understanding and forecasting the impacts of climate change, land use change, and invasive species at continental-scale. NEON, funded by National Science Foundation (NSF) in the US, will operate for 30 years starting 2016. Local ecological measurements at sites distributed within 20 ecoclimatic domains across the contiguous United States, Alaska, Hawaii, and Puerto Rico will be coordinated with high resolution, regional airborne remote sensing observations \cite{kampe2010neon}. Airborne Observation Platform (AOP) would be the remote sensing platform with equipments of meter/sub-meter resolution for hyperspectral and Light Detection and Ranging (LiDAR) measurements. This work is a pilot study on the pre-mission airborne hyperspectral data collected. 
+
+Various studies have dealt with identifying tree species at both pixel level and crown level. State-of-the-art uses both a combination of airborne or satellite hyperspectral/lidar sensors to for various classification purposes such as road/building classification, tree specie classification and mapping.
 
 Main text paragraph.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Experimental Section}
+\section{Data Aquisition}
 %% Only for the Journal of Physical and Chemical Gels: Please place the Experimental Section after the Conclusions
 
 Main text paragraph.
@@ -122,16 +127,22 @@ Main text paragraph.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{This is a Subsection Heading}
+\subsection{Hypercpetral Photometry}
 
 Main text paragraph.
 
 Main text paragraph.
 
-
-\subsubsection{This is a Subsubsection Heading}
+\subsubsection{Airborne Setup}
 
 Main text paragraph.
+
+\subsubsection{Atmospheric Correction}
+
+\section{Specie Classification}
+
+\subsubsection{Support Vector Machines}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -170,7 +181,8 @@ Main text paragraph.
 
 \acknowledgements{Acknowledgements}
 
-Main text.
+This work is supported in part by DARPA under
+FA8750-12-2-0348-2 (DEFT/CUBISM).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -180,39 +192,12 @@ Main text.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\conflictofinterests{Conflicts of Interest}
+%\conflictofinterests{Conflicts of Interest}
 
-State any potential conflicts of interest here or ``The authors declare no conflict of interest''. 
+%State any potential conflicts of interest here or ``The authors declare no conflict of interest''. 
 
-%=================================================================
-% References: Variant A
-%=================================================================
-% Back Matter (References and Notes)
-%----------------------------------------------------------
-% Style and layout of the references
+\bibliography{citation}
 \bibliographystyle{mdpi}
-\makeatletter
-\renewcommand\@biblabel[1]{#1. }
-\makeatother
-
-\begin{thebibliography}{999} % if there are less than 10 entries, enter a one digit number
-
-% Reference 1
-\bibitem{ref-journal}
-Lastname, F.; Author, T. The title of the cited article. {\em Journal Abbreviation} {\bf 2008}, {\em 10}, 142-149.
-
-% Reference 2
-\bibitem{ref-book}
-Lastname, F.F.; Author, T. The title of the cited contribution. In {\em The Book Title}; Editor, F., Meditor, A., Eds.; Publishing House: City, Country, 2007; pp. 32-58.
-
-\end{thebibliography}
-
-%=================================================================
-% References:  Variant B
-%=================================================================
-% Use the following option to include external BibTeX files:
-%\bibliography{lite}
-%\bibliographystyle{mdpi}
 
 \end{document}
 
