@@ -94,7 +94,7 @@ Conservation, 349 Newins Ziegler Hall, Gainesville, Florida
 \corres{msnia@cise.ufl.edu}
 
 % Abstract (Do not use inserted blank lines, i.e. \\) 
-\abstract{Identifiying savannah species at ecological scale is major mile-stone in measuring biomass, carbon reserves, drought and invasive specie spread predictions. In this paper we perform classification and geo-mapping of tree species from hyperspectral imagery collected using AVRIS airborne sensors and atmospherically corrected using ATCOR. This study classifies four common savannah tree species in Ordway-Swisher Biological Station in north-central Florida, USA. Among predictors we found NDVI, the NIR wavelngths (0.73$\mu m$) and removal of water absorption bands (1.36$\mu m$ - 1.44$\mu m$) and (1.8$\mu m$ - 1.96$\mu m$) to be most useful. Gaussian filter was used to avoid sensor measurements and calibration errors in reflectance data. We employed various classification techniques out of which Support Vector Machines with a third degree polynomial kernel outperformed others. Our classification scheme produces accurate predictions of 80.02\% at pixel level. This research was performed as a pilot study for the National Ecological Observatory Network-Airborne Observation Platform protocols.}
+\abstract{Identifiying savannah species at ecological scale is major mile-stone in measuring biomass, carbon reserves, drought and invasive specie spread predictions. In this paper we perform classification and geo-mapping of tree species from hyperspectral imagery collected using AVRIS airborne sensors and atmospherically corrected using ATCOR. This study classifies four common savannah tree species in Ordway-Swisher Biological Station in north-central Florida, USA. Among predictors we found NDVI, the NIR wavelngths (0.73$\mu m$) and removal of water absorption bands (1.36$\mu m$ - 1.44$\mu m$) and (1.8$\mu m$ - 1.96$\mu m$) to be most useful. Gaussian filter was used to avoid sensor measurements and calibration errors in reflectance data. We employed various classification techniques out of which Support Vector Machines with a third degree polynomial kernel outperformed others. Our classification scheme produces accurate predictions of 80.02\% at pixel level. We also evaluated the performance of FLAASH and ATCOR atmospheric corrections on prediction accuracy. This research was performed as a pilot study for the National Ecological Observatory Network-Airborne Observation Platform protocols.}
 
 % Keywords: add 3 to 10 keywords
 \keyword{Specie classification; Hyperspectral; Savannah; Support Vector Machines; Ordway-Swisher Biological Station; High spatial and spectral resolution; Pixel-level classification; National Ecological Observatory Network; Airborne Observation Platform protocols; NEON-AOP}
@@ -106,17 +106,21 @@ Conservation, 349 Newins Ziegler Hall, Gainesville, Florida
 
 \begin{document}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Introduction}
 
-National Ecological Observatory Network (NEON) is a long term ecology monitoring project for for discovering, understanding and forecasting the impacts of climate change, land use change, and invasive species at continental-scale. NEON, funded by National Science Foundation (NSF) in the US, will operate for 30 years starting 2016. Local ecological measurements at sites distributed within 20 ecoclimatic domains across the contiguous United States, Alaska, Hawaii, and Puerto Rico will be coordinated with high resolution, regional airborne remote sensing observations \cite{kampe2010neon}. Airborne Observation Platform (AOP) would be the remote sensing platform with equipments of meter/sub-meter resolution for hyperspectral and Light Detection and Ranging (LiDAR) measurements. This work is a pilot study on the pre-mission airborne hyperspectral data collected. 
+Mapping tree species by remote sensing techniques is an essential step in understanding how species play roles in ecological scale. This will enable us to study land covers, climate change, invasive specie changes, plant competitions, predict fire potentials and spreading routes, soil characteristics and etc \cite{scholes1997tree, colgan2012mapping}. This kind of work has only been possible via the technological advancements in hyperspectral imagey. 
 
-Various studies have dealt with identifying tree species at both pixel level and crown level. State-of-the-art uses both a combination of airborne or satellite hyperspectral/lidar sensors to for various classification purposes such as road/building classification, tree specie classification and mapping.
+Various studies have dealt with identifying tree species at both pixel level and crown level. Carnegie Airborne Observatory\footnote{http://cao.stanford.edu/} (CAO)  is a major prioneer in employing airborne technology for remote sensing of ecology. Here we briefly overview some of their works as well as other research groups contributions. Colgan et al. \cite{colgan2012mapping} uses a two stage Support Vector Machines (SVM) at pixel level and at crown level for tree specie classification; LiDAR data is used for crown segmentation. F\'{e}ret and Asner \cite{feret2013tree} study the accuracy of various parametric/non-parametric supervised classification techniques and observed that there is a clear advantage in using regularized discriminant analysis, linear discriminant analysis, and support vector machines among others. There are other schools of thought that use unsupervised techniques. For example Baldeck and Asner \cite{baldeck2013estimating} try to measure how similar beta diversity of regions are; they use distance measures such as Euclidean distance and K-means clustering. Using these clustering techniques one can have a quick understanding of beta diversities and avoid costly and time consuming field data collections. This line of research needs more work as about 50\% of pixels are classified as \textit{other}, therefore any conclusion at this scale of uncertainty is not necessarily helpful, the same holds for \cite{baldeck2014landscape}.
 
-Main text paragraph.
+Cho et al. \cite{cho2012mapping} compares accuracies when different hyperspectral sensors of CAO, WorldView2 and QuickBird are utilized by convolving the 72 bands of CAO to eight and four multispectral channels available in the WorldView-2 and Quickbird satellite sensors, respectively. Interestingly enough they observed that WorldView-2 produced more accurate classification results then QuickBird and finally CAO. Clark et a. take on another perspective and compare lab measurements to pixel and to crown level \cite{clark2005hyperspectral} and try to identify important wavelength regions for specie discrimination. They observed that optimal regions of the spectrum for species discrimination varied with scale. However, near-infrared (700-1327$nm$) bands were consistently important regions across all scales. Bands in the visible region (437-700$nm$) and shortwave infrared (1994-2435$nm$) were more important at pixel and crown scales  \cite{clark2005hyperspectral}. Clark et al.  in another work evaluates the effects of differnet metrics used for classification (indexes, derivatives, signals themselves and all together) \cite{clark2012species}. There are other tree specie classification works such as \cite{dalponte2014tree, feret2012semi, feret2013tree, ghosh2014framework, immitzer2012tree, naidoo2012classification, ustin2009retrieval} that share the same aproach with minor variations. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Sometimes specially tailored tools and methodologies in this field are necessary. As an example, one should note that differnet bands in a hyperspectral image have differnet signal to noise ratios, and Principal Components (PC) transform will not always result in components with a steadily increasing noise level. This makes setting a cut-off point difficult. Minimum Noise Fraction (MNF)   \cite{green1988transformation} is a modified PC transform which produces a set of principal component images ordered in terms of decreasing signal quality. 
+
+
+National Ecological Observatory Network (NEON) is a long term ecology monitoring project for for discovering, understanding and forecasting the impacts of climate change, land use change, and invasive species at continental-scale. NEON, funded by National Science Foundation (NSF) in the US, will operate for 30 years starting 2016. Local ecological measurements at sites distributed within 20 ecoclimatic domains across the contiguous United States, Alaska, Hawaii, and Puerto Rico will be coordinated with high resolution, regional airborne remote sensing observations \cite{kampe2010neon}. Airborne Observation Platform (AOP) would be the remote sensing platform with equipments of meter/sub-meter resolution for hyperspectral and Light Detection and Ranging (LiDAR) measurements. This paper is a pilot study on the pre-mission airborne hyperspectral data collected. No operation at the scale and time span of NEON has been ever carried out before and a thorough study of the opportunities and challenges ahead is necessary specifically in the \textit{remote sensing} perspective where the volume of data can quickly become overwhelming.
+
+
+
 
 \section{Data Aquisition}
 %% Only for the Journal of Physical and Chemical Gels: Please place the Experimental Section after the Conclusions
@@ -186,9 +190,9 @@ FA8750-12-2-0348-2 (DEFT/CUBISM).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\authorcontributions{Author Contributions}
+% \authorcontributions{Author Contributions}
 
-Main text.
+% Main text.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
