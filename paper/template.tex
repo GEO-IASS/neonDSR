@@ -58,7 +58,8 @@
 \usepackage{graphicx}
 \usepackage{subcaption} 
 \usepackage{url}
-
+\usepackage{multirow}
+\usepackage{amsmath}
 
 %=================================================================
 %% Please use the following mathematics environments:
@@ -171,7 +172,16 @@ LiDAR: The National Center for Airborne Laser Mapping (NCALM)\footnote{http://ww
 
 \section{Specie Classification}
 
-Upon the collection, orthorectification and atmospheric correction of hyperspectral and LiDAR data we work on identifying tree species. For our classification task, we collected ground data of identifying tree species on February 28th, 2014. We drove to OSBS with a laptop that has ArcMap installed on and the ENVI image loaded in it, we connected a professional grade GPS to the laptop. ArcMap read GPS coordniates and mapped the polygons in the ENVI image. In this way, we marked several geo-polygons that had uniform plant species in the ENVI image. Later on we overlayed the identified polygons with proper JPL AVRIS flight which had the least amout of clouds. In this case we bookmarked flight \#4 on morning of 09/04/2010. This approach works pretty accurate if you are not in a dense forest such as tropical forests where GPS signal under the tree canopy has high deviations due to NLOS (no-line of sight) of GPS signals. Even with these considerations GPS still doesn't work that great and you need to mark several items such as by this road, close to this big tree to be able to later on mark your points in the map and avoid shifts in coordinats.
+Upon the collection, orthorectification and atmospheric correction of hyperspectral and LiDAR data we work on identifying tree species. With the resolution of images being about 3 meters we are not getting pure pine or oak signlas and there is lots of mixing going on. A pixel's hyperspectral values is a linear/nonlinear mixing of leaf, branch, soil, shade, and other signals. The timing of fights (September) adds to the challenge: leafs might not be as green or that some trees might have already started to lose leaves and this leads to us getting more branch signals. Further more Longleaf pine is a conifer (needlelaf), unlike broadleaf trees where signal return can be more accurate. 
+
+\subsection{Field Data}
+
+
+For our classification task, we collected ground data of identifying tree species on February 28th, 2014. We drove to OSBS with a laptop that has ArcMap installed on and the ENVI image loaded in it, we connected a professional grade GPS to the laptop. ArcMap read GPS coordniates and mapped the polygons in the ENVI image. In this way, we marked several geo-polygons that had uniform plant species in the ENVI image. Later on we overlayed the identified polygons with proper JPL AVRIS flight which had the least amout of clouds. In this case we bookmarked flight \#4 on morning of 09/04/2010. This approach works pretty accurate if you are not in a dense forest such as tropical forests where GPS signal under the tree canopy has high deviations due to NLOS (no-line of sight) of GPS signals. Even with these considerations GPS still doesn't work that great and you need to mark several items such as by this road, close to this big tree to be able to later on mark your points in the map and avoid shifts in coordinats.
+
+Alltogether we identified species for 452 pixels. In Table \ref{table:field data} you can fidn the details of identified Regions of Interest (ROIs) along with their details. 
+
+
 
 \begin{figure}[t]
     \centering
@@ -196,7 +206,53 @@ Upon the collection, orthorectification and atmospheric correction of hyperspect
 
 
 
-With the resolution of images being about 3 meters we are not getting pure pine or oak signlas and there is lots of mixing going on. A pixel's hyperspectral values is a linear/nonlinear mixing of leaf, branch, soil, shade, and other signals. The timing of fights (September) adds to the challenge: leafs might not be as green or that some trees might have already started to lose leaves and this leads to us getting more branch signals. Further more Longleaf pine is a conifer (needlelaf), unlike broadleaf trees where signal return can be more accurate. 
+
+
+
+%\begin{tabular}{ | l | l | }
+%    \hline
+%    4 & 48  \\ \hline
+%    13 & 37  \\ \hline
+%\end{tabular}
+
+\begin{table}
+\begin{center}
+
+    \begin{tabular}{ | c | c | c | c | l | }
+    \hline
+    Specie & ROI & Pixels per ROI & Total Pixels & Characteristics \\
+    \hline
+    \multirow{2}{*}{Live Oak} & 4  & 48 & \multirow{2}{*}{85} & \multirow{2}{*}{specie details} \\ 
+ & 13 & 37 & & \\    
+    \hline
+    \multirow{4}{*}{Turkey Oak} & 6 & 23 &\multirow{4}{*}{136} & specie details \\ 
+     & 7 & 14 & & \\    
+     & 10 & 73 &  & \\    
+     & 11 & 26 & & \\    
+    \hline
+    \multirow{3}{*}{Longleaf Pine} & 8 & 7 & \multirow{3}{*}{144} & specie details \\ 
+     & 9 & 30 &  & \\    
+     & 12 & 107 & & \\
+     \hline
+    \multirow{4}{*}{Pine (other)} & 1 & 13 & \multirow{4}{*}{87} & specie details \\
+     & 2 & 30 & & \\    
+     & 3 & 20 &  & \\    
+     & 5 & 24 & & \\
+    \hline
+    
+    \end{tabular}
+    \caption{Field data details}
+    \label{table:field data}
+    \end{center}
+
+\end{table}
+
+
+
+
+
+
+
 
 \subsection{Preprocessing}
 
@@ -211,13 +267,40 @@ To properly classify tree species we get rid of pixels not belonging to planetar
 NDVI  = \frac{NIR - VIS}{NIR + VIS}
 \end{equation}
 
-where is $NIR$ the reflectance in the reflective near-infrared wavelengths (0.725-1.1 $\mu m$) and $VIS$ is the reflectance in the visible (red) wavelengths (0.58-0.68 $\mu m$). The principle behind this is that $VIS$ is in a part of the spectrum where chlorophyll causes considerable absorption of incoming radiation, and the $NIR$ is in a spectral region where spongy mesophyll leaf structure leads to considerable reflectance \cite{tucker1979red, jackson1983discrimination}. For this purpose we chose wavelengths 0.6656 $\mu m$ for red and 0.7341 $\mu m$ for near-infrared. By filtering out pixels with $NDVI < 0.4$ we are essentially removing pixels that are not green. Furthermore, a filter of $NIR < 0.33$  excludes heavily shaded samples \cite{colgan2012mapping}.
+where is $NIR$ the reflectance in the reflective near-infrared wavelengths (0.725-1.1 $\mu m$) and $VIS$ is the reflectance in the visible (red) wavelengths (0.58-0.68 $\mu m$). The principle behind this is that $VIS$ is in a part of the spectrum where chlorophyll causes considerable absorption of incoming radiation, and the $NIR$ is in a spectral region where spongy mesophyll leaf structure leads to considerable reflectance \cite{tucker1979red, jackson1983discrimination}. For this purpose we chose wavelengths 0.6656 $\mu m$ for red and 0.7341 $\mu m$ for near-infrared. By filtering out pixels with $NDVI < 0.4$ we are essentially removing pixels that are not green. Furthermore, a filter of $NIR < 0.33$  excludes heavily shaded samples \cite{colgan2012mapping}. By performing previous filters we get rid of roads, clouds, shades and grassy areas and we are left with mostly tree canopies where we can apply the classification.
 
-By filtering out pixels with NDVI values 
 
-We set any
 
-\subsubsection{Support Vector Machines}
+
+\subsection{Support Vector Machines}
+
+It is well known in literature that Support Vector Machines (SVM) outperforms other algorithms on specie clasification \cite{colgan2012mapping, baldeck2014landscape, cho2012mapping}. We perform two types of classification. We perform specie classification using \textit{non-linear multi-class SVM} from two perspectives. 
+
+
+\begin{itemize}
+\item SVM with $\frac{2}{3}$ train, $\frac{1}{3}$ test with no-substitution sampling.
+\item Perform SVM classification with $k$-fold cross validation where $k=10$. This means we perform classification 10 times where at each time a separate non-overlapping portion of ground data is specified for train and test purposes. The ratio of train vs test is 9 to 1 from total samples.
+\end{itemize}
+
+This setup asserts the utility of cross-validation and the robustness of our approach in classification. By observing similar accuracies in cross validation runs and the initial 2 to 1 basic setup we observse that our training is robust in terms of seeing ground data. As the field data is in order, in both of the scenarios above we shuffle the data before each run to make sure, this setup will not bia the training process.
+
+Regarding multi-class classification, we create $\binom{c}{2}$ classifiers where $c$ is the number of classes. We train all the classifiers and to decide on the class a given test case belongs to we do majority voting among classifiers. In Table \ref{table:confusion matrix} you can view the confusion matrix.
+
+
+\begin{table}[h]
+\begin{center}
+
+\begin{tabular}{| l | l | l | l | l |}
+\hline
+ &  &  &  &  \\ \hline
+ &  &  &  &  \\ \hline
+ &  &  &  &  \\ \hline
+ &  &  &  &  \\ \hline
+\end{tabular}
+    \caption{Field data details}
+    \label{table:confusion matrix}\end{center}
+
+\end{table}
 
 
 \section{Results and Discussion}
