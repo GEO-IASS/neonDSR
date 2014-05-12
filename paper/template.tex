@@ -53,6 +53,13 @@
 %\usepackage{graphicx}
 %\usepackage{subfigure,psfig}
 
+
+
+\usepackage{graphicx}
+\usepackage{subcaption} 
+\usepackage{url}
+
+
 %=================================================================
 %% Please use the following mathematics environments:
 %\theoremstyle{mdpi}
@@ -80,7 +87,7 @@
 \Title{Hyperspectral Classification of Savanah Tree Species Using $k$-fold Cross-Validated Non-linear Support Vector Machines }
 
 % Authors (Add full first names)
-\Author{Morteza Shahriari Nia $^{1,}$*, Daisy Zhe Wang $^{1}$, Milenko Petrovic $^{2}$, Stephanie Ann Bohlman $^{3}$ and Paul Gader $^{2}$}
+\Author{Morteza Shahriari Nia $^{1,}$*, Daisy Zhe Wang $^{1}$, Milenko Petrovic $^{2}$, Stephanie Ann Bohlman $^{3}$ and Paul Gader $^{1}$}
 
 % Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
 \address{%
@@ -117,67 +124,128 @@ Cho et al. \cite{cho2012mapping} compares accuracies when different hyperspectra
 Sometimes specially tailored tools and methodologies in this field are necessary. As an example, one should note that differnet bands in a hyperspectral image have differnet signal to noise ratios, and Principal Components (PC) transform will not always result in components with a steadily increasing noise level. This makes setting a cut-off point difficult. Minimum Noise Fraction (MNF)   \cite{green1988transformation} is a modified PC transform which produces a set of principal component images ordered in terms of decreasing signal quality. 
 
 
-National Ecological Observatory Network (NEON) is a long term ecology monitoring project for for discovering, understanding and forecasting the impacts of climate change, land use change, and invasive species at continental-scale. NEON, funded by National Science Foundation (NSF) in the US, will operate for 30 years starting 2016. Local ecological measurements at sites distributed within 20 ecoclimatic domains across the contiguous United States, Alaska, Hawaii, and Puerto Rico will be coordinated with high resolution, regional airborne remote sensing observations \cite{kampe2010neon}. Airborne Observation Platform (AOP) would be the remote sensing platform with equipments of meter/sub-meter resolution for hyperspectral and Light Detection and Ranging (LiDAR) measurements. This paper is a pilot study on the pre-mission airborne hyperspectral data collected. No operation at the scale and time span of NEON has been ever carried out before and a thorough study of the opportunities and challenges ahead is necessary specifically in the \textit{remote sensing} perspective where the volume of data can quickly become overwhelming.
+National Ecological Observatory Network (NEON) is a long term ecology monitoring project for for discovering, understanding and forecasting the impacts of climate change, land use change, and invasive species at continental-scale. NEON, funded by National Science Foundation (NSF) in the US, will operate for 30 years starting 2016. Local ecological measurements at sites distributed within 20 ecoclimatic domains across the contiguous United States, Alaska, Hawaii, and Puerto Rico will be coordinated with high resolution, regional airborne remote sensing observations \cite{kampe2010neon}. Twenty terrestrial wildland core sites statistically represent unmanaged wildland conditions across the U.S. for NEON's 30-year lifetime. NEON moves an additional 40 relocatable terrestrial sites every five to seven years to locations where they may best capture specific ecological phenomena such as land use change and regional nitrogen deposition. Thirty-six aquatic sites collect representative aquatic data. Many aquatic sites are located near core and relocatable terrestrial sites\footnote{http://www.neoninc.org/science/domains\#sthash.aW1THj1N.dpuf}.Airborne Observation Platform (AOP) would be the remote sensing platform with equipments of meter/sub-meter resolution for hyperspectral and Light Detection and Ranging (LiDAR) measurements. This paper is a pilot study on the pre-mission airborne hyperspectral data collected. No operation at the scale and time span of NEON has been ever carried out before and a thorough study of the opportunities and challenges ahead is necessary specifically in the \textit{remote sensing} perspective where the volume of data can quickly become overwhelming \cite{neon2010aop}.
+
+\section{Data Collection}
+
+The NEON Southeast Domain 3 contains the southern portions of the Gulf Coast states, half of South Carolina, and all of Florida except for the southern tip. The candidate core site for Domain 3 is located at the Ordway-Swisher Biological Station (OSBS) in north-central Florida\footnote{http://ordway-swisher.ufl.edu/index.htm} with UTM coordinates: 3,285,000 Northing, 405,000 Easting and Zone 17. OSBS features diverse natural forests, small pine plantations nearby, a range of wildlife species that reflects the area's ecological communities, and a 75-year history of low human impact. The ground sampling part of this campaign focused on a sandhill ecosystem dominated by Long-Leaf Pine (\textit{Pinus Palustris}) and Turkey Oak (\textit{Quercus Laevis}) \cite{neon2010aop}.
+
+Hyperspectral: NEON deployed the JPL AVIRIS (Jet Propulsion Laboratory - Airborne Visible/Infrared Imaging Spectrometer) in partnership with NASA to collect data. JPL has flown on two separate days over OSBS: morning of September 4, 2010 (between 9:30 and 10:30 am) and mid-day of September 10, 2010. Both of the flights were flown at approximately 4000m AGL at approximately 90 knots on a Twin Otter aircraft. Details of these flights can be seen in Figure \ref{fig:hyperspectral}. Dependent on flight line, pixel size ranges from 3.3m to 3.6m. Hyperspectral data was atmospherically corrected using FLAASH \cite{adler1998flaash} and ATCOR \cite{richter2005atmospheric} algorithms. There are 8 flight lines and the total size of compressed data is 33GB. There are 224 bands recorded, with wavelengths from 365.93 nm to 2496.24 nm.
+%Concurrent ground data includes weather parameters, aerosol optical depth, field spectra of various canopies, and Leaf Area Index (LAI) measurements.
+
+Atmospheric characterization relied on measurements of a CIMEL sun photometer in coordination with the NASA Aerosol Robotic Network\footnote{NASA AERONET: http://gcmd.nasa.gov/records/GCMD\_AERONET\_NASA.html}. Measurements were collected on September 4, 2010 and the the derived atmospheric information was used to improve the atmospheric correction of the AVIRIS spectrometer data. You can find the detailed measurements such as aerosol optical thickness, water vapor, and etc online\footnote{http://aeronet.gsfc.nasa.gov/cgi-bin/type\_one\_station\_opera\_v2\_new?site=Ordway-Swisher}.
+ 
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/JPL_AVIRIS_flight_ground_tracks_OSBS_9_4_10.png}
+        \caption{Flights ground tracks}
+        \label{fig:JPL_AVIRIS_flight_ground_tracks_OSBS_9_4_10}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/JPL_AVIRIS_true_color_mosaic_OSBS_9_4_10.png}
+        \caption{Hyperspectral true-color mosaic, morning 09/04/2010}
+        \label{fig:JPL_AVIRIS_true_color_mosaic_OSBS_9_4_10}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/JPL_AVIRIS_true_color_mosaic_OSBS_9_10_10.png}
+        \caption{Hyperspectral true-color mosaic, mid-day 09/10/2010}
+        \label{fig:JPL_AVIRIS_true_color_mosaic_OSBS_9_10_10}
+    \end{subfigure}
+    \caption{JPL AVRIS flights over OSBS \cite{neon2010aop}}
+    \label{fig:hyperspectral}
+\end{figure}
 
 
 
+LiDAR: The National Center for Airborne Laser Mapping (NCALM)\footnote{http://www.ncalm.cive.uh.edu/} coordinated the waveform-LiDAR flights in the same study areas and as  with the AVIRIS flights \cite{neon2010aop}. As shown in Figure \ref{fig:lidar}, NCALM flew an Optech Gemini\footnote{Optech Gemini LiDAR sensor: http://www.optech.ca/gemini.htm} waveform-LiDAR with a nominal altitude flight covering the entire OSBS on September 1, 2010. In total there were 33 flight lines collected over OSBS both in the morning and in the afternoon, 7 flight lines were re-flown due to clouds. Range scale of LiDAR data was at 1.0m and up to five returns were recorded. The parameters for the data collected are 70 kHz PRF, wide beam divergence of 0.8 mrad, 20 deg half scan angle, and 40 Hz scan frequency. The GPS/IMU navigation data are processed using the Applanix POSPac MMS software to determine the position, orientation, and trajectory of the aircraft. The discrete LiDAR return data are processed using the Optech DASHMap software to create point cloud data files in ASPRS LAS 1.2 format \cite{las12format}. Each point data record contains information such as the intensity for the laser pulse and the X, Y, and Z geolocation of the point return. DASHMap reports up to four discrete returns: first, second, third, last. Using the geolocation information, the point clouds can be visualized 3-dimensionally.
 
-\section{Data Aquisition}
-%% Only for the Journal of Physical and Chemical Gels: Please place the Experimental Section after the Conclusions
 
-Main text paragraph.
 
-Main text paragraph.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Hypercpetral Photometry}
-
-Main text paragraph.
-
-Main text paragraph.
-
-\subsubsection{Airborne Setup}
-
-Main text paragraph.
-
-\subsubsection{Atmospheric Correction}
 
 \section{Specie Classification}
+
+Upon the collection, orthorectification and atmospheric correction of hyperspectral and LiDAR data we work on identifying tree species. For our classification task, we collected ground data of identifying tree species on February 28th, 2014. We drove to OSBS with a laptop that has ArcMap installed on and the ENVI image loaded in it, we connected a professional grade GPS to the laptop. ArcMap read GPS coordniates and mapped the polygons in the ENVI image. In this way, we marked several geo-polygons that had uniform plant species in the ENVI image. Later on we overlayed the identified polygons with proper JPL AVRIS flight which had the least amout of clouds. In this case we bookmarked flight \#4 on morning of 09/04/2010. This approach works pretty accurate if you are not in a dense forest such as tropical forests where GPS signal under the tree canopy has high deviations due to NLOS (no-line of sight) of GPS signals. Even with these considerations GPS still doesn't work that great and you need to mark several items such as by this road, close to this big tree to be able to later on mark your points in the map and avoid shifts in coordinats.
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/NCALM_flight_ground_tracks_OSBS_9_01_10.png}
+        \caption{Flights ground tracks - UTM coordinates, zone 17}
+        \label{fig:JPL_AVIRIS_flight_ground_tracks_OSBS_9_4_10}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{./images/NCALM_Optech_Gemini_LiDAR_color_height_mosaic_OSBS_9_01_10.png}
+        \caption{LiDAR color height mosaic}
+        \label{fig:JPL_AVIRIS_true_color_mosaic_OSBS_9_4_10}
+    \end{subfigure}
+    %\hfill
+    
+    \caption{NCALM Optech Gemini LiDAR flights over OSBS 09/01/2010 \cite{neon2010aop}}
+    \label{fig:lidar}
+\end{figure}
+
+
+
+With the resolution of images being about 3 meters we are not getting pure pine or oak signlas and there is lots of mixing going on. A pixel's hyperspectral values is a linear/nonlinear mixing of leaf, branch, soil, shade, and other signals. The timing of fights (September) adds to the challenge: leafs might not be as green or that some trees might have already started to lose leaves and this leads to us getting more branch signals. Further more Longleaf pine is a conifer (needlelaf), unlike broadleaf trees where signal return can be more accurate. 
+
+\subsection{Preprocessing}
+
+We load hyperspectral images in Matlab using an in-house modified source code of \texttt{enviread}, initially developed by \cite{howat2007enviread}. We check for the consistency of calibration and uniformness of pixel sizes. As different flights have different altitudes and hence pixel resolutions, this is an essential step. There are some noises in JPL AVRIS measurements as we get negative reflectance values. The actual range of hyperspectral values is in range $[-32762, 32724]$ One should note that reflectance is the proportion of sun radiance signals and shall be greater than zero. In normalized form reflectance is between zero and one. To normalize we set negative reflectance values to zero and values greater than 10,000 to 10,000. To enhance the intensity of readings we take the suare-root of signal returns. As there is no standard output of reflectance data and since we don't have ground values, and that signals are all mixed, empirically obtained thresholds and ranges are inevitable. Without taking the square root the images lack intensity and appear dark.
+
+
+In our calculations wavelengths corresponding to strong water vapor absorption bands in the atmosphere are excluded. At those wavelengths, a small radiance signal is measured by the instrument due to the strong absorption, this leads to errors in the reflectance calculation (seen as a few upward spikes in reflectance plots). 
+
+To properly classify tree species we get rid of pixels not belonging to planetary material, such as roads, clouds and shaddows. A good filter for this task is to use the Normalized Difference Vegetation Index (NDVI). NDVI is defined as below:
+
+\begin{equation}\label{xx}
+NDVI  = \frac{NIR - VIS}{NIR + VIS}
+\end{equation}
+
+where is $NIR$ the reflectance in the reflective near-infrared wavelengths (0.725-1.1 $\mu m$) and $VIS$ is the reflectance in the visible (red) wavelengths (0.58-0.68 $\mu m$). The principle behind this is that $VIS$ is in a part of the spectrum where chlorophyll causes considerable absorption of incoming radiation, and the $NIR$ is in a spectral region where spongy mesophyll leaf structure leads to considerable reflectance \cite{tucker1979red, jackson1983discrimination}. For this purpose we chose wavelengths 0.6656 $\mu m$ for red and 0.7341 $\mu m$ for near-infrared. By filtering out pixels with $NDVI < 0.4$ we are essentially removing pixels that are not green. Furthermore, a filter of $NIR < 0.33$  excludes heavily shaded samples \cite{colgan2012mapping}.
+
+By filtering out pixels with NDVI values 
+
+We set any
 
 \subsubsection{Support Vector Machines}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Results and Discussion}
 
 Main text paragraph.
+
+
+
+
+
+
+
+
 
 %% Example of a theorem:
 %\begin{Theorem}
 %Text text text
 %\end{Theorem}
 
-The document text continues here.
-
 %% Example of a proof:
 %\begin{proof}[Proof of Theorem 1]
 %Text text text
 %\end{proof}
 
-The document text continues here.
-
-\subsection{This is a Subsection Heading}
-
-Main text paragraph.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusions}
-
-Main text paragraph.
-
 
 Main text paragraph.
 
