@@ -60,6 +60,7 @@
 \usepackage{url}
 \usepackage{multirow}
 \usepackage{amsmath}
+\usepackage{rotating}
 
 %=================================================================
 %% Please use the following mathematics environments:
@@ -125,13 +126,15 @@ Cho et al. \cite{cho2012mapping} compares accuracies when different hyperspectra
 Sometimes specially tailored tools and methodologies in this field are necessary. As an example, one should note that differnet bands in a hyperspectral image have differnet signal to noise ratios, and Principal Components (PC) transform will not always result in components with a steadily increasing noise level. This makes setting a cut-off point difficult. Minimum Noise Fraction (MNF)   \cite{green1988transformation} is a modified PC transform which produces a set of principal component images ordered in terms of decreasing signal quality. 
 
 
-National Ecological Observatory Network (NEON) is a long term ecology monitoring project for for discovering, understanding and forecasting the impacts of climate change, land use change, and invasive species at continental-scale. NEON, funded by National Science Foundation (NSF) in the US, will operate for 30 years starting 2016. Local ecological measurements at sites distributed within 20 ecoclimatic domains across the contiguous United States, Alaska, Hawaii, and Puerto Rico will be coordinated with high resolution, regional airborne remote sensing observations \cite{kampe2010neon}. Twenty terrestrial wildland core sites statistically represent unmanaged wildland conditions across the U.S. for NEON's 30-year lifetime. NEON moves an additional 40 relocatable terrestrial sites every five to seven years to locations where they may best capture specific ecological phenomena such as land use change and regional nitrogen deposition. Thirty-six aquatic sites collect representative aquatic data. Many aquatic sites are located near core and relocatable terrestrial sites\footnote{http://www.neoninc.org/science/domains\#sthash.aW1THj1N.dpuf}.Airborne Observation Platform (AOP) would be the remote sensing platform with equipments of meter/sub-meter resolution for hyperspectral and Light Detection and Ranging (LiDAR) measurements. This paper is a pilot study on the pre-mission airborne hyperspectral data collected. No operation at the scale and time span of NEON has been ever carried out before and a thorough study of the opportunities and challenges ahead is necessary specifically in the \textit{remote sensing} perspective where the volume of data can quickly become overwhelming \cite{neon2010aop}.
+National Ecological Observatory Network (NEON) is a long term ecology monitoring project for for discovering, understanding and forecasting the impacts of climate change, land use change, and invasive species at continental-scale. NEON, funded by National Science Foundation (NSF) in the US, will operate for 30 years starting 2016. Local ecological measurements at sites distributed within 20 ecoclimatic domains across the contiguous United States, Alaska, Hawaii, and Puerto Rico will be coordinated with high resolution, regional airborne remote sensing observations \cite{kampe2010neon}. Twenty terrestrial wildland core sites statistically represent unmanaged wildland conditions across the U.S. for NEON's 30-year lifetime. NEON moves an additional 40 relocatable terrestrial sites every five to seven years to locations where they may best capture specific ecological phenomena such as land use change and regional nitrogen deposition. Thirty-six aquatic sites collect representative aquatic data. Many aquatic sites are located near core and relocatable terrestrial sites\footnote{http://www.neoninc.org/science/domains\#sthash.aW1THj1N.dpuf}.Airborne Observation Platform (AOP) would be the remote sensing platform with equipments of meter/sub-meter resolution for hyperspectral and Light Detection and Ranging (LiDAR) measurements. This paper is a pilot study on the pre-mission airborne hyperspectral data collected. No operation at the scale and time span of NEON has been ever carried out before and a thorough study of the opportunities and challenges ahead is necessary specifically in the \textit{remote sensing} perspective where the volume of data can quickly become overwhelming \cite{neon2010aopdatarelease}.
 
 \section{Data Collection}
 
-The NEON Southeast Domain 3 contains the southern portions of the Gulf Coast states, half of South Carolina, and all of Florida except for the southern tip. The candidate core site for Domain 3 is located at the Ordway-Swisher Biological Station (OSBS) in north-central Florida\footnote{http://ordway-swisher.ufl.edu/index.htm} with UTM coordinates: 3,285,000 Northing, 405,000 Easting and Zone 17. OSBS features diverse natural forests, small pine plantations nearby, a range of wildlife species that reflects the area's ecological communities, and a 75-year history of low human impact. The ground sampling part of this campaign focused on a sandhill ecosystem dominated by Long-Leaf Pine (\textit{Pinus Palustris}) and Turkey Oak (\textit{Quercus Laevis}) \cite{neon2010aop}.
+The NEON Southeast Domain 3 contains the southern portions of the Gulf Coast states, half of South Carolina, and all of Florida except for the southern tip. The candidate core site for Domain 3 is located at the Ordway-Swisher Biological Station (OSBS) which is a 37-square kilometer area in Putnam County in north-central Florida and is managed jointly by the University of Florida and the Nature Conservancy\footnote{http://ordway-swisher.ufl.edu/index.htm} with UTM coordinates: 3,285,000 Northing, 405,000 Easting and UTM Zone 17. OSBS features diverse natural forests, small pine plantations nearby, a range of wildlife species that reflects the area's ecological communities, and a 75-year history of low human impact.  Nine major plant communities exist within the region as defined by the Florida Natural Areas Inventory and these diverse targets are populated by sandhill, xeric hammock, upland mixed forest, baygalls, basin swamp, basin marsh, marsh lake, clastic upland lake and sandhill upland lakes. The sandhills community is managed using prescribed burning on a scheduled 3-year rotation. The ground sampling part of this campaign focused on a sandhill ecosystem dominated by Long-Leaf Pine (\textit{Pinus Palustris}) and Turkey Oak (\textit{Quercus Laevis}). The sandhill ecosystem at OSBS was selected for concurrent ground measurements because a NEON instrumented tower will be located within this ecosystem type \cite{neon2010aopdatarelease, kampea2010aop}.
 
-Hyperspectral: NEON deployed the JPL AVIRIS (Jet Propulsion Laboratory - Airborne Visible/Infrared Imaging Spectrometer) in partnership with NASA to collect data. JPL has flown on two separate days over OSBS: morning of September 4, 2010 (between 9:30 and 10:30 am) and mid-day of September 10, 2010. Both of the flights were flown at approximately 4000m AGL at approximately 90 knots on a Twin Otter aircraft. Details of these flights can be seen in Figure \ref{fig:hyperspectral}. Dependent on flight line, pixel size ranges from 3.3m to 3.6m. Hyperspectral data was atmospherically corrected using FLAASH \cite{adler1998flaash} and ATCOR \cite{richter2005atmospheric} algorithms. There are 8 flight lines and the total size of compressed data is 33GB. There are 224 bands recorded, with wavelengths from 365.93 nm to 2496.24 nm.
+Since the instrumentation slated for deployment on the eventual AOP remote sensing payloads were not yet available, airborne spectroscopic and LiDAR measurements were made during this campaign using existing systems that exhibit similar performance characteristics as the instrumentation under development \cite{kampea2010aop}.
+
+Hyperspectral: AVIRIS (Airborne Visible/Infrared Imaging Spectrometer) operated by personnel from the Jet Propulsion Laboratory (JPL) deployed on a Twin Otter aircraft in partnership with the National Aeronautics and Space Administration Terrestrial Ecology Program was used to collect data. JPL has flown on two separate days over OSBS: morning of September 4, 2010 (between 9:30 and 10:30 am) and mid-day of September 10, 2010. Both of the flights were flown at approximately 4000m AGL at approximately 90 knots on a Twin Otter aircraft with zenith angle of 180.0 and azimuth angle of 0.0. Details of these flights can be seen in Figure \ref{fig:hyperspectral}. Dependent on flight line, pixel size ranges from 3.3m to 3.6m. Hyperspectral data was atmospherically corrected using FLAASH \cite{adler1998flaash} and ATCOR \cite{richter2005atmospheric} algorithms. There are 8 flight lines and the total size of compressed data is 33GB. There are 224 bands recorded, with wavelengths from 365.93 nm to 2496.24 nm. 
 %Concurrent ground data includes weather parameters, aerosol optical depth, field spectra of various canopies, and Leaf Area Index (LAI) measurements.
 
 Atmospheric characterization relied on measurements of a CIMEL sun photometer in coordination with the NASA Aerosol Robotic Network\footnote{NASA AERONET: http://gcmd.nasa.gov/records/GCMD\_AERONET\_NASA.html}. Measurements were collected on September 4, 2010 and the the derived atmospheric information was used to improve the atmospheric correction of the AVIRIS spectrometer data. You can find the detailed measurements such as aerosol optical thickness, water vapor, and etc online\footnote{http://aeronet.gsfc.nasa.gov/cgi-bin/type\_one\_station\_opera\_v2\_new?site=Ordway-Swisher}.
@@ -159,13 +162,13 @@ Atmospheric characterization relied on measurements of a CIMEL sun photometer in
         \caption{Hyperspectral true-color mosaic, mid-day 09/10/2010}
         \label{fig:JPL_AVIRIS_true_color_mosaic_OSBS_9_10_10}
     \end{subfigure}
-    \caption{JPL AVRIS flights over OSBS \cite{neon2010aop}}
+    \caption{JPL AVRIS flights over OSBS \cite{neon2010aopdatarelease}}
     \label{fig:hyperspectral}
 \end{figure}
 
 
 
-LiDAR: The National Center for Airborne Laser Mapping (NCALM)\footnote{http://www.ncalm.cive.uh.edu/} coordinated the waveform-LiDAR flights in the same study areas and as  with the AVIRIS flights \cite{neon2010aop}. As shown in Figure \ref{fig:lidar}, NCALM flew an Optech Gemini\footnote{Optech Gemini LiDAR sensor: http://www.optech.ca/gemini.htm} waveform-LiDAR with a nominal altitude flight covering the entire OSBS on September 1, 2010. In total there were 33 flight lines collected over OSBS both in the morning and in the afternoon, 7 flight lines were re-flown due to clouds. Range scale of LiDAR data was at 1.0m and up to five returns were recorded. The parameters for the data collected are 70 kHz PRF, wide beam divergence of 0.8 mrad, 20 deg half scan angle, and 40 Hz scan frequency. The GPS/IMU navigation data are processed using the Applanix POSPac MMS software to determine the position, orientation, and trajectory of the aircraft. The discrete LiDAR return data are processed using the Optech DASHMap software to create point cloud data files in ASPRS LAS 1.2 format \cite{las12format}. Each point data record contains information such as the intensity for the laser pulse and the X, Y, and Z geolocation of the point return. DASHMap reports up to four discrete returns: first, second, third, last. Using the geolocation information, the point clouds can be visualized 3-dimensionally.
+LiDAR: The National Center for Airborne Laser Mapping (NCALM)\footnote{http://www.ncalm.cive.uh.edu/} coordinated the waveform-LiDAR flights in the same study areas and as  with the AVIRIS flights \cite{neon2010aopdatarelease}. As shown in Figure \ref{fig:lidar}, NCALM flew an Optech Gemini\footnote{Optech Gemini LiDAR sensor: http://www.optech.ca/gemini.htm} waveform-LiDAR with a nominal altitude flight covering the entire OSBS on September 1, 2010. In total there were 33 flight lines collected over OSBS both in the morning and in the afternoon, 7 flight lines were re-flown due to clouds. Range scale of LiDAR data was at 1.0m and up to five returns were recorded. The parameters for the data collected are 70 kHz PRF, wide beam divergence of 0.8 mrad, 20 deg half scan angle, and 40 Hz scan frequency. The GPS/IMU navigation data are processed using the Applanix POSPac MMS software to determine the position, orientation, and trajectory of the aircraft. The discrete LiDAR return data are processed using the Optech DASHMap software to create point cloud data files in ASPRS LAS 1.2 format \cite{las12format}. Each point data record contains information such as the intensity for the laser pulse and the X, Y, and Z geolocation of the point return. DASHMap reports up to four discrete returns: first, second, third, last. Using the geolocation information, the point clouds can be visualized 3-dimensionally.
 
 
 
@@ -200,7 +203,7 @@ Alltogether we identified species for 452 pixels. In Table \ref{table:field data
     \end{subfigure}
     %\hfill
     
-    \caption{NCALM Optech Gemini LiDAR flights over OSBS 09/01/2010 \cite{neon2010aop}}
+    \caption{NCALM Optech Gemini LiDAR flights over OSBS 09/01/2010 \cite{neon2010aopdatarelease}}
     \label{fig:lidar}
 \end{figure}
 
@@ -218,25 +221,25 @@ Alltogether we identified species for 452 pixels. In Table \ref{table:field data
 \begin{table}
 \begin{center}
 
-    \begin{tabular}{ | c | c | c | c | l | }
+    \begin{tabular}{ | c | c | c | c | p{7cm} | }
     \hline
     Specie & ROI & Pixels per ROI & Total Pixels & Characteristics \\
     \hline
-    \multirow{2}{*}{Live Oak} & 4  & 48 & \multirow{2}{*}{85} & \multirow{2}{*}{specie details} \\ 
+    \multirow{2}{*}{Live Oak} & 4  & 48 & \multirow{2}{*}{85} & \multirow{2}{*}{Sand live oak (\textit{Quercus geminata})} \\ 
  & 13 & 37 & & \\    
     \hline
-    \multirow{4}{*}{Turkey Oak} & 6 & 23 &\multirow{4}{*}{136} & specie details \\ 
+    \multirow{4}{*}{Turkey Oak} & 6 & 23 &\multirow{4}{*}{136} & \multirow{4}{*}{\textit{Quercus laevis}} \\ 
      & 7 & 14 & & \\    
      & 10 & 73 &  & \\    
      & 11 & 26 & & \\    
     \hline
-    \multirow{3}{*}{Longleaf Pine} & 8 & 7 & \multirow{3}{*}{144} & specie details \\ 
+    \multirow{3}{*}{Longleaf Pine} & 8 & 7 & \multirow{3}{*}{144} & \multirow{3}{*}{\textit{Pinus palustris}} \\ 
      & 9 & 30 &  & \\    
      & 12 & 107 & & \\
      \hline
-    \multirow{4}{*}{Pine (other)} & 1 & 13 & \multirow{4}{*}{87} & specie details \\
+    \multirow{4}{*}{Pine (other)} & 1 & 13 & \multirow{4}{*}{87} & \multirow{4}{7cm}{A mixture of different varieties of pine:  Longleaf pine (\textit{Pinus palustris}), Loblolly pine(\textit{Pinus taeda}) or Slash pine (\textit{Pinus elliottii})} \\
      & 2 & 30 & & \\    
-     & 3 & 20 &  & \\    
+     & 3 & 20 & & \\    
      & 5 & 24 & & \\
     \hline
     
@@ -284,34 +287,44 @@ It is well known in literature that Support Vector Machines (SVM) outperforms ot
 
 This setup asserts the utility of cross-validation and the robustness of our approach in classification. By observing similar accuracies in cross validation runs and the initial 2 to 1 basic setup we observse that our training is robust in terms of seeing ground data. As the field data is in order, in both of the scenarios above we shuffle the data before each run to make sure, this setup will not bia the training process.
 
-Regarding multi-class classification, we create $\binom{c}{2}$ classifiers where $c$ is the number of classes. We train all the classifiers and to decide on the class a given test case belongs to we do majority voting among classifiers. In Table \ref{table:confusion matrix} you can view the confusion matrix.
+Regarding multi-class classification, we create $\binom{c}{2}$ classifiers where $c$ is the number of classes. We train all the classifiers and to decide on the class a given test case belongs to we do majority voting among classifiers. 
 
-
-\begin{table}[h]
-\begin{center}
-
-\begin{tabular}{| l | l | l | l | l |}
-\hline
- &  &  &  &  \\ \hline
- &  &  &  &  \\ \hline
- &  &  &  &  \\ \hline
- &  &  &  &  \\ \hline
-\end{tabular}
-    \caption{Field data details}
-    \label{table:confusion matrix}\end{center}
-
-\end{table}
 
 
 \section{Results and Discussion}
 
-Main text paragraph.
+In Table \ref{table:confusion matrix} you can view the confusion matrix.
+
+For future work we can consider adding the following sections to paper: 
+
+\begin{itemize}
+\item Gaussian Smoothing
+\item Adding Lidar and classification using it
+\item other cassification methods and their comparison diagrams
+\item parameter tuning for SVM charts
+\item global predicted maps with legend
+\item robustness Dr. Gader
+
+\item Add endmember features and verify its utility in enhancing classification accuracy
+\item Mention that the actual neon system will be at higher resolution
+\end{itemize}
 
 
 
+\begin{table}[t]
+\begin{center}
 
-
-
+\begin{tabular}{llllll}
+                                       &                       & \multicolumn{4}{c}{Predicted Class}                                                                          \\ \cline{3-6} 
+                                       & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{Live Oak} & \multicolumn{1}{l|}{Turkey Oak} & \multicolumn{1}{l|}{Longleaf Pine} & \multicolumn{1}{l|}{Pine (other)} \\ \cline{2-6} 
+\multicolumn{1}{l|}{\multirow{3}{*}{\begin{sideways}Known Class\end{sideways}}} & \multicolumn{1}{l|}{Live Oak}      & \multicolumn{1}{l|}{8} & \multicolumn{1}{l|}{0} & \multicolumn{1}{l|}{0} & \multicolumn{1}{l|}{0} \\ \cline{2-6} 
+\multicolumn{1}{l|}{}                                                           & \multicolumn{1}{l|}{Turkey Oak}    & \multicolumn{1}{l|}{0} & \multicolumn{1}{l|}{11} & \multicolumn{1}{l|}{0} & \multicolumn{1}{l|}{3} \\ \cline{2-6} 
+\multicolumn{1}{l|}{}                                                           & \multicolumn{1}{l|}{Longleaf Pine} & \multicolumn{1}{l|}{0} & \multicolumn{1}{l|}{0} & \multicolumn{1}{l|}{14} & \multicolumn{1}{l|}{0} \\ \cline{2-6} 
+\multicolumn{1}{l|}{}                                                           & \multicolumn{1}{l|}{Pine (other)}  & \multicolumn{1}{l|}{5} & \multicolumn{1}{l|}{0} & \multicolumn{1}{l|}{0} & \multicolumn{1}{l|}{3} \\ \cline{2-6} 
+\end{tabular}
+ \caption{Classification Confusion Matrix of a Test Sample (Prediction Accuracy: 81.82\%)}
+    \label{table:confusion matrix}\end{center}
+\end{table}
 
 
 
@@ -330,9 +343,7 @@ Main text paragraph.
 
 \section{Conclusions}
 
-Main text paragraph.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Identifying species using remote sensing technologies such as hyperspectral and LiDAR sensors has a critical utility in studying global warming, bio-mass estimation, carbon preserves, invasive species identification and etc. NEON is about to begin as a thirty-year project at continental scale with goals on ecological monitoring one of which is remote sensing. In this paper we perform specie classification using SVM and the AVRIS hyperspectral and LiDAR data available via NEON. Our results show we have developed a promissing and robust classifier for determining tree species. 
 
 \acknowledgements{Acknowledgements}
 
