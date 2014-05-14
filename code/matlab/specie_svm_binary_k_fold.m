@@ -1,3 +1,12 @@
+function avg_accuracy = specie_svm_binary_k_fold(debug, smoothing_window_size)
+%% This is a k-fold classification.
+
+if nargin < 1
+  debug = 0;
+end
+
+
+
 % Prepare data
 fieldData = '/cise/homes/msnia/zproject/neonDSR/docs/field_trip_28022014/crowns_osbs_atcor_flight4_morning.csv';
 
@@ -29,8 +38,24 @@ random_permutations = randperm(size(numerical_part_of_file,1));
 shuffledArray = numerical_part_of_file(random_permutations,:); % samples_reflectance is ordered by specie, shuffle it
 shuffled_species = specie_titles(random_permutations, :);
 
-shuffled_samples_reflectance = shuffledArray(:, 11:numel(file_columns)-1);
+shuffled_samples_reflectance = shuffledArray(:, 10:numel(file_columns) - 1);
 
+% pre-process data
+% remove_noisy_bands
+%cut nans
+shuffled_samples_reflectance(:,215:224) = []; %svm could not work with NaN, so we removed those columns instead of setting to NaN
+shuffled_samples_reflectance(:,151:171) = [];
+shuffled_samples_reflectance(:,105:120) = [];
+
+if smoothing_window_size > 0
+  for i = 1 : size(shuffled_samples_reflectance,1)
+    smoothed(i,:) = gaussian_smoothing(shuffled_samples_reflectance(i,:), smoothing_window_size);
+  end
+  shuffled_samples_reflectance =smoothed;
+end
+
+%plot nans and cut columns
+%x_cut = size(cut_nans, 2); x = 1:224; figure; plot(x,smoothed); figure; plot(x,shuffled_samples_reflectance); plot(1:x_cut, cut_nans);
 %% svm part
 
 meas = shuffled_samples_reflectance;
@@ -70,17 +95,21 @@ for i = 1:k                                  %# for each fold
         selector = any( bsxfun(@eq, g, pairwise(j,:)) , 2 );
         idx = trainIdx & selector;
 
-        %# train
-       svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
-            'BoxConstraint',2e-1, 'Kernel_Function','polynomial', 'Polyorder',3);
-        
-        
-      % svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
-       %          'Autoscale',true, 'Showplot',false, 'Method','QP', ...
-       %          'BoxConstraint',2e-1, 'Kernel_Function','rbf', 'RBF_Sigma',1);
+        % train
+        try
+          svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
+             'BoxConstraint',2e-1, 'Kernel_Function','polynomial', 'Polyorder',3);
+         
+          % test
+          predTest(:,j) = svmclassify(svmModel{j}, meas(testIdx,:));
 
-        %# test
-        predTest(:,j) = svmclassify(svmModel{j}, meas(testIdx,:));
+        catch ME
+        end
+        
+    %   svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
+    %             'Autoscale',true, 'Showplot',false, 'Method','QP', ...
+    %             'BoxConstraint',2e-1, 'Kernel_Function','rbf', 'RBF_Sigma',1);
+
     end
     pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
                            % Find the most frequent value of each column.
@@ -88,11 +117,12 @@ for i = 1:k                                  %# for each fold
     %# performance
     [cmat, order] = confusionmat(g(testIdx),pred);
     acc = 100*sum(diag(cmat))./sum(cmat(:));
-    fprintf('SVM (1-against-1):\naccuracy = %.2f%%\n', acc);
-    fprintf('Confusion Matrix:\n'), disp(cmat)
-    order
-    gn
-    
+    if debug 
+      fprintf('SVM (1-against-1):\naccuracy = %.2f%%\n', acc);
+      fprintf('Confusion Matrix:\n'), disp(cmat)
+      order
+      gn
+    end
     
     sum_accuracy = sum_accuracy + acc;
 
@@ -114,7 +144,7 @@ for i = 1:k                                  %# for each fold
 end
 
 
-avg_accuracy = sum_accuracy / k
+avg_accuracy = sum_accuracy / k;
 
 %# get accuracy
 %disp(['CorrectRate: %' num2str( cp.CorrectRate)]);
@@ -128,3 +158,5 @@ avg_accuracy = sum_accuracy / k
 
 % confudion matrix
 % multiclass clasification: 1vs all 1vs 1/.
+
+end

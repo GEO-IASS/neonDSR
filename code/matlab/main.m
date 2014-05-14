@@ -1,10 +1,15 @@
+%% Main runner of all sections
+% generic normalization - not suitable for hyperspectral data 
+%envi.z = double((envi.z - min_num)) / double((max_num - min_num)); % scale envi.z
+
+
 
 format long g; % avoid scientific notation
 global setting
 setting = struct('RED_INDEX', 34, 'NIR_INDEX', 41, 'GREEN_INDEX', 20, ...
                  'BLUE_INDEX', 10, 'NDVI_THRESHOLD', 0.4, 'NIR_THRESHOLD', 0.33);
 
-%% Read ENVI file
+%% Read ENVI file and Normalize ata reflectance range = [-32724, +32762] 
 
 flightDetails = 'Morning f100904t01p00r04rdn_b: ATCOR4r';
 if exist('/cise/', 'file')
@@ -15,17 +20,17 @@ else
   cd('/home/scidb/zproject/neonDSR/code/matlab/');
   envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
 end
+
 Check_XY_Have_Uniform_Step_Sizes(envi);
 
-%% Normalize ata reflectance range = [-32724, +32762] 
-
 envi.z(envi.z<0) = 0; % filter out negative noises
-envi.z(envi.z >10000) = 10000; % filter out large noises
+envi.z(envi.z >=10000) = NaN; % filter out large noises
 envi.z = double(double(envi.z) / 10000.1);
 envi.z = sqrt(double(envi.z));
-%envi.z = double((envi.z - min_num)) / double((max_num - min_num)); % scale envi.z
 
 subimg = envi.z;
+subimg = remove_noisy_bands(subimg);
+
 
 %% NDVI Filter Clouds and Shaddows
 
@@ -56,57 +61,46 @@ reflectance_figure = figure;
 set(envi_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, envi.z, envi_figure, reflectance_figure});
 set(subimg_h,'ButtonDownFcn',{@ImageClickCallback, wavelength_titles, subimg, subimg_figure, reflectance_figure});
 
-%% SVM 
+%% merge with LiDAR
 
-specie_svm;
+p1 = [1,1; 2,2;3,3];
+p2 = [0 ,0;1,1; 3,3; 4,4; 5,5];
+pdist2(p1,p2)
 
+[mesh_flight4_X, mesh_flight4_Y]= meshgrid(envi.x, envi.y);
+mesh_flight_4 = cat(3, mesh_flight4_X, mesh_flight4_Y);
+mesh_flight_4_reshaped = reshape(mesh_flight_4, 2, []);
 
-fileID = fopen('test.csv');
-C = textscan(fileID,'%f %f %f %f %u8 %f',...
-'delimiter',',','EmptyValue',-Inf);
-fclose(fileID);
-column4 = C{4}, column5 = C{5}
-%% Gaussian Smoothing
-% http://www.mathworks.com/matlabcentral/newsreader/view_thread/272556
-% Generate sample data.
-vector = 5*(1+cosd(1:3:180)) + 2 * rand(1, 60);
-plot(vector, 'r-', 'linewidth', 3);
-set(gcf, 'Position', get(0,'Screensize')); % Maximize figure.
+%% SVM performance plots
 
-% Construct blurring window.
-windowWidth = int16(5);
-halfWidth = windowWidth / 2
-gaussFilter = gausswin(5)
-gaussFilter = gaussFilter / sum(gaussFilter); % Normalize.
+count = 400;
+svm_results = zeros(count, 1);
+smoothing_windows = zeros(count, 1);
 
-% Do the blur.
-smoothedVector = conv(vector, gaussFilter)
-
-% plot it.
-hold on;
-plot(smoothedVector(halfWidth:end-halfWidth), 'b-', 'linewidth', 3);
-
-
-
-
-
-
-
-
-
+for i=1:count
+   i
+   smoothing_window_size = rem(i,40);  % 25 runs per gaussian window
+   smoothing_windows(i) = smoothing_window_size;
+   svm_results(i) = specie_svm_binary_k_fold(0, smoothing_window_size);
+end
+figure;
+plot(svm_results);
+boxplot(svm_results, smoothing_windows);
+    xlabel('Gaussian window size'); ylabel('Accuracy (%)'); 
+  %  title (sprintf('Impact of Gaussian window size on '));
 
 %%
 %%
-%% Mark an already known spot in image
+%% read each ROI csv files, extract relevant reflectance from envi
 
-markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
-
-%% read ROI csv files, extract relevant reflectance
-
-[rgb0, envi_figure, envi_h] = toRGB(envi.z, flightDetails); %Normalize for it, memory faced in normalizin
+[rgb0, envi_figure, envi_h] = toRGB(envi.z, flightDetails); 
 for i = 1:13
   plotROI(envi_figure, envi, i);
 end
+
+%% Mark an already known spot in image
+
+markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
 
 %% Display hsi_img at differnet bands.
 
@@ -125,40 +119,13 @@ end
 hsi2scidb(normalized_subimg, 'normalized_subimg.csv');
 hsi2scidb(hsi_img, 'hsi_img.csv');
 
-%% load LiDAR data (LIght Detection And Ranging)
-mode = 1; % | 2
-disp(['Time: ' datestr(now, 'HH:MM:SS')])
-if exist('/cise/', 'file')
-  addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/uf/');
-  [DataPoints, Coords] = readLAS('/cise/homes/msnia/neon/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las', mode);
-else
-  [DataPoints, Coords] = readLAS('/home/scidb/neon/f100910t01p00r02rdn/lidar/lidar/DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las', mode);
-end
-disp(['Time: ' datestr(now, 'HH:MM:SS')])
-
-
-
-% Unique items in data
-numel(unique(Coords(:, 1))) % Unique X's
-numel(unique(Coords(:, 2))) % Unique Y's
-size(unique(Coords(:, [1,2]), 'rows')) % Unique X,Y combinations
-
-hist(DataPoints(:,[2]))%---------------
-title (sprintf('Histogram of Lidar Returns')); xlabel('Lidar Return #'); ylabel('# of Points');
-
-
-hist(Coords(:,3), 200) % histogram of heights
-title (sprintf('Histogram of Lidar Data')); xlabel('Height'); ylabel('# of Points in Histogram Bin');
-
-temp = Coords(Coords < 100);
-temp = temp(temp > -1);
-hist(temp, 200)
-title (sprintf('Histogram of Lidar Data - After Removing Outliers')); xlabel('Height'); ylabel('# of Points in Histogram Bin');
-
-%% try lasread - AWESOME!!!
+%% lasread - AWESOME fast!!!
 
 disp(['Time: ' datestr(now, 'HH:MM:SS')])
-[s, h, v] = lasread('/cise/homes/msnia/neon/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las', 'A');
+addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/lidar/');
+lidar_file = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las';
+params = 'xyz'; % 'A'
+[s, h, v] = lasread(lidar_file, params);
 zmean= mean(s.Z);
 zstd = std(s.Z);
 lidar = s.Z(s.Z <zmean + 3 * zstd );
@@ -306,3 +273,32 @@ for i=1:params.C
     end
 end
 
+%% load LiDAR data (LIght Detection And Ranging)   -- VERY SLOW
+mode = 1; % | 2
+disp(['Time: ' datestr(now, 'HH:MM:SS')])
+if exist('/cise/', 'file')
+  addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/uf/');
+  [DataPoints, Coords] = readLAS('/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las', mode);
+else
+  [DataPoints, Coords] = readLAS('/home/scidb/neon/f100910t01p00r02rdn/lidar/lidar/DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las', mode);
+end
+disp(['Time: ' datestr(now, 'HH:MM:SS')])
+
+
+
+% Unique items in data
+numel(unique(Coords(:, 1))) % Unique X's
+numel(unique(Coords(:, 2))) % Unique Y's
+size(unique(Coords(:, [1,2]), 'rows')) % Unique X,Y combinations
+
+hist(DataPoints(:,[2]))%---------------
+title (sprintf('Histogram of Lidar Returns')); xlabel('Lidar Return #'); ylabel('# of Points');
+
+
+hist(Coords(:,3), 200) % histogram of heights
+title (sprintf('Histogram of Lidar Data')); xlabel('Height'); ylabel('# of Points in Histogram Bin');
+
+temp = Coords(Coords < 100);
+temp = temp(temp > -1);
+hist(temp, 200)
+title (sprintf('Histogram of Lidar Data - After Removing Outliers')); xlabel('Height'); ylabel('# of Points in Histogram Bin');

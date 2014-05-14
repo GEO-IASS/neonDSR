@@ -1,3 +1,14 @@
+function accuracy = specie_svm_multiclass(debug)
+%% This is a single run of SVM with 2/3 vs 1/3 partitioing of data
+%% for training and test purposes respectively
+
+if nargin < 1
+  debug = 0;
+end
+
+
+
+
 % Prepare data
 fieldData = '/cise/homes/msnia/zproject/neonDSR/docs/field_trip_28022014/crowns_osbs_atcor_flight4_morning.csv';
 
@@ -69,12 +80,18 @@ pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
 
 %# performance
 [cmat, order] = confusionmat(g(testIdx),pred);
-acc = 100*sum(diag(cmat))./sum(cmat(:));
-fprintf('SVM (1-against-1):\naccuracy = %.2f%%\n', acc);
-fprintf('Confusion Matrix:\n'), disp(cmat)
-order
-gn
+accuracy = 100*sum(diag(cmat))./sum(cmat(:));
 
+if debug 
+  fprintf('SVM (1-against-1):\naccuracy = %.2f%%\n', accuracy);
+  fprintf('Confusion Matrix:\n'), disp(cmat)
+  order
+  gn
+end
+
+
+
+end
 
 
 

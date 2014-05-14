@@ -8,6 +8,7 @@ fid = fopen(strcat(path, 'osbs_polygons_notes.csv'),'rt');
 tmp = textscan(fid, '%s','delimiter','\n');
 fclose(fid);
 specie = tmp{1}(roi_index);
+specie = strrep(specie, ',', ' ');
 
 % reflectance values and coordinates
 fileName = strcat(path, 'ROIs/roi', num2str(roi_index), '.csv');
@@ -38,7 +39,7 @@ for i=1:pointCount
   imageIndex = markCoordinate(hsi_figure, envi, coordinates(i,1),  coordinates(i,2) );
   
   reflectance = reshape(envi.z(imageIndex(2), imageIndex(1), :), 1,224);
-  message = sprintf('Reflectance-Wavelength intensity of ROI #%d %s',roi_index, specie{1});
+  message = sprintf('ROI %s', specie{1});
   plotReflectanceWavelength( reflectance_figure, reflectance, wavelength, message, 1);
   diff = reflectance - r(i, :);
   %if diff >0

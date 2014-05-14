@@ -1,4 +1,4 @@
-function ImageClickCallback(obj,event, hsi_img, hsi_figure, reflectance_figure)
+function ImageClickCallback(obj,event,  wavelength_titles, hsi_img, hsi_figure, reflectance_figure)
 % figures passed to draw red line and draw reflectance diagram
 
   global setting
@@ -21,6 +21,13 @@ function ImageClickCallback(obj,event, hsi_img, hsi_figure, reflectance_figure)
   red = double(reflectance(setting.RED_INDEX)); 
   ndvi = (nir-red)/(nir+red);
   fprintf('NIR: %f   --  RED: %f --- NDVI:%f\n',nir, red, ndvi);
+  
+  
+  % smoothing
+  newfig = figure;
+  smoothedVector = gaussian_smoothing(reflectance);
+  plotReflectanceWavelength( newfig, smoothedVector(halfWidth:end-halfWidth), wavelength_titles, sprintf('Reflectance-Wavelength'), 0);
 
-  plotReflectanceWavelength( reflectance_figure, reflectance, envi.info.wavelength', sprintf('Reflectance-Wavelength'), 0);
+
+  plotReflectanceWavelength( reflectance_figure, reflectance, wavelength_titles, sprintf('Reflectance-Wavelength'), 0);
 end
