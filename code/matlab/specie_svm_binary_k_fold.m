@@ -1,8 +1,10 @@
-function avg_accuracy = specie_svm_binary_k_fold(debug, smoothing_window_size)
+function avg_accuracy = specie_svm_binary_k_fold(debug, smoothing_window_size, polynomial_order)
 %% This is a k-fold classification.
 
 if nargin < 1
   debug = 0;
+  smoothing_window_size = 4;
+  polynomial_order = 1;
 end
 
 
@@ -97,8 +99,13 @@ for i = 1:k                                  %# for each fold
 
         % train
         try
-          svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
-             'BoxConstraint',2e-1, 'Kernel_Function','polynomial', 'Polyorder',3);
+         % svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
+         %    'BoxConstraint',2e-1, 'Kernel_Function','polynomial', 'Polyorder',polynomial_order);
+         
+         
+           svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
+              'Method','QP', ...
+              'BoxConstraint',Inf, 'Kernel_Function','rbf', 'RBF_Sigma',polynomial_order);
          
           % test
           predTest(:,j) = svmclassify(svmModel{j}, meas(testIdx,:));
@@ -106,9 +113,7 @@ for i = 1:k                                  %# for each fold
         catch ME
         end
         
-    %   svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
-    %             'Autoscale',true, 'Showplot',false, 'Method','QP', ...
-    %             'BoxConstraint',2e-1, 'Kernel_Function','rbf', 'RBF_Sigma',1);
+    
 
     end
     pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes

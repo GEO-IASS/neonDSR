@@ -73,28 +73,58 @@ mesh_flight_4_reshaped = reshape(mesh_flight_4, 2, []);
 
 %% SVM performance plots
 
+% Evaluate Gaussian filter size on accuracy
 rng(982451653); % large prime as seed for random generation
 
-count = 61;
-svm_results = zeros(count, 1);
+count = 21;
+svm_results_gaussian = zeros(count, 1);
 smoothing_windows = zeros(count, 1);
 
 for i=1:count
    i
    smoothing_window_size =  rem(i,20);  % 25 runs per gaussian window
    smoothing_windows(i) = smoothing_window_size;
-   svm_results(i) = specie_svm_binary_k_fold(0, smoothing_window_size);
+   svm_results_gaussian(i) = specie_svm_binary_k_fold(0, smoothing_window_size, 1);
 end
 figure;
-boxplot(svm_results, smoothing_windows);
+boxplot(svm_results_gaussian, smoothing_windows);
     xlabel('Gaussian window size'); ylabel('Accuracy (%)'); 
-%for i = 1: numel(svm_results)
-%    if smoothing_windows(i) == 38 || smoothing_windows(i) == 39
-%        svm_results(i) = NaN;
-%        smoothing_windows(i) = NaN;
-%    end
-%end
-    
+
+%---------------------------------------------------------------------
+% Evaluate polynomial degree of svm kernel for accuracy
+rng(982451653); % large prime as seed for random generation
+
+rbf_sigma_values = [0.000001 0.00001 0.0001 0.001 0.01 0.1 1 1.6 1.9 2 2.5  2.9 3 3.2 3.3 3.33 3.35 3.4 3.5 3.9 10 100 1000];
+count = 10;
+svm_results_poly = zeros(count, 1);
+polynomial_orders = zeros(count, 1);
+
+for i=1:count
+   i
+   polynomial_order = i;% rem(i,20);  % 25 runs per gaussian window
+   polynomial_orders(i) = polynomial_order;
+   svm_results_poly(i) = specie_svm_binary_k_fold(0, 4, polynomial_order);
+end
+figure;
+plot(polynomial_orders(1:30), svm_results_poly(1:30));
+    xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)'); 
+
+%---------------------------------------------------------------------
+% Evaluate RBF sigma of svm kernel for accuracy
+rng(982451653); % large prime as seed for random generation
+
+rbf_sigma_values = [ 0.0001 0.001 0.01 0.1 1 1.6 1.9 2 2.5  2.9 3 3.2 3.3 3.33 3.35 3.4 3.5 3.9 5 6 7 8 9 10 20 30 40 50 60 70 80 90 100 200 400 600 800 1000];
+count = numel(rbf_sigma_values);
+svm_results_rbf = zeros(count, 1);
+
+for i=1:count
+   i
+   svm_results_rbf(i) = specie_svm_binary_k_fold(0, 4, rbf_sigma_values(i));
+end
+figure;
+loglog(rbf_sigma_values, svm_results_rbf);
+    xlabel('SVM Kernel - RBF \sigma'); ylabel('Accuracy (%)');  
+
     
 %%
 %%
