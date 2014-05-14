@@ -73,6 +73,8 @@ mesh_flight_4_reshaped = reshape(mesh_flight_4, 2, []);
 
 %% SVM performance plots
 
+rng(982451653); % large prime as seed for random generation
+
 count = 61;
 svm_results = zeros(count, 1);
 smoothing_windows = zeros(count, 1);

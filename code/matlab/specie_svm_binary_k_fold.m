@@ -43,9 +43,9 @@ shuffled_samples_reflectance = shuffledArray(:, 10:numel(file_columns) - 1);
 % pre-process data
 % remove_noisy_bands
 %cut nans
-%shuffled_samples_reflectance(:,215:224) = []; %svm could not work with NaN, so we removed those columns instead of setting to NaN
-%shuffled_samples_reflectance(:,151:171) = [];
-%shuffled_samples_reflectance(:,105:120) = [];
+shuffled_samples_reflectance(:,215:224) = []; %svm could not work with NaN, so we removed those columns instead of setting to NaN
+shuffled_samples_reflectance(:,151:171) = [];
+shuffled_samples_reflectance(:,105:120) = [];
 
 if smoothing_window_size > 0
   for i = 1 : size(shuffled_samples_reflectance,1)
