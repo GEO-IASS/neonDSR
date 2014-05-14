@@ -73,22 +73,27 @@ mesh_flight_4_reshaped = reshape(mesh_flight_4, 2, []);
 
 %% SVM performance plots
 
-count = 400;
+count = 61;
 svm_results = zeros(count, 1);
 smoothing_windows = zeros(count, 1);
 
 for i=1:count
    i
-   smoothing_window_size = rem(i,40);  % 25 runs per gaussian window
+   smoothing_window_size =  rem(i,20);  % 25 runs per gaussian window
    smoothing_windows(i) = smoothing_window_size;
    svm_results(i) = specie_svm_binary_k_fold(0, smoothing_window_size);
 end
 figure;
-plot(svm_results);
 boxplot(svm_results, smoothing_windows);
     xlabel('Gaussian window size'); ylabel('Accuracy (%)'); 
-  %  title (sprintf('Impact of Gaussian window size on '));
-
+%for i = 1: numel(svm_results)
+%    if smoothing_windows(i) == 38 || smoothing_windows(i) == 39
+%        svm_results(i) = NaN;
+%        smoothing_windows(i) = NaN;
+%    end
+%end
+    
+    
 %%
 %%
 %% read each ROI csv files, extract relevant reflectance from envi
