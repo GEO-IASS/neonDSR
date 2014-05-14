@@ -113,7 +113,7 @@ plot(polynomial_orders(1:30), svm_results_poly(1:30));
 % Evaluate RBF sigma of svm kernel for accuracy
 rng(982451653); % large prime as seed for random generation
 
-rbf_sigma_values = [ 0.0001 0.001 0.01 0.1 1 1.6 1.9 2 2.5  2.9 3 3.2 3.3 3.33 3.35 3.4 3.5 3.9 5 6 7 8 9 10 20 30 40 50 60 70 80 90 100 200 400 600 800 1000];
+rbf_sigma_values = [ 0.001 0.01 0.1 1 1.6 1.9 2 2.5  2.9 3 3.1 3.15 3.2 3.25 3 3.2 3.3 3.33 3.35 3.4 3.5 3.9 4.2 4.7 5 5.5 6 6.15 6.25 6.33 6.5 6.6 6.75 6.9 7 8 9 10];
 count = numel(rbf_sigma_values);
 svm_results_rbf = zeros(count, 1);
 
@@ -122,8 +122,9 @@ for i=1:count
    svm_results_rbf(i) = specie_svm_binary_k_fold(0, 4, rbf_sigma_values(i));
 end
 figure;
-loglog(rbf_sigma_values, svm_results_rbf);
-    xlabel('SVM Kernel - RBF \sigma'); ylabel('Accuracy (%)');  
+semilogx(rbf_sigma_values, svm_results_rbf);
+grid on
+xlabel('SVM Kernel - RBF \sigma'); ylabel('Accuracy (%)');
 
     
 %%
