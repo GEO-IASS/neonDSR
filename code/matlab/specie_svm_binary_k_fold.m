@@ -1,120 +1,44 @@
-function avg_accuracy = specie_svm_binary_k_fold(debug, smoothing_window_size, polynomial_order)
-%% This is a k-fold classification.
+function avg_accuracy = specie_svm_binary_k_fold(classes, features, debug, polynomial_order)
+%% This is a k-fold classification all-vs-all (as compared to one-vs-all)
 
 if nargin < 1
   debug = 0;
-  smoothing_window_size = 4;
   polynomial_order = 1;
 end
 
-
-
-% Prepare data
-fieldData = '/cise/homes/msnia/zproject/neonDSR/docs/field_trip_28022014/crowns_osbs_atcor_flight4_morning.csv';
-
-fileID = fopen(fieldData);
-% file_columns is an array of cells each of which is an array of items
-file_columns = textscan(fileID, ['%s %f %f %f %f %f %f %f %f %f' ... % {'Specie','Specie_ID','ROI_ID','ID','X','Y','MapX','MapY','Lat','Lon'}
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %20
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %40
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %60
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %80
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %100
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %120
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %140
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %160
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %180
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %200
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %220    
-    '%f %f %f %f' %224   ---  224 wavelengths
-    ], ...    
-'delimiter',',','EmptyValue',-Inf, 'headerLines', 1);
-fclose(fileID);
-
-specie_titles = file_columns{1,1,:}; % char(file_columns{1,1,:});
-a = [file_columns(1, 2:numel(file_columns))]';
-numerical_part_of_file=reshape(cell2mat(a), numel(file_columns{1}), numel(file_columns)-1); % one column containing textual info (specie name)
-
-%shuffle
-random_permutations = randperm(size(numerical_part_of_file,1));
-shuffledArray = numerical_part_of_file(random_permutations,:); % samples_reflectance is ordered by specie, shuffle it
-shuffled_species = specie_titles(random_permutations, :);
-
-shuffled_samples_reflectance = shuffledArray(:, 10:numel(file_columns) - 1);
-
-% pre-process data
-% remove_noisy_bands
-%cut nans
-shuffled_samples_reflectance(:,215:224) = []; %svm could not work with NaN, so we removed those columns instead of setting to NaN
-shuffled_samples_reflectance(:,151:171) = [];
-shuffled_samples_reflectance(:,105:120) = [];
-
-if smoothing_window_size > 0
-  for i = 1 : size(shuffled_samples_reflectance,1)
-    smoothed(i,:) = gaussian_smoothing(shuffled_samples_reflectance(i,:), smoothing_window_size);
-  end
-  shuffled_samples_reflectance =smoothed;
-end
-
-%plot nans and cut columns
-%x_cut = size(cut_nans, 2); x = 1:224; figure; plot(x,smoothed); figure; plot(x,shuffled_samples_reflectance); plot(1:x_cut, cut_nans);
-%% svm part
-
-meas = shuffled_samples_reflectance;
-species = shuffled_species;
-
-%Example multi-class
-
-groups = shuffled_species;
-total_samples = shuffled_samples_reflectance;
-
-[g gn] = grp2idx(groups);      %# nominal class to numeric (string classes to numeric)
-
+[g gn] = grp2idx(classes);      %# nominal class to numeric (string classes to numeric)
 
 k=10;
-
-cvFolds = crossvalind('Kfold', groups, k);   %# get indices of 10-fold CV
-%cp = classperf(groups);                      %# init performance tracker
-
 sum_accuracy = 0;
+cvFolds = crossvalind('Kfold', classes, k);   %# get indices of 10-fold CV
 
 for i = 1:k                                  %# for each fold
     testIdx = (cvFolds == i);                %# get indices of test instances
     trainIdx = ~testIdx;                     %# get indices training instances
-
-
-
              
-             
-             
-    pairwise = nchoosek(1:length(gn),2);            %# 1-vs-1 pairwise models [1,2;1,3;2,3]
+    pairwise = nchoosek(1:length(gn),2);            %# all-vs-all pairwise models [1,2;1,3;2,3]
     svmModel = cell(size(pairwise,1),1);            %# NchooseK binary-classifers: one classifier for each [1,2;1,3;2,3]
     predTest = zeros(sum(testIdx),numel(svmModel)); %# binary predictions - three predictions per test (one for each classfier above)
 
-    %# classify using one-against-one approach, SVM with 3rd degree poly kernel
+    %# classify using one-against-one approach
     for j=1:numel(svmModel)
         %# get only training instances belonging to this pair
         selector = any( bsxfun(@eq, g, pairwise(j,:)) , 2 );
         idx = trainIdx & selector;
 
-        % train
+        % train - test
         try
-         % svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
-         %    'BoxConstraint',2e-1, 'Kernel_Function','polynomial', 'Polyorder',polynomial_order);
+           % svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
+           %    'BoxConstraint',2e-1, 'Kernel_Function','polynomial', 'Polyorder',polynomial_order);         
          
-         
-           svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
+           svmModel{j} = svmtrain(features(idx,:), g(idx), ...
               'Method','QP', ...
               'BoxConstraint',Inf, 'Kernel_Function','rbf', 'RBF_Sigma',polynomial_order);
          
-          % test
-          predTest(:,j) = svmclassify(svmModel{j}, meas(testIdx,:));
+          predTest(:,j) = svmclassify(svmModel{j}, features(testIdx,:));
 
         catch ME
         end
-        
-    
-
     end
     pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
                            % Find the most frequent value of each column.
@@ -130,38 +54,8 @@ for i = 1:k                                  %# for each fold
     end
     
     sum_accuracy = sum_accuracy + acc;
-
-
-             
-             
-             
-             
-             
-             
-             
-             
-             
-    %# test using test instances
-    %pred = svmclassify(svmModel, total_samples(testIdx,:), 'Showplot',false);
-
-    %# evaluate and update performance object
-    %cp = classperf(cp, pred, testIdx);
 end
 
-
 avg_accuracy = sum_accuracy / k;
-
-%# get accuracy
-%disp(['CorrectRate: %' num2str( cp.CorrectRate)]);
-
-%# get confusion matrix
-%# columns:actual, rows:predicted, last-row: unclassified instances
-%cp.CountingMatrix
-
-%disp(['Time: ' datestr(now, 'HH:MM:SS')])
-
-
-% confudion matrix
-% multiclass clasification: 1vs all 1vs 1/.
 
 end
