@@ -54,13 +54,16 @@
 %\usepackage{subfigure,psfig}
 
 
-
+\usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{subcaption} 
 \usepackage{url}
 \usepackage{multirow}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{rotating}
+
+\newcommand\red[1]{\textcolor{red}{#1}} % Red marker to declare errors.
 
 %=================================================================
 %% Please use the following mathematics environments:
@@ -134,42 +137,44 @@ The NEON Southeast Domain 3 contains the southern portions of the Gulf Coast sta
 
 Since the instrumentation slated for deployment on the eventual AOP remote sensing payloads were not yet available, airborne spectroscopic and LiDAR measurements were made during this campaign using existing systems that exhibit similar performance characteristics as the instrumentation under development \cite{kampea2010aop}.
 
-Hyperspectral: AVIRIS (Airborne Visible/Infrared Imaging Spectrometer) operated by personnel from the Jet Propulsion Laboratory (JPL) deployed on a Twin Otter aircraft in partnership with the National Aeronautics and Space Administration Terrestrial Ecology Program was used to collect data. JPL has flown on two separate days over OSBS: morning of September 4, 2010 (between 9:30 and 10:30 am) and mid-day of September 10, 2010. Both of the flights were flown at approximately 4000m AGL at approximately 90 knots on a Twin Otter aircraft with zenith angle of 180.0 and azimuth angle of 0.0. Details of these flights can be seen in Figure \ref{fig:hyperspectral}. Dependent on flight line, pixel size ranges from 3.3m to 3.6m. Hyperspectral data was atmospherically corrected using FLAASH \cite{adler1998flaash} and ATCOR \cite{richter2005atmospheric} algorithms. There are 8 flight lines and the total size of compressed data is 33GB. There are 224 bands recorded, with wavelengths from 365.93 nm to 2496.24 nm. 
+Hyperspectral: AVIRIS (Airborne Visible/Infrared Imaging Spectrometer) operated by personnel from the Jet Propulsion Laboratory (JPL) deployed on a Twin Otter DeHavilland DHC-6-300 aircraft in partnership with the National Aeronautics and Space Administration Terrestrial Ecology Program was used to collect data. JPL has flown on two separate days over OSBS: morning of September 4, 2010 (between 9:30 and 10:30 am) and mid-day of September 10, 2010. Both of the flights were flown at approximately 4000m AGL at approximately 90 knots on a Twin Otter aircraft with zenith angle of 180.0 and azimuth angle of 0.0. Details of these flights can be seen in Figure \ref{fig:hyperspectral}. Dependent on flight line, pixel size ranges from 3.3m to 3.6m. Hyperspectral data was atmospherically corrected using FLAASH \cite{adler1998flaash} and ATCOR \cite{richter2005atmospheric} algorithms. There are 8 flight lines and the total size of compressed data is 33GB. There are 224 bands recorded, with wavelengths from 365.93 nm to 2496.24 nm. 
 %Concurrent ground data includes weather parameters, aerosol optical depth, field spectra of various canopies, and Leaf Area Index (LAI) measurements.
 
 Atmospheric characterization relied on measurements of a CIMEL sun photometer in coordination with the NASA Aerosol Robotic Network\footnote{NASA AERONET: http://gcmd.nasa.gov/records/GCMD\_AERONET\_NASA.html}. Measurements were collected on September 4, 2010 and the the derived atmospheric information was used to improve the atmospheric correction of the AVIRIS spectrometer data. You can find the detailed measurements such as aerosol optical thickness, water vapor, and etc online\footnote{http://aeronet.gsfc.nasa.gov/cgi-bin/type\_one\_station\_opera\_v2\_new?site=Ordway-Swisher}.
  
 
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}[b]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{./images/JPL_AVIRIS_flight_ground_tracks_OSBS_9_4_10.png}
-        \caption{Flights ground tracks}
-        \label{fig:JPL_AVIRIS_flight_ground_tracks_OSBS_9_4_10}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{./images/JPL_AVIRIS_true_color_mosaic_OSBS_9_4_10.png}
-        \caption{Hyperspectral true-color mosaic, morning 09/04/2010}
-        \label{fig:JPL_AVIRIS_true_color_mosaic_OSBS_9_4_10}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.3\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{./images/JPL_AVIRIS_true_color_mosaic_OSBS_9_10_10.png}
-        \caption{Hyperspectral true-color mosaic, mid-day 09/10/2010}
-        \label{fig:JPL_AVIRIS_true_color_mosaic_OSBS_9_10_10}
-    \end{subfigure}
-    \caption{JPL AVRIS flights over OSBS \cite{neon2010aopdatarelease}}
-    \label{fig:hyperspectral}
+
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[tp]
+  % Fixed length
+  \centering
+  \subcaptionbox{Flights ground tracks\label{fig3:gaussian smoothing:a}}{\includegraphics[height=1.7in,keepaspectratio]{./images/JPL_AVIRIS_flight_ground_tracks_OSBS_9_4_10.png}}\hspace{1em}%
+  \subcaptionbox{Hyperspectral true-color mosaic, morning 09/04/2010\label{fig3:gaussian smoothing:a}}{\includegraphics[height=1.7in,keepaspectratio]{./images/JPL_AVIRIS_true_color_mosaic_OSBS_9_4_10.png}}\hspace{1em}%
+  \subcaptionbox{Hyperspectral true-color mosaic, mid-day 09/10/2010\label{fig3:gaussian smoothing:b}}{\includegraphics[height=1.7in,keepaspectratio]{./images/JPL_AVIRIS_true_color_mosaic_OSBS_9_10_10.png}}
+   \caption{JPL AVRIS flights over OSBS \cite{neon2010aopdatarelease}}
+ \label{fig:hyperspectral}
 \end{figure}
+
+
+
+
+
 
 
 
 LiDAR: The National Center for Airborne Laser Mapping (NCALM)\footnote{http://www.ncalm.cive.uh.edu/} coordinated the waveform-LiDAR flights in the same study areas and as  with the AVIRIS flights \cite{neon2010aopdatarelease}. As shown in Figure \ref{fig:lidar}, NCALM flew an Optech Gemini\footnote{Optech Gemini LiDAR sensor: http://www.optech.ca/gemini.htm} waveform-LiDAR with a nominal altitude flight covering the entire OSBS on September 1, 2010. In total there were 33 flight lines collected over OSBS both in the morning and in the afternoon, 7 flight lines were re-flown due to clouds. Range scale of LiDAR data was at 1.0m and up to five returns were recorded. The parameters for the data collected are 70 kHz PRF, wide beam divergence of 0.8 mrad, 20 deg half scan angle, and 40 Hz scan frequency. The GPS/IMU navigation data are processed using the Applanix POSPac MMS software to determine the position, orientation, and trajectory of the aircraft. The discrete LiDAR return data are processed using the Optech DASHMap software to create point cloud data files in ASPRS LAS 1.2 format \cite{las12format}. Each point data record contains information such as the intensity for the laser pulse and the X, Y, and Z geolocation of the point return. DASHMap reports up to four discrete returns: first, second, third, last. Using the geolocation information, the point clouds can be visualized 3-dimensionally.
 
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[tp]
+  % Fixed length
+  \centering
+  \subcaptionbox{Flights ground tracks\label{fig3:gaussian smoothing:a}}{\includegraphics[height=2.3in,keepaspectratio]{./images/NCALM_flight_ground_tracks_OSBS_9_01_10.png}}\hspace{3em}%
+  \subcaptionbox{LiDAR color height mosaic\label{fig3:gaussian smoothing:b}}{\includegraphics[height=2.3in,keepaspectratio]{./images/NCALM_Optech_Gemini_LiDAR_color_height_mosaic_OSBS_9_01_10.png}}
+   \caption{NCALM Optech Gemini LiDAR flights over OSBS 09/01/2010 \cite{neon2010aopdatarelease}}
+ \label{fig:lidar}
+\end{figure}
 
 
 
@@ -184,28 +189,6 @@ For our classification task, we collected ground data of identifying tree specie
 
 Alltogether we identified species for 452 pixels. In Table \ref{table:field data} you can fidn the details of identified Regions of Interest (ROIs) along with their details. 
 
-
-
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}[b]{0.4\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{./images/NCALM_flight_ground_tracks_OSBS_9_01_10.png}
-        \caption{Flights ground tracks - UTM coordinates, zone 17}
-        \label{fig:JPL_AVIRIS_flight_ground_tracks_OSBS_9_4_10}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.4\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{./images/NCALM_Optech_Gemini_LiDAR_color_height_mosaic_OSBS_9_01_10.png}
-        \caption{LiDAR color height mosaic}
-        \label{fig:JPL_AVIRIS_true_color_mosaic_OSBS_9_4_10}
-    \end{subfigure}
-    %\hfill
-    
-    \caption{NCALM Optech Gemini LiDAR flights over OSBS 09/01/2010 \cite{neon2010aopdatarelease}}
-    \label{fig:lidar}
-\end{figure}
 
 
 
@@ -261,8 +244,10 @@ Alltogether we identified species for 452 pixels. In Table \ref{table:field data
 
 We load hyperspectral images in Matlab using an in-house modified source code of \texttt{enviread}, initially developed by \cite{howat2007enviread}. We check for the consistency of calibration and uniformness of pixel sizes. As different flights have different altitudes and hence pixel resolutions, this is an essential step. There are some noises in JPL AVRIS measurements as we get negative reflectance values. The actual range of hyperspectral values is in range $[-32762, 32724]$ One should note that reflectance is the proportion of sun radiance signals and shall be greater than zero. In normalized form reflectance is between zero and one. To normalize we set negative reflectance values to zero and values greater than 10,000 to 10,000. To enhance the intensity of readings we take the suare-root of signal returns. As there is no standard output of reflectance data and since we don't have ground values, and that signals are all mixed, empirically obtained thresholds and ranges are inevitable. Without taking the square root the images lack intensity and appear dark.
 
-
 In our calculations wavelengths corresponding to strong water vapor absorption bands in the atmosphere are excluded. At those wavelengths, a small radiance signal is measured by the instrument due to the strong absorption, this leads to errors in the reflectance calculation (seen as a few upward spikes in reflectance plots). 
+
+
+\subsubsection{Non-green Pixels}
 
 To properly classify tree species we get rid of pixels not belonging to planetary material, such as roads, clouds and shaddows. A good filter for this task is to use the Normalized Difference Vegetation Index (NDVI). NDVI is defined as below:
 
@@ -272,7 +257,19 @@ NDVI  = \frac{NIR - VIS}{NIR + VIS}
 
 where is $NIR$ the reflectance in the reflective near-infrared wavelengths (0.725-1.1 $\mu m$) and $VIS$ is the reflectance in the visible (red) wavelengths (0.58-0.68 $\mu m$). The principle behind this is that $VIS$ is in a part of the spectrum where chlorophyll causes considerable absorption of incoming radiation, and the $NIR$ is in a spectral region where spongy mesophyll leaf structure leads to considerable reflectance \cite{tucker1979red, jackson1983discrimination}. For this purpose we chose wavelengths 0.6656 $\mu m$ for red and 0.7341 $\mu m$ for near-infrared. By filtering out pixels with $NDVI < 0.4$ we are essentially removing pixels that are not green. Furthermore, a filter of $NIR < 0.33$  excludes heavily shaded samples \cite{colgan2012mapping}. By performing previous filters we get rid of roads, clouds, shades and grassy areas and we are left with mostly tree canopies where we can apply the classification.
 
+\subsubsection{Gaussian Filter}
 
+Real-life sensor measurements are far from perfect and there are many nosy readings alongs different bands. We take advantage of the abundance of bands and take use of their aggregated information by applying a Gaussian filter. We take a Gaussian wndow $w$ of size $N > 0$, the coefficients of a Gaussian window are computed from the following equation
+
+\begin{equation}
+w(n) = e^{-\frac{1}{2}(\alpha \frac{n}{N/2})^2}
+\end{equation}  
+
+where $-\frac{(N-1)}{2} \leq n \leq \frac{(N-1)}{2}$, and $\alpha$ is inversly proportional to the standard deviaton ($\sigma$) of a Gaussian random variable ($\sigma = \frac{N}{2\alpha}$). Once we have the window we perform convolution to apply the smoothing factor. By convolving vectors $u \in \mathbb{R}^m$ and $v\in \mathbb{R}^n$, we will have vector $w\in \mathbb{R}^{m+n-1}$ such that: 
+
+\begin{equation}
+w(k)=\sum_j u(j)v(k-j+1)
+\end{equation} 
 
 
 \subsection{Support Vector Machines}
@@ -288,26 +285,6 @@ It is well known in literature that Support Vector Machines (SVM) outperforms ot
 This setup asserts the utility of cross-validation and the robustness of our approach in classification. By observing similar accuracies in cross validation runs and the initial 2 to 1 basic setup we observse that our training is robust in terms of seeing ground data. As the field data is in order, in both of the scenarios above we shuffle the data before each run to make sure, this setup will not bia the training process.
 
 Regarding multi-class classification, we create $\binom{c}{2}$ classifiers where $c$ is the number of classes. We train all the classifiers and to decide on the class a given test case belongs to we do majority voting among classifiers. 
-
-
-
-\section{Results and Discussion}
-
-In Table \ref{table:confusion matrix} you can view the confusion matrix.
-
-For future work we can consider adding the following sections to paper: 
-
-\begin{itemize}
-\item Gaussian Smoothing
-\item Adding Lidar and classification using it
-\item other cassification methods and their comparison diagrams
-\item parameter tuning for SVM charts
-\item global predicted maps with legend
-\item robustness Dr. Gader
-
-\item Add endmember features and verify its utility in enhancing classification accuracy
-\item Mention that the actual neon system will be at higher resolution
-\end{itemize}
 
 
 
@@ -328,6 +305,61 @@ For future work we can consider adding the following sections to paper:
 
 
 
+
+
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[htp]
+  % Fixed length
+  \centering
+  \subcaptionbox{Before removing water absorbtion bands\label{fig3:gaussian smoothing:a}}{\includegraphics[height=2.3in,keepaspectratio]{./images/gaussian_window.eps}}\hspace{1em}%
+  \subcaptionbox{After removing water absorbtion bands\label{fig3:gaussian smoothing:b}}{\includegraphics[height=2.3in,keepaspectratio]{./images/gaussian_window_filtered_water_absorbtion_bands.eps}}
+   \caption{Effect of Gaussian smoothing window size on SVM accuracy using polynomial kernel degree 3}
+ \label{fig:gaussian smoothing}
+\end{figure}
+
+
+\section{Results and Discussion}
+
+Gaussian smoothing increases accuracy by about 10\% on raw data, but after preprocesings such as removing various water absorbtion bands its effects become marginal. We observe that after removing water absorbtion bands the we reach an accuracy of about 94\%. In general we suggest a Gaussian window of size 4 or 8 beyind that data although we might get slight changes in accuracy, but due to major structure changes, data loses its meaning. You can view the confusion matrix in Table \ref{table:confusion matrix}. 
+
+For future work we can consider adding the following sections to paper: 
+
+\begin{itemize}
+\item Gaussian Smoothing OK
+\item \red{compare atcor and flaash}
+\item \red{Adding Lidar and classification using it}
+\item \red{knowledge reasoning on enhancing mis-classification of Live oak vs Pine}
+\item \red{other cassification methods and their comparison diagrams}
+\item \red{parameter tuning for SVM charts}
+\item \red{global predicted maps with legend}
+\item \red{robustness Dr. Gader}
+
+\item \red{Add endmember features and verify its utility in enhancing classification accuracy}
+\item \red{Mention that the actual neon system will be at higher resolution}
+\item \red{compare airborne reflectance to ground}
+
+\end{itemize}
+
+
+
+
+
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[htp]
+  % Fixed length
+  \centering
+  \subcaptionbox{Tuning polynomial order for SVM with polynomial kernel function\label{fig3:a}}{\includegraphics[height=2.1in,keepaspectratio]{./images/svm_kernel_polynomial_order.eps}}\hspace{1em}%
+  \subcaptionbox{Tuning $\sigma$ in SVM with RBF kernel function\label{fig3:b}}{\includegraphics[height=2.1in,keepaspectratio]{./images/svm_kernel_rbf.eps}}
+   \caption{Parameter tuning for classification algorithms}
+       \label{fig:parameter tuning}
+
+\end{figure}
+
+
+
+
 %% Example of a theorem:
 %\begin{Theorem}
 %Text text text
@@ -345,10 +377,9 @@ For future work we can consider adding the following sections to paper:
 
 Identifying species using remote sensing technologies such as hyperspectral and LiDAR sensors has a critical utility in studying global warming, bio-mass estimation, carbon preserves, invasive species identification and etc. NEON is about to begin as a thirty-year project at continental scale with goals on ecological monitoring one of which is remote sensing. In this paper we perform specie classification using SVM and the AVRIS hyperspectral and LiDAR data available via NEON. Our results show we have developed a promissing and robust classifier for determining tree species. 
 
-\acknowledgements{Acknowledgements}
+%\acknowledgements{Acknowledgements}
 
-This work is supported in part by DARPA under
-FA8750-12-2-0348-2 (DEFT/CUBISM).
+%This work is supported ...
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
