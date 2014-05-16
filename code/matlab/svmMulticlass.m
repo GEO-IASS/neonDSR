@@ -1,4 +1,4 @@
-function accuracy = specie_svm_multiclass(debug)
+function accuracy = svmMulticlass(debug)
 %% This is a single run of SVM with 2/3 vs 1/3 partitioing of data
 %% for training and test purposes respectively
 

@@ -1,9 +1,9 @@
-function avg_accuracy = specie_svm_binary_k_fold(classes, features, debug, polynomial_order)
+function avg_accuracy = svmMultiClassKFold(classes, features, debug, kernel, kernel_param)
 %% This is a k-fold classification all-vs-all (as compared to one-vs-all)
 
 if nargin < 1
   debug = 0;
-  polynomial_order = 1;
+  kernel_param = 1;
 end
 
 [g gn] = grp2idx(classes);      %# nominal class to numeric (string classes to numeric)
@@ -12,9 +12,9 @@ k=10;
 sum_accuracy = 0;
 cvFolds = crossvalind('Kfold', classes, k);   %# get indices of 10-fold CV
 
-for i = 1:k                                  %# for each fold
-    testIdx = (cvFolds == i);                %# get indices of test instances
-    trainIdx = ~testIdx;                     %# get indices training instances
+for i = 1:k                          % Run SVM classificatoin k times (k being the # of folds)
+    testIdx = (cvFolds == i);        % get test set indices
+    trainIdx = ~testIdx;             % get training indices
              
     pairwise = nchoosek(1:length(gn),2);            %# all-vs-all pairwise models [1,2;1,3;2,3]
     svmModel = cell(size(pairwise,1),1);            %# NchooseK binary-classifers: one classifier for each [1,2;1,3;2,3]
@@ -28,13 +28,14 @@ for i = 1:k                                  %# for each fold
 
         % train - test
         try
-           % svmModel{j} = svmtrain(meas(idx,:), g(idx), ...
-           %    'BoxConstraint',2e-1, 'Kernel_Function','polynomial', 'Polyorder',polynomial_order);         
-         
-           svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-              'Method','QP', ...
-              'BoxConstraint',Inf, 'Kernel_Function','rbf', 'RBF_Sigma',polynomial_order);
-         
+            if strcmp(kernel, 'polynomial')
+               svmModel{j} = svmtrain(features(idx,:), g(idx), ...
+                 'BoxConstraint',2e-1, 'Kernel_Function', kernel, 'Polyorder',kernel_param);         
+            elseif strcmp(kernel, 'rbf')
+               svmModel{j} = svmtrain(features(idx,:), g(idx), ...
+                 'Method','QP', ...
+                 'BoxConstraint',Inf, 'Kernel_Function', kernel, 'RBF_Sigma',kernel_param);
+            end
           predTest(:,j) = svmclassify(svmModel{j}, features(testIdx,:));
 
         catch ME

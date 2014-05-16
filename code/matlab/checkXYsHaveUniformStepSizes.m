@@ -1,4 +1,4 @@
-function Check_XY_Have_Uniform_Step_Sizes( envi )
+function checkXYsHaveUniformStepSizes( envi )
 % makes sure the step size does't change between pixels and is always the
 % same
 
