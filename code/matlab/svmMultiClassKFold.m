@@ -1,10 +1,10 @@
 function avg_accuracy = svmMultiClassKFold(classes, features, debug, kernel, kernel_param)
 %% This is a k-fold classification all-vs-all (as compared to one-vs-all)
 
-if nargin < 1
-  debug = 0;
-  kernel_param = 1;
-end
+% if nargin < 1
+%   debug = 0;
+%   kernel_param = 1;
+% end
 
 [g gn] = grp2idx(classes);      %# nominal class to numeric (string classes to numeric)
 
@@ -27,7 +27,7 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
         idx = trainIdx & selector;
 
         % train - test
-        try
+      %  try
             if strcmp(kernel, 'polynomial')
                svmModel{j} = svmtrain(features(idx,:), g(idx), ...
                  'BoxConstraint',2e-1, 'Kernel_Function', kernel, 'Polyorder',kernel_param);         
@@ -38,8 +38,8 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
             end
           predTest(:,j) = svmclassify(svmModel{j}, features(testIdx,:));
 
-        catch ME
-        end
+       % catch ME
+        %end
     end
     pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
                            % Find the most frequent value of each column.

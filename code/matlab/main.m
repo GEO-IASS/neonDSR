@@ -9,6 +9,8 @@ global setting
 setting = struct('RED_INDEX', 34, 'NIR_INDEX', 41, 'GREEN_INDEX', 20, ...
     'BLUE_INDEX', 10, 'NDVI_THRESHOLD', 0.4, 'NIR_THRESHOLD', 0.33);
 
+envi.info.wavelength(setting.NIR_INDEX)
+
 %% Read ENVI file and Normalize ata reflectance range = [-32724, +32762]
 
 flightDetails = 'Morning f100904t01p00r04rdn_b: ATCOR4r';
@@ -36,28 +38,8 @@ subimg = envi.z;
 tic
 envi.z = removeWaterAbsorbtionBands(envi.z, 0);
 toc
-%%
-envi_atcor = envi;
-envi_flaash = envi;
-
-svm_results_rbf_atcor = svm_results_rbf;
-svm_results_poly_atcor = svm_results_poly;
-svm_results_gaussian_atcor = svm_results_gaussian;
 
 
-svm_results_rbf_flaash = svm_results_rbf;
-svm_results_poly_flaash = svm_results_poly;
-svm_results_gaussian_flaash = svm_results_gaussian;
-
-envi = envi_flaash;
-
-
-figure_svm_results_rbf = figure;
-figure figure_svm_results_rbf;
-semilogx(rbf_sigma_values, svm_results_rbf_atcor, 'marke', '+', rbf_sigma_values, svm_results_rbf_flaash, 'marker', '*');
-grid on
-xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
-hleg1 = legend('ATCOR','FLAASH');
 
 %% NDVI Filter Clouds and Shaddows
 
@@ -97,84 +79,6 @@ pdist2(p1,p2)
 [mesh_flight4_X, mesh_flight4_Y]= meshgrid(envi.x, envi.y);
 mesh_flight_4 = cat(3, mesh_flight4_X, mesh_flight4_Y);
 mesh_flight_4_reshaped = reshape(mesh_flight_4, 2, []);
-
-
-
-
-%% SVM performance
-
-% Extract ground pixels
-[specie_titles, reflectances] = extractPixels( envi );
-
-% Evaluate Gaussian filter size on accuracy
-rng(982451653); % large prime as seed for random generation
-
-count = 100;
-svm_results_gaussian = zeros(count, 1);
-smoothing_windows = zeros(count, 1);
-
-for i=1:count
-    i
-    smoothing_window_size =  rem(i,10);  % 25 runs per gaussian window
-    smoothing_windows(i) = smoothing_window_size;
-    %[ specie_titles, reflectances, info ] = loadGroundCSVFile( fieldPath, smoothing_window_size);
-    svm_results_gaussian(i) = svmMultiClassKFold(specie_titles, reflectances, 0, 'polynomial', 3);
-end
-figure;
-boxplot(svm_results_gaussian, smoothing_windows);
-xlabel('Gaussian window size'); ylabel('Accuracy (%)');
-
-%---------------------------------------------------------------------
-% Evaluate polynomial degree of svm kernel for accuracy
-rng(982451653); % large prime as seed for random generation
-
-polynomial_orders = [ 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.007 0.008 0.009 ...
-    0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 ...
-    0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...
-    1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 ...
-    2 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 ...
-    3 3.1 3.15 3.2 3.25  3.3 3.33 3.35 3.4 3.5 3.6 3.7 3.8 3.9...
-    4 4.1 4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 ...
-    5 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8 5.9 ...
-    6 6.1 6.2 6.3 6.4 6.5 6.6 6.7 6.8 6.9 ...
-    7 8 9 10]; %[ 1 2 3 4 5 6 7 8 9 10];
-count = numel(polynomial_orders);
-svm_results_poly = zeros(count, 1);
-
-for i=1:count
-    i
-    svm_results_poly(i) = svmMultiClassKFold(specie_titles, reflectances, 0, 'polynomial', polynomial_orders(i));
-end
-figure;
-semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
-xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
-
-%---------------------------------------------------------------------
-% Evaluate RBF sigma of svm kernel for accuracy
-rng(982451653); % large prime as seed for random generation
-
-rbf_sigma_values = [ 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.007 0.008 0.009 ...
-    0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 ...
-    0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...
-    1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 ...
-    2 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 ...
-    3 3.1 3.15 3.2 3.25  3.3 3.33 3.35 3.4 3.5 3.6 3.7 3.8 3.9 ...
-    4 4.1 4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 ...
-    5 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8 5.9 ...
-    6 6.1 6.2 6.3 6.4 6.5 6.6 6.7 6.8 6.9 ...
-    7 8 9 10];
-count = numel(rbf_sigma_values);
-svm_results_rbf = zeros(count, 1);
-
-for i=1:count
-    i
-    svm_results_rbf(i) = svmMultiClassKFold(specie_titles, reflectances, 0, 'rbf', rbf_sigma_values(i));
-end
-figure;
-semilogx(rbf_sigma_values, svm_results_rbf);
-grid on
-xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
-
 
 %%
 %%

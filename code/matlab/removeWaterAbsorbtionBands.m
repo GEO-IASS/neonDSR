@@ -1,6 +1,13 @@
 function pixel = removeWaterAbsorbtionBands( pixel, set_nan )
 %% Either completedly delete those bands or set them to NaN
 % could be one pixel, a list of pixels, or a map of pixels
+% envi.info.wavelength(105)
+% envi.info.wavelength(120)
+% envi.info.wavelength(151)
+% envi.info.wavelength(171)
+% envi.info.wavelength(215)
+% envi.info.wavelength(224)
+
 if ndims(pixel) ==2 && size(pixel,1) == 1
     if set_nan == 1
         pixel(105:120) = NaN;
