@@ -111,7 +111,7 @@ hsi2scidb(normalized_subimg, 'normalized_subimg.csv');
 hsi2scidb(hsi_img, 'hsi_img.csv');
 
 %% lasread - AWESOME fast!!!
-
+tic
 disp(['Time: ' datestr(now, 'HH:MM:SS')])
 addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/lidar/');
 lidar_file = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las';
@@ -123,6 +123,18 @@ lidar = s.Z(s.Z <zmean + 3 * zstd );
 hist(lidar, 200);
 lasview(lastrim(s,50000),'z'); %sam
 disp(['Time: ' datestr(now, 'HH:MM:SS')])
+
+%lidar bining and averaging
+lidarBining(s);
+toc
+
+% takes 10 miutes to draw contour
+%step = 150;
+%x=linspace(min(s.X),max(s.X),step);
+%y=linspace(min(s.Y),max(s.Y),step);
+%[X,Y]=meshgrid(x,y);
+%F=TriScatteredInterp(s.X,s.Y,s.Z-1);
+%contourf(X,Y,F(X,Y),100,'LineColor','none');
 
 %% SPICE: linear unmixing - not suitable for neon dataset
 
