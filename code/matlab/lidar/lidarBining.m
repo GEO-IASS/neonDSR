@@ -1,5 +1,5 @@
 function Zmap = lidarBining(s, bin_size)
-% lidar bining, averaging, and removing outliers in elevation (clouds)
+% lidar bining, taking maximum in pixel
 
 yy = s.Y;
 xx = s.X;
