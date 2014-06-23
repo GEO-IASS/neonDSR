@@ -117,15 +117,28 @@ addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/lidar/');
 lidar_file = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las';
 params = 'xyz'; % 'A'
 [s, h, v] = lasread(lidar_file, params);
-zmean= mean(s.Z);
+zmean= mean(s.Z); % elevation
 zstd = std(s.Z);
-lidar = s.Z(s.Z <zmean + 3 * zstd );
-hist(lidar, 200);
+nonoutlier_elevations_indexes = s.Z <zmean + 3 * zstd;
+s.Z = s.Z(nonoutlier_elevations_indexes);
+s.X = s.X(nonoutlier_elevations_indexes);
+s.Y = s.Y(nonoutlier_elevations_indexes);
+
+figure, hist(s.Z, 200);
 lasview(lastrim(s,50000),'z'); %sam
-disp(['Time: ' datestr(now, 'HH:MM:SS')])
+%disp(['Time: ' datestr(now, 'HH:MM:SS')])
 
 %lidar bining and averaging
-lidarBining(s);
+Zmap = lidarBining(s,3);
+figure, hist(Zmap(:), 200), title('elevation');
+figure, imagesc(Zmap');
+
+heightMap = lidarElevationToHeight(Zmap, 10);
+hm = heightMap(:);
+figure, hist(hm(hm > 2), 200),  title('height');
+
+figure, imagesc(heightMap');
+
 toc
 
 % takes 10 miutes to draw contour
