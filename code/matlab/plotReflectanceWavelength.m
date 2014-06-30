@@ -5,8 +5,8 @@ function plotReflectanceWavelength(reflectance_figure, reflectance, wavelength, 
   plot(wavelength, reflectance);  
   xlabel('Wavelength(nm)'); ylabel('Reflectance');
   title (message);
-  set(gca,'YTick',[0:0.1:max(reflectance)])
-  set(gca,'XTick',[0:0.1:max(wavelength)])
+  set(gca,'YTick',[0:0.1:max(reflectance(:))]);
+  set(gca,'XTick',[0:0.1:max(wavelength)]);
   %set(findobj(gca,'Type','line','Color','blue'),'Color',[0 0 0],'Marker','x');
   grid on;
   
