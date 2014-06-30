@@ -9,17 +9,18 @@ global setting
 setting = struct('RED_INDEX', 34, 'NIR_INDEX', 41, 'GREEN_INDEX', 20, ...
     'BLUE_INDEX', 10, 'NDVI_THRESHOLD', 0.4, 'NIR_THRESHOLD', 0.33);
 
-envi.info.wavelength(setting.NIR_INDEX)
+%envi.info.wavelength(setting.NIR_INDEX)
 
 %% Read ENVI file and Normalize ata reflectance range = [-32724, +32762]
 
 flightDetails = 'Morning f100904t01p00r04rdn_b: ATCOR4r';
 if exist('/cise/', 'file')
     cd('/cise/homes/msnia/zproject/neonDSR/code/matlab');
-    addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/');
-    envi = enviread('/cise/homes/msnia/neon/morning/f100904t01p00r04rdn_b/f100904t01p00r04rdn_b_sc01_ort_img_atm.bsq');
+    addpath(genpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/'));
+    %envi = enviread('/cise/homes/msnia/neon/morning/f100904t01p00r04rdn_b/f100904t01p00r04rdn_b_sc01_ort_img_atm.bsq');
+        
+    envi = enviread('/cise/homes/msnia/neon/midday/f100910t01p00r04rdn_b/f100910t01p00r04rdn_b_sc01_ort_img_atm.bsq');
     %envi = enviread('/cise/homes/msnia/neon/morning/f100910t01p00r04rdn_b_NEON-L1G/f100910t01p00r04rdn_b_sc01_ort_flaashreflectance_img');
-    
 else
     cd('/home/scidb/zproject/neonDSR/code/matlab/');
     envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
@@ -90,6 +91,27 @@ for i = 1:13
     plotROI(envi_figure, envi, i);
 end
 
+%% read spectral library
+
+fileData = csvread('/cise/homes/msnia/zproject/neonDSR/docs/NEON_Field_Data.csv');
+wavelength = str2double(fileData(1,2:size(fileData,2))) * 10^-3;
+species = fileData(2:size(fileData,1),1);
+reflectance = str2double(fileData(2:size(fileData,1),2:size(fileData,2)));
+
+resampled_reflectance = zeros(size(reflectance, 1), numel(envi.info.wavelength));
+for i=1:size(reflectance, 1)
+    resampled_reflectance(i,:) = resample(wavelength,reflectance(i,:), envi.info.wavelength');
+end
+
+reflectance_figure = figure;
+plotReflectanceWavelength(reflectance_figure, resampled_reflectance, envi.info.wavelength', 's', 0 );
+legend(strrep(species, '_', '\_'));
+
+size(species)
+size(resampled_reflectance)
+data = [species num2cell(resampled_reflectance)];
+cell2csv('/cise/homes/msnia/zproject/neonDSR/docs/NEON_Field_Data_Resampled.csv', data, ',');
+
 %% Mark an already known spot in image
 
 markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
@@ -117,6 +139,7 @@ tic
 addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/lidar/');
 lidar_file = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las';
 heightMap = getHeightMap(lidar_file);
+% TODO: generate x and y's of each bin
 toc
 
 %% SPICE: linear unmixing - not suitable for neon dataset

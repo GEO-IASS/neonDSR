@@ -6,8 +6,7 @@
 % Evaluate Gaussian filter size on accuracy
 rng(982451653); % large prime as seed for random generation
 
-% Extract ground pixels  
-[specie_titles, reflectances] = extractPixels( envi );
+
 
 count = 100;
 svm_results_gaussian = zeros(count, 1);
@@ -17,7 +16,9 @@ for i=1:count
     i
     smoothing_window_size =  rem(i,10);  % 25 runs per gaussian window
     smoothing_windows(i) = smoothing_window_size;
-    %[ specie_titles, reflectances, info ] = loadGroundCSVFile( fieldPath, smoothing_window_size);
+    % Extract ground pixels  
+    % make suresmoothing is applied on extracted data with the same level as desired 
+    [specie_titles, reflectances] = extractPixels( envi, smoothing_window_size ); 
     svm_results_gaussian(i) = svmMultiClassKFold(specie_titles, reflectances, 0, 'polynomial', 3);
 end
 figure;
@@ -29,7 +30,7 @@ xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 rng(982451653); % large prime as seed for random generation
 
 % Extract ground pixels  
-[specie_titles, reflectances] = extractPixels( envi );
+[specie_titles, reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
 
 % polynomial_orders = [ 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.007 0.008 0.009 ...
 %     0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 ...
@@ -58,7 +59,7 @@ xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
 rng(982451653); % large prime as seed for random generation
 
 % Extract ground pixels  
-[specie_titles, reflectances] = extractPixels( envi );
+[specie_titles, reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
 
 % rbf_sigma_values = [ 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.007 0.008 0.009 ...
 %     0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 ...
@@ -92,8 +93,7 @@ xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
 % Evaluate Gaussian filter size on accuracy
 rng(982451653); % large prime as seed for random generation
 
-% Extract ground pixels  
-[specie_titles, reflectances] = extractPixels( envi );
+
 
 count = 100;
 svm_results_gaussian = zeros(count, 1);
@@ -103,7 +103,8 @@ for i=1:count
     i
     smoothing_window_size =  rem(i,10);  % 25 runs per gaussian window
     smoothing_windows(i) = smoothing_window_size;
-    %[ specie_titles, reflectances, info ] = loadGroundCSVFile( fieldPath, smoothing_window_size);
+    % Extract ground pixels  
+    [specie_titles, reflectances] = extractPixels( envi, smoothing_window_size);    
     svm_results_gaussian(i) = svmMultiClass(specie_titles, reflectances, 0);
 end
 figure;

@@ -1,9 +1,8 @@
 function [ specie_titles, reflectances, info ] = loadGroundCSVFile( fieldPath, smoothing_window_size )
 %% info: {'Specie','Specie_ID','ROI_ID','ID','X','Y','MapX','MapY','Lat','Lon'}
 
-if nargin < 2
- smoothing_window_size = 4;
-end
+% best  smoothing_window_size = 4;
+
 
 fileID = fopen(fieldPath);
 % file_columns is an array of cells each of which is an array of items
@@ -35,25 +34,7 @@ reflectances = numerical_part_of_file(:, 10:numel(file_columns) - 1);
 
 %% preprocess
 
-reflectances = removeWaterAbsorbtionBands( reflectances, 0);
-% x = 1:size(reflectances,2); figure; plot(x,reflectances); 
-reflectances = gaussianSmoothing(reflectances, smoothing_window_size);
-% x = 1:size(reflectances,2); figure; plot(x,reflectances); 
-for i = 1:size(reflectances, 1)
-  reflectances(i,:) = scalePixel(reflectances(i,:));
-end
+reflectances = preprocessReflectances(reflectances, smoothing_window_size);
  x = 1:size(reflectances,2); figure; plot(x,reflectances); 
-
-%% shuffle
-%random_permutations = randperm(size(reflectances,1));
-%reflectances = reflectances(random_permutations,:); % samples_reflectance is ordered by specie, shuffle it
-%specie_titles = specie_titles(random_permutations, :);
-%
-%if smoothing_window_size > 0
-%  for i = 1 : size(reflectances,1)
-%    reflectances(i,:) = gaussian_smoothing(reflectances(i,:), smoothing_window_size);
-%  end
-%end
-
 end
 

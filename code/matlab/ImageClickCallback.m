@@ -16,7 +16,9 @@ function ImageClickCallback(obj,event,  wavelength_titles, hsi_img, hsi_figure, 
   
   %figure(reflectance_figure);
   reflectance = reshape(hsi_img(x_index, y_index, :), 1,224);
- 
+  disp(strrep(['Reflectance: (' sprintf(' %f,', reflectance) ')'], ',)', ')'))
+
+  
   nir = double(reflectance(setting.NIR_INDEX));  
   red = double(reflectance(setting.RED_INDEX)); 
   ndvi = (nir-red)/(nir+red);
