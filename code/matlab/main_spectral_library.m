@@ -19,7 +19,7 @@ size(resampled_reflectance)
 data = [species num2cell(resampled_reflectance)];
 cell2csv('/cise/homes/msnia/zproject/neonDSR/docs/NEON_Field_Data_Resampled.csv', data, ',');
 
-%%
+%% Visualize current spectral library
 
 fileData = csvread('/cise/homes/msnia/zproject/neonDSR/docs/spectral_library.csv');
 wavelength = str2double(fileData(1,11:size(fileData,2))) * 10^-3;
@@ -34,4 +34,6 @@ legend(strrep(species(1:38), '_', '\_'), 'Location', 'EastOutside');
 reflectance_figure = figure;
 plotReflectanceWavelength(reflectance_figure, reflectance(39:size(reflectance,1),:), wavelength, 's', 0 );
 legend(strrep(species(39:size(reflectance,1)), '_', '\_'), 'Location', 'EastOutside');
+
+%% 
 
