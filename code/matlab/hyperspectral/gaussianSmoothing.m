@@ -10,7 +10,7 @@ if windowWidth > 1
         gaussFilter = gaussFilter / sum(gaussFilter); % Normalize.
         smoothedVector = conv(pixel, gaussFilter);   % Do the blur.
         smoothedVector = smoothedVector(halfWidth:end-halfWidth);
-        pixel(i,:) = smoothedVector;
+        pixel(:) = smoothedVector;
     elseif ndims(pixel) == 2 % list of pixels
         for i=1:size(pixel, 1)
             halfWidth = windowWidth / 2;

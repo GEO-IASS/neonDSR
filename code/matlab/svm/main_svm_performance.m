@@ -1,6 +1,7 @@
 %% SVM performance
 
-
+global setting;
+fieldPath = setting.FIELD_PATH;
 
 %%
 % Evaluate Gaussian filter size on accuracy
@@ -18,7 +19,7 @@ for i=1:count
     smoothing_windows(i) = smoothing_window_size;
     % Extract ground pixels  
     % make suresmoothing is applied on extracted data with the same level as desired 
-    [specie_titles, reflectances] = extractPixels( envi, smoothing_window_size ); 
+    [specie_titles, reflectances] = extractPixels( envi, fieldPath ); 
     svm_results_gaussian(i) = svmMultiClassKFold(specie_titles, reflectances, 0, 'polynomial', 3);
 end
 figure;

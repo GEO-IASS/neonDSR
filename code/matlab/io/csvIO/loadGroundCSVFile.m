@@ -1,4 +1,4 @@
-function [ specie_titles, reflectances, info ] = loadGroundCSVFile( fieldPath, smoothing_window_size )
+function [ specie_titles, reflectances, info ] = loadGroundCSVFile( fieldPath)
 %% info: {'Specie','Specie_ID','ROI_ID','ID','X','Y','MapX','MapY','Lat','Lon'}
 
 % best  smoothing_window_size = 4;
@@ -17,24 +17,20 @@ file_columns = textscan(fileID, ['%s %f %f %f %f %f %f %f %f %f' ... % {'Specie'
     '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %160
     '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %180
     '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %200
-    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %220    
+    '%f %f %f %f %f %f %f %f %f %f' '%f %f %f %f %f %f %f %f %f %f' ... %220
     '%f %f %f %f' %224   ---  224 wavelengths
-    ], ...    
-'delimiter',',','EmptyValue',-Inf, 'headerLines', 1);
+    ], ...
+    'delimiter',',','EmptyValue',-Inf, 'headerLines', 1);
 fclose(fileID);
 
-%% separate columns 
+%% separate columns
 specie_titles = file_columns{1,1,:}; % char(file_columns{1,1,:});
 a = [file_columns(1, 2:numel(file_columns))]';
 numerical_part_of_file=reshape(cell2mat(a), numel(file_columns{1}), numel(file_columns)-1); % one column containing textual info (specie name)
 info = numerical_part_of_file(:, 1:9);
 reflectances = numerical_part_of_file(:, 10:numel(file_columns) - 1);
 
-% x = 1:size(reflectances,2); figure; plot(x,reflectances); 
+% x = 1:size(reflectances,2); figure; plot(x,reflectances);
 
-%% preprocess
-
-reflectances = preprocessReflectances(reflectances, smoothing_window_size);
- x = 1:size(reflectances,2); figure; plot(x,reflectances); 
 end
 

@@ -1,6 +1,23 @@
 function [idx, A, rec, minerr]=MESMA_brute_small (x,L)
 % MESMA_BRUTE_SMALL Efficient brute force approach for MESMA problems with
 % a low number of endmember libraries.
+% assumes that the data is vectorized: x is a (d,N) matrix, with d the 
+% number of dimensions (or spectral bands) and N the number of targets. L is
+% a cell array containing any number of libraries, each of size (d, libsize).
+% The libsizes do not need to be the same for every library. Use reshape to
+% turn 3-dim data cubes into 2-dim pixel arrays.
+%
+% Example:
+%
+% x=rand(50,1);
+% L{1}=rand(50,5);
+% L{2}=rand(50,10);
+% L{3}=rand(50,15);
+% [idx, A, rec, minerr]=MESMA_brute_small (x,L)
+%
+% This gives you the indices into each library of the best combination, the
+% abundance wrt. these library elements, the reconstructed spectrum, and 
+% the error.
 
 [d,num]=size(x);
 p=numel(L);

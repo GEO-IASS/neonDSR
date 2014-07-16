@@ -1,6 +1,6 @@
-function [specie_titles, reflectances] = extractPixels( envi )
+function [specie_titles, reflectances] = extractPixels( envi, fieldPath )
+%% gets coordinates of pixels from text file and just returns their reflectance value
 
-fieldPath = '/cise/homes/msnia/zproject/neonDSR/docs/field_trip_28022014/crowns_osbs_atcor_flight4_morning.csv';
 [ specie_titles, ~, info ] = loadGroundCSVFile( fieldPath);
 
 x_list=info(:,6); y_list =info(:, 7);
