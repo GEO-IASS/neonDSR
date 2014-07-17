@@ -1,4 +1,14 @@
 
+%% load field data
+envi = init();
+
+global setting;
+fieldPath = setting.FIELD_PATH;
+
+[ground_specie_titles, ground_reflectances] = extractPixels(envi, fieldPath);
+% only remove water absorption bands for the ones we care about
+ground_reflectances = removeWaterAbsorbtionBands(ground_reflectances, 0);
+plot(ground_reflectances(1,:));
 
 %% load current spectral library and visualize it
 % The result of the resampling method along with other manually extracted
@@ -31,18 +41,6 @@ if visualize
     legend(strrep(species(39:size(reflectance,1)), '_', '\_'), 'Location', 'EastOutside');
 end
 
-%% load field data
-envi = init();
-
-global setting;
-fieldPath = setting.FIELD_PATH;
-
-smoothing_window_size = 4;
-[ground_specie_titles, ground_reflectances] = extractPixels(envi, fieldPath);
-% only remove water absorption bands for the ones we care about
-ground_reflectances = removeWaterAbsorbtionBands(ground_reflectances, 0);
-plot(ground_reflectances(1,:));
-
 %% MESMA Brute-force
 
 % there was some issue in \ operator used in MESMA_brute_small
@@ -53,70 +51,22 @@ plot(ground_reflectances(1,:));
 % http://stackoverflow.com/questions/19268293/matlab-error-cannot-open-with-static-tls
 
 % actual code by Rob Heylen
-clear L;
-x=rand(50,1);
-L{1}=rand(50,5);
-L{2}=rand(50,10);
-L{3}=rand(50,15);
-[idx, A, rec, minerr]=MESMA_brute_small (x,L);
-plot(L{1});
-clear L;
+%clear L;
+%x=rand(50,1);
+%L{1}=rand(50,5);
+%L{2}=rand(50,10);
+%L{3}=rand(50,15);
+%[idx, A, rec, minerr]=MESMA_brute_small (x,L);
+%plot(L{1});
+%clear L;
 
-library_size = size(reflectance, 1);
-bands =  size(reflectance, 2);
-sublibrary_indexes = combntns(1:library_size,3);
-row_count = size(sublibrary_indexes,1);
-%valid_sublibrary_indexes = ones(row_count,1) % remove reflectances of the
-%same class from library
-%for i=1:size(sublibrary_indexes,1)
-%end
-
-for i=1:size(sublibrary_indexes,1)
-    triples_library{i} = zeros(bands, 3);
-    triples_library{i}(:, 1) = reflectance(sublibrary_indexes(i, 1), :)';
-    triples_library{i}(:, 2) = reflectance(sublibrary_indexes(i, 2), :)';
-    triples_library{i}(:, 3) = reflectance(sublibrary_indexes(i, 3), :)';
-end
-plot(triples_library{1}(1, :));
-
-
-
-
-%    triples_library{1} = zeros(177,1);
-%    triples_library{2} = zeros(177,1);
-%    triples_library{3} = zeros(177,1);
-%    triples_library{1}(:) = reflectance(sublibrary_indexes(i, 1), :)';
-%    triples_library{2}(:) = reflectance(sublibrary_indexes(i, 2), :)';
-%    triples_library{3}(:) = reflectance(sublibrary_indexes(i, 3), :)';
-
-%    x = ground_reflectances(1, :)';
-%    L = triples_library;
-%    [idx, A, rec, minerr]=MESMA_brute_small (x, L);
+%library_size = size(reflectance, 1);
+%bands =  size(reflectance, 2);
+%sublibrary_indexes = combntns(1:library_size,3);
+%row_count = size(sublibrary_indexes,1);
 
 tic
-L{1} = reflectance';
-L{2} = reflectance';
-L{3} = reflectance';
-
-reflectance_figure = figure;
-for i=1:size(ground_reflectances,1)
-    x = ground_reflectances(i, :)';
-    
-    disp(['Time: ' datestr(now, 'HH:MM:SS')])
-    [idx, A, rec, minerr]=MESMA_brute_small (x, L);
-    disp(['Time: ' datestr(now, 'HH:MM:SS')])
-
-    plot([reflectance(idx(1),:)' reflectance(idx(2),:)' reflectance(idx(3),:)' rec x], '-x');
-   
-    legend([strcat(species(idx(1)),': ', num2str(A(1),4)), ...
-        strcat(species(idx(2)),': ', num2str(A(2),4)), ... 
-        strcat(species(idx(3)),': ', num2str(A(3),4)), ... 
-        'Recreated', strcat('Actual:::', ground_specie_titles(i))]);
-    
-    file = sprintf(strcat( int2str(i), '.','png'));
-    
-    saveas(reflectance_figure, file);
-end
+run_MESMA_brute_small(reflectance, species, ground_reflectances, ground_specie_titles);
 toc
 %% MESMA ViperTools Approach
 
