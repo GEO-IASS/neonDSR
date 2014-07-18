@@ -26,7 +26,7 @@ for i=59:size(ground_reflectances,1)
     
     file = sprintf(strcat( int2str(i), '.','png'));
     
-    saveas(reflectance_figure, file);
+    saveas(reflectance_figure, [pwd strcat('/images/', file)]);
 end
 end
 
