@@ -7,7 +7,7 @@ L{2} = reflectance_library';
 L{3} = reflectance_library';
 
 
-for i=59:size(ground_reflectances,1)
+for i=1:size(ground_reflectances,1)
     reflectance_figure = figure;
     set(reflectance_figure, 'Visible', 'off');
     x = ground_reflectances(i, :)';

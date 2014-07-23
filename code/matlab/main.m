@@ -4,7 +4,7 @@
 
 
 envi = init();
-envi.z = removeWaterAbsorbtionBands(envi.z, removeWABs);
+envi.z = removeWaterAbsorbtionBands(envi.z, 0);
 
 subimg = envi.z;
 

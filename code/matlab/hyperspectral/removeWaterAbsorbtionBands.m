@@ -8,41 +8,31 @@ function pixel = removeWaterAbsorbtionBands( pixel, set_nan )
 % envi.info.wavelength(215)
 % envi.info.wavelength(224)
 
+water_absorption_bands = [1:7 105:120 151:171 215:224];
+
 if ndims(pixel) ==2 && size(pixel,1) == 1
     if set_nan == 1
-        pixel(105:120) = NaN;
-        pixel(151:171) = NaN;
-        pixel(215:224) = NaN;
+        pixel(water_absorption_bands) = NaN;      
     else
         %cut nans
         %svm could not work with NaN, so we removed those columns instead of setting to NaN
-        pixel(215:224) = [];
-        pixel(151:171) = [];
-        pixel(105:120) = [];
+        pixel(water_absorption_bands) = [];
     end
 elseif ndims(pixel) == 2
     if set_nan == 1
-        pixel(:,105:120) = NaN;
-        pixel(:,151:171) = NaN;
-        pixel(:,215:224) = NaN;
+        pixel(:,water_absorption_bands) = NaN;
     else
         %cut nans
         %svm could not work with NaN, so we removed those columns instead of setting to NaN
-        pixel(:,215:224) = [];
-        pixel(:,151:171) = [];
-        pixel(:,105:120) = [];
+        pixel(:,water_absorption_bands) = [];
     end
 elseif ndims(pixel) == 3
     if set_nan == 1
-        pixel(:,:,105:120) = NaN;
-        pixel(:,:,151:171) = NaN;
-        pixel(:,:,215:224) = NaN;
+        pixel(:,:,water_absorption_bands) = NaN;
     else
         %cut nans
         %svm could not work with NaN, so we removed those columns instead of setting to NaN
-        pixel(:,:,215:224) = [];
-        pixel(:,:,151:171) = [];
-        pixel(:,:,105:120) = [];
+        pixel(:,:,water_absorption_bands) = [];
     end
 end
 
