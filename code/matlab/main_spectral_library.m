@@ -8,7 +8,12 @@ fieldPath = setting.FIELD_PATH;
 [ground_specie_titles, ground_reflectances] = extractPixels(envi, fieldPath);
 % only remove water absorption bands for the ones we care about
 ground_reflectances = removeWaterAbsorbtionBands(ground_reflectances, 0);
-plot(ground_reflectances(1,:));
+
+figure, plot(ground_reflectances(1,:));
+
+%% Print ground data as comma separate  -> to be imported to the spectral library instead of cherry picker data
+
+print_library(ground_specie_titles, ground_reflectances);  % copy lines to spectral_library file
 
 %% load current spectral library and visualize it
 % The result of the resampling method along with other manually extracted
@@ -66,7 +71,24 @@ end
 %row_count = size(sublibrary_indexes,1);
 
 tic
-run_MESMA_brute_small(reflectance, species, ground_reflectances, ground_specie_titles);
+[indexes, abundances, errors] = run_MESMA_brute_small(reflectance, species, ground_reflectances, ground_specie_titles);
 toc
+
+
+%%
+classes = cell(size(indexes, 1),1);
+indexes(indexes==0)=1; % set to null
+
+%classes = cell(25,1);
+
+for i=1:size(indexes, 1)
+    %indexes(i, :)
+    classes(i) = {getPlant(indexes(i, :), species)};
+end
+
+[c, order] = confusionmat(ground_specie_titles, classes)
+
+
 %% MESMA ViperTools Approach
+
 

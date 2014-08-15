@@ -91,6 +91,13 @@ for i=1:p
     end
 end
 
+% sort by abundance
+    [~, sorted_abundances_order] = sort(A);
+    sorted_abundances = A(sorted_abundances_order);
+    sorted_indexes = idx(sorted_abundances_order);
+    A = sorted_abundances;
+    idx = sorted_indexes;
+
 end
 
 function [y,a]=plane_project2(x,E)
