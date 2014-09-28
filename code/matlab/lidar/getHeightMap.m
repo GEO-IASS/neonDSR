@@ -7,28 +7,33 @@ function heightMap = getHeightMap( lidar_file )
 %lidar_file = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las';
 params = 'xyz'; % 'A'
 [s, h, v] = lasread(lidar_file, params);
-zmean= mean(s.Z); % elevation
+
+% remove outlier elevations
+zmean= mean(s.Z); 
 zstd = std(s.Z);
 nonoutlier_elevations_indexes = s.Z <zmean + 3 * zstd;
 s.Z = s.Z(nonoutlier_elevations_indexes);
 s.X = s.X(nonoutlier_elevations_indexes);
 s.Y = s.Y(nonoutlier_elevations_indexes);
 
-figure, hist(s.Z, 40);
-lasview(lastrim(s,50000),'z'); %sam
-%disp(['Time: ' datestr(now, 'HH:MM:SS')])
+% display raw histogram and map--- %disp(['Time: ' datestr(now, 'HH:MM:SS')])
+figure, hist(s.Z, 40), title('Elevation Histogram') , grid on
+lasview(lastrim(s,50000),'z');
 
-%lidar bining and averaging
-Zmap = lidarBining(s,1);
-figure, hist(Zmap(:), 40), title('elevation') , grid on,   set(gca,'YTick',[0:25:15000]);
+%lidar bining
+bin_resolution = 2; % bin side length in meters
+Zmap = lidarBining(s, bin_resolution);
+
+% display binned histogram and map
+figure, hist(Zmap(:), 40), title('Binned Elevation Histogram') , grid on
 figure, imagesc(Zmap');
 
+% convert to height
 heightMap = lidarElevationToHeight(Zmap, 3);
 hm = heightMap(:);
-figure, hist(hm(hm > 2), 40),  title('height'), grid on,   set(gca,'YTick',[0:25:15000])
 
-
-
+% display height histogram and map
+figure, hist(hm(hm > 2), 40),  title('Height Histogram'), grid on
 figure, imagesc(heightMap');
 
 

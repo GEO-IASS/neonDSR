@@ -1,21 +1,20 @@
-function Zmap = lidarBining(s, bin_size)
-% lidar bining, taking maximum in pixel
+function [baseX, baseY, Zmap] = lidarBining(s, bin_resolution)
+% lidar bining, taking maximum in pixel, the 0th pixel is located at (baseX
+% + 0 * bin_resolution, baseY + 0 * bin_resolution)
 
-yy = s.Y;
-xx = s.X;
-zz = s.Z;
-dx = bin_size; % meters
-dy = bin_size;
+baseX = min(s.X);
+baseY = min(s.Y);
 
+yidx=[min(s.Y):bin_resolution:max(s.Y)];
+xidx=[min(s.X):bin_resolution:max(s.X)];
 
-yidx=[min(yy):dy:max(yy)];
-xidx=[min(xx):dx:max(xx)];
-%ZmapSum=zeros(length(yidx),length(xidx));
-ZmapSum=NaN(length(yidx),length(xidx));
-ZmapIdx=zeros(size(ZmapSum));
+Zmap=NaN(length(yidx),length(xidx));
 
-[nx,binx] = histc(xx,xidx);
-[ny,biny] = histc(yy,yidx);
+[bincountx,binx] = histc(s.X,xidx);
+[bincounty,biny] = histc(s.Y,yidx);
+
+figure, plot(1:size(bincountx), bincountx);
+figure, plot(1:size(bincounty), bincounty);
 %bin==0 means the value is out of range
 binx=binx+1; biny=biny+1;
 
@@ -23,18 +22,18 @@ binx=binx+1; biny=biny+1;
 %binzero=( (binx==0) | (biny==0) ); %binx(binzero) = []; %biny(binzero) = [];%xx(binzero) = [];%yy(binzero) = [];%zz(binzero) = [];
 
 %binx and biny give their respective bin locations
-for i=1:1:length(xx)
+for i=1:1:length(s.X)
     %ZmapSum(biny(i),binx(i))=ZmapSum(biny(i),binx(i))+zz(i);
     %ZmapIdx(biny(i),binx(i))=ZmapIdx(biny(i),binx(i))+1; % keep track of how many points it is
 
-    if (isnan(ZmapSum(biny(i),binx(i))) || zz(i) > ZmapSum(biny(i),binx(i)))
-        ZmapSum(biny(i),binx(i)) = zz(i); % take maximum
+    %disp([biny(i),binx(i)])
+    if (isnan(Zmap(biny(i),binx(i))) || s.Z(i) > Zmap(biny(i),binx(i)))
+        Zmap(biny(i),binx(i)) = s.Z(i); % take maximum
+    else
+        ;
+        %disp([ZmapSum(biny(i),binx(i)) zz(i)]);
     end
         
 end
-
-%Zmap=ZmapSum./ZmapIdx;
-Zmap = ZmapSum;
-%Zmap(isnan(Zmap)) = 0; 
 
 end
