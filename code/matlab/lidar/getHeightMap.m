@@ -22,20 +22,26 @@ lasview(lastrim(s,50000),'z');
 
 %lidar bining
 bin_resolution = 2; % bin side length in meters
-Zmap = lidarBining(s, bin_resolution);
+[baseX, baseY, Zmap] = lidarBining(s, bin_resolution);
 
 % display binned histogram and map
 figure, hist(Zmap(:), 40), title('Binned Elevation Histogram') , grid on
-figure, imagesc(Zmap');
+figure, imagesc(flipud(Zmap));
 
 % convert to height
-heightMap = lidarElevationToHeight(Zmap, 3);
+radius = 3;
+heightMap = lidarElevationToHeight(Zmap, radius);
 hm = heightMap(:);
 
+%% keep both a max filter and min filter of lidar points. when getting height consider 
+% all neighbor mins rather than max of mins of neighbors.
+
+%once this is done, write a function that given a x,y returns height of its cell
+
+%%
 % display height histogram and map
 figure, hist(hm(hm > 2), 40),  title('Height Histogram'), grid on
-figure, imagesc(heightMap');
-
+figure, imagesc(flipud(heightMap));
 
 
 % takes 10 miutes to draw contour

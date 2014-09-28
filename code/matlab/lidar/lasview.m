@@ -1,7 +1,7 @@
 % function [h cmap] = lasview(s,attributeToColor)
 %
 % attributeToColor may be: 'rgb', 'classification', 'z', or 'i' (intensity)
-%
+% it only uses scatter3 to draw point cloud.
 function [h cmap] = lasview(s,attributeToColor)
 
 if nargin<2
