@@ -2,8 +2,10 @@
 % generic normalization - not suitable for hyperspectral data
 %envi.z = double((envi.z - min_num)) / double((max_num - min_num)); % scale envi.z
 
+cd('/cise/homes/msnia/zproject/neonDSR/code/matlab');
 
-envi = init();
+init();
+envi = load_flight_image('/cise/homes/msnia/neon/midday/f100910t01p00r04rdn_b/f100910t01p00r04rdn_b_sc01_ort_img_atm.bsq');
 envi.z = removeWaterAbsorbtionBands(envi.z, 0);
 
 subimg = envi.z;
@@ -79,12 +81,23 @@ hsi2scidb(hsi_img, 'hsi_img.csv');
 
 %% lasread - AWESOME fast!!!
 
-tic
 addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/lidar/');
-lidar_file = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las';
-heightMap = getHeightMap(lidar_file);
-% TODO: generate x and y's of each bin
+binResolution = 2; % bin side length in meters
+
+tic
+lidar_file08 = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL08_discrete_lidar_NEON-L1B/DL20100901_osbs_FL08_discrete_lidar_NEON-L1B.las';
+[baseX08, baseY08, heightMap08] = getHeightMap(lidar_file08, binResolution);
+lidar_file09 = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las';
+[baseX09, baseY09, heightMap09] = getHeightMap(lidar_file09, binResolution);
 toc
+TODO load all field data and loop through all pixels for a tree and try to come up with an aggregate  tree height
+targetX = 402536;
+targetY = 3283512;
+
+height08 = getHeight( heightMap08, baseX08, baseY08, binResolution, targetX, targetY );
+height09 = getHeight( heightMap09, baseX09, baseY09, binResolution, targetX, targetY );
+disp([height08 height09]);
+
 
 %% SPICE: linear unmixing - not suitable for neon dataset
 

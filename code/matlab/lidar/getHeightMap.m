@@ -1,10 +1,16 @@
-function heightMap = getHeightMap( lidar_file )
+function [baseX, baseY, heightMap] = getHeightMap( lidar_file, bin_resolution )
 
 
 
 %disp(['Time: ' datestr(now, 'HH:MM:SS')])
 %addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/lidar/');
-%lidar_file = '/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las';
+%lidar_file = ;
+%params = 'xyz'; [s, h, v] = lasread('/cise/homes/msnia/neon/lidar/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B/DL20100901_osbs_FL09_discrete_lidar_NEON-L1B.las', params);
+%min(s.X)
+%max(s.X)
+%min(s.Y)
+%max(s.Y)
+ 
 params = 'xyz'; % 'A'
 [s, h, v] = lasread(lidar_file, params);
 
@@ -21,7 +27,6 @@ figure, hist(s.Z, 40), title('Elevation Histogram') , grid on
 lasview(lastrim(s,50000),'z');
 
 %lidar bining
-bin_resolution = 2; % bin side length in meters
 [baseX, baseY, Zmap] = lidarBining(s, bin_resolution);
 
 % display binned histogram and map
@@ -33,7 +38,7 @@ radius = 3;
 heightMap = lidarElevationToHeight(Zmap, radius);
 hm = heightMap(:);
 
-%% keep both a max filter and min filter of lidar points. when getting height consider 
+%% TODO: keep both a max filter and min filter of lidar points. when getting height consider 
 % all neighbor mins rather than max of mins of neighbors.
 
 %once this is done, write a function that given a x,y returns height of its cell

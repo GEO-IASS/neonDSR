@@ -1,5 +1,8 @@
 function [specie_titles, reflectances] = extractPixels( envi, fieldPath )
 %% gets coordinates of pixels from text file and just returns their reflectance value
+global setting;
+fieldPath = setting.FIELD_PATH;
+field_trips = csvread(fieldPath);
 
 [ specie_titles, ~, info ] = loadGroundCSVFile( fieldPath);
 

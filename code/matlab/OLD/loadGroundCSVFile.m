@@ -1,6 +1,7 @@
 function [ specie_titles, reflectances, info ] = loadGroundCSVFile( fieldPath)
 %% info: {'Specie','Specie_ID','ROI_ID','ID','X','Y','MapX','MapY','Lat','Lon'}
-
+% THIS IS KINDA OBSOLETE IS FOR PREVIOUS FIELD TRIPS SAVED IN SAPARATE
+% FOLDERS. THE NEW ONE IS ONE CSV FILE FOR ALL TRIPS;
 % best  smoothing_window_size = 4;
 
 
