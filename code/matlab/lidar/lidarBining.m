@@ -14,8 +14,8 @@ Zmap=NaN(length(yidx),length(xidx));
 [bincounty,biny] = histc(s.Y,yidx);
 
 % observe distribution of points per bin in each dimension
-figure, plot(1:size(bincountx), bincountx);
-figure, plot(1:size(bincounty), bincounty);
+%figure, plot(1:size(bincountx), bincountx);
+%figure, plot(1:size(bincounty), bincounty);
 
 %bin==0 means the value is out of range
 binx=binx+1; biny=biny+1;
