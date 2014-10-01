@@ -2,7 +2,7 @@ function [baseEasting, baseNorthing, heightMap] = getHeightMap( lidar_file, bin_
 
 % Neighbiors to Consider for subtraction to get height
 radius = 2;
-
+HISTOGRAM_BINS = 80;
 
 %disp(['Time: ' datestr(now, 'HH:MM:SS')])
 
@@ -39,31 +39,34 @@ s.Z = s.Z(nonoutlier_elevations_indexes);
 s.X = s.X(nonoutlier_elevations_indexes);
 s.Y = s.Y(nonoutlier_elevations_indexes);
 
+nonoutlier_elevations_indexes = s.Z < 26; % discard anything more than 26
+s.Z = s.Z(nonoutlier_elevations_indexes);
+s.X = s.X(nonoutlier_elevations_indexes);
+s.Y = s.Y(nonoutlier_elevations_indexes);
+
 % display raw histogram and map--- %disp(['Time: ' datestr(now, 'HH:MM:SS')])
-figure, hist(s.Z, 40), title('Elevation Histogram') , grid on
+figure, hist(s.Z, HISTOGRAM_BINS), title('Elevation Histogram') , grid on
 lasview(lastrim(s,50000),'z'); title('lasview scatter3 point cloud')
 
 %lidar bining
 [baseEasting, baseNorthing, Zmap] = lidarBining(s, bin_resolution);
 
 % display binned histogram and map
-figure, hist(Zmap(:), 40), title('Gridded Elevation Histogram') , grid on
+figure, hist(Zmap(:), HISTOGRAM_BINS), title('Gridded Elevation Histogram') , grid on
 figure, imagesc(flipud(Zmap));  title('Gridded Elevation Map')
 
-% convert to height
-heightMap = lidarElevationToHeight(Zmap, radius);
-hm = heightMap(:);
+heightMap = Zmap; % Assuming the lidar file is already converted to heights using lastools
 
-%% TODO: keep both a max filter and min filter of lidar points. when getting height consider 
+% convert to height  % THE ALGORITHM IS NOT CORRECT
+%heightMap = lidarElevationToHeight(Zmap, radius);
+%hm = heightMap(:);
+% TODO: keep both a max filter and min filter of lidar points. when getting height consider 
 % all neighbor mins rather than max of mins of neighbors.
-
-%once this is done, write a function that given a x,y returns height of its cell
-
-%%
 % display height histogram and map
-figure, hist(hm(hm > 2), 40),  title('Height Histogram'), grid on
-figure, imagesc(flipud(heightMap));  title('Gridded Height Map')
-sum(isnan(heightMap(:)))   % -xyz 13506006x1 double   -A 13512407x1 double
+%figure, hist(hm(hm > 2), HISTOGRAM_BINS),  title('Height Histogram'), grid on
+%figure, imagesc(flipud(heightMap));  title('Gridded Height Map')
+%sum(isnan(heightMap(:)))   % -xyz 13506006x1 double   -A 13512407x1 double
+% COUNT HOW MANY NANS this method of heights has made
 
 
 % takes 10 miutes to draw contour
