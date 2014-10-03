@@ -3,11 +3,30 @@
 %envi.z = double((envi.z - min_num)) / double((max_num - min_num)); % scale envi.z
 
 cd('/cise/homes/msnia/zproject/neonDSR/code/matlab');
+addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/hyperspectral');
+addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/io');
+
 
 init();
-envi = load_flight_image('/cise/homes/msnia/neon/midday/f100910t01p00r04rdn_b/f100910t01p00r04rdn_b_sc01_ort_img_atm.bsq');
-envi.z = removeWaterAbsorbtionBands(envi.z, 0);
+global setting;
 
+
+
+envi03 = load_flight_image('/cise/homes/msnia/neon/morning/f100904t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
+envi03.z = removeWaterAbsorbtionBands(envi03.z, 0);
+[~, envi03_figure, envi03_h] = toRGB(envi03.z, 'Flight 03'); 
+
+envi04 = load_flight_image('/cise/homes/msnia/neon/morning//f100904t01p00r04rdn_b_sc01_ort_flaashreflectance_img');
+envi04.z = removeWaterAbsorbtionBands(envi04.z, 0);
+[~, envi04_figure, envi04_h] = toRGB(envi04.z, 'Flight 04'); 
+
+envi05 = load_flight_image('/cise/homes/msnia/neon/morning/f100904t01p00r05rdn_b_sc01_ort_flaashreflectance_img');
+envi05.z = removeWaterAbsorbtionBands(envi05.z, 0);
+[~, envi05_figure, envi05_h] = toRGB(envi02.z, 'Flight 05'); 
+
+% TODO : mark field samples on hyperspectral and lidar flights.
+% TODO : BBL is the good/bad bands
+envi = envi02;
 subimg = envi.z;
 
 %% NDVI Filter Clouds and Shaddows
@@ -29,6 +48,7 @@ end
 
 %% Plot the actual image and the subimg
 
+flightDetails = 'FLIGHT DETAILS';
 [rgb0, envi_figure, envi_h] = toRGB(envi.z, flightDetails); %Normalize for it, memory faced in normalizin
 [rgb,subimg_figure, subimg_h] = toRGB(subimg, flightDetails);
 
@@ -62,6 +82,11 @@ end
 
 markCoordinate(envi_figure, envi, 402424.06,  3283571.80 )
 
+addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/io/csvIO');
+[ specie, reflectance, roi, northing, easting, flight ] = get_field_pixels();
+for i = 1: numel(northing)
+    markCoordinate(envi_figure, envi, easting(i),  northing(i) )
+end
 %% Display hsi_img at differnet bands.
 
 [n_row,n_col,n_band] = size(subimg);

@@ -2,7 +2,7 @@
 addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/lidar/');
 addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/io/');
 addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/io/csvIO');
-
+init();
 
 binResolution = 2; % bin side length in meters
 
@@ -24,41 +24,13 @@ tic
 % TODO - first convert las files to height in lastools: 
 % >lasheight.exe -i ..\..\DL20100901_osbs_FL10_discrete_lidar_NEON-L1B\DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las -replace_z -o height_lidar.las    
 
-lidar_file_merge = '/cise/homes/msnia/neon/lidar/lastools_heights/merge_lidar_8_9_10-height.las';
+lidar_file_merge = '/cise/homes/msnia/neon/lidar/lastools_heights/merge_lidar_6_7_8_9_10-height.las';
 [baseEasting_merge, baseNorthing_merge, heightMap_merge] =  getHeightMap(lidar_file_merge, binResolution);
 toc
 
+get_field_data_heights( heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution );
+%% 
 
-[ specie, reflectance, roi, northing, easting, flight ] = get_field_pixels();
-
-uniqueROIs = unique(roi);
-for i = 1 : numel(uniqueROIs)
-    
-   % For each ROI determine height:
-   % Extract each ROI
-   index = roi == uniqueROIs(i);
-   roiSpecie = specie(index);
-   roiSpecie = roiSpecie(1); % A single specie in each ROI
-   roiReflectance = reflectance(index);
-   roiNorthing = northing(index);
-   roiEasting = easting(index);
-   roiFlight = flight(index); % A single flight for each ROI
-   roiFlight = roiFlight(1);
-   maxROIHeight = -inf;
-   
-   for j = 1 : numel(roiNorthing)
-      
-      % Assuming that a pixel might be captured in its actual flight and/or
-      % two adjacent flights.
-      pixelHeight = getHeight( heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution, roiEasting(j), roiNorthing(j) );
-      
-      maxROIHeight = max([maxROIHeight, pixelHeight]);         
-   end
-   
-   
-   disp(['ROI: ', uniqueROIs(i), roiSpecie, maxROIHeight])
-   
-end
-
+% Mark field data in lidar map
 
 

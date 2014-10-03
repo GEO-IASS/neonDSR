@@ -13,13 +13,17 @@ function envi = load_flight_image( envi_file_path )
 %    envi = enviread('/home/users-share/allFlights/f100910t01p00r03rdn_b_NEON-L1G/f100910t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
 %end
 
-checkXYsHaveUniformStepSizes(envi);
+envi = enviread(envi_file_path);
+
+%checkXYsHaveUniformStepSizes(envi);
 
 envi.z = double(envi.z);
 
 for j = 1: size(envi.z, 2)
     for i = 1: size(envi.z, 1)
-        
+        if i == 300 && j == 300
+        disp('w')
+        end
         envi.z(i, j, :) = scalePixel(envi.z(i,j,:));
     end
 end

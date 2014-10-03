@@ -9,7 +9,6 @@ function [rgb, hsi_figure, h] = toRGB(hsi_img, message)
   hsi_figure = figure;
   h = imshow(rgb);
   title (sprintf(message));
-  colorbar
 end
 
 % wavelength = {
