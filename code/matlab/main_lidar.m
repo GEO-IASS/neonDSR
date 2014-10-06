@@ -24,11 +24,18 @@ tic
 % TODO - first convert las files to height in lastools: 
 % >lasheight.exe -i ..\..\DL20100901_osbs_FL10_discrete_lidar_NEON-L1B\DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las -replace_z -o height_lidar.las    
 
-lidar_file_merge = '/cise/homes/msnia/neon/lidar/lastools_heights/merge_lidar_6_7_8_9_10-height.las';
+lidar_file_merge = '/cise/homes/msnia/neon/lidar/lastools_heights/merge_lidar_7_8_9_10_13_14-height.las';
 [baseEasting_merge, baseNorthing_merge, heightMap_merge] =  getHeightMap(lidar_file_merge, binResolution);
 toc
 
-get_field_data_heights( heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution );
+[ specie, reflectance, roi, northing, easting, flight ] = get_field_pixels();
+
+
+lidar_figure = figure; imagesc(heightMap_merge);  title('Gridded Elevation Map')
+
+
+
+get_field_data_heights(lidar_figure, heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution, specie, reflectance, roi, northing, easting, flight );
 %% 
 
 % Mark field data in lidar map

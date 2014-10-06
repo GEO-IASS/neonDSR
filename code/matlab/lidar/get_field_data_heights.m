@@ -1,13 +1,12 @@
-function [ output_args ] = get_field_data_heights( heightMap, baseEasting, baseNorthing, binResolution )
+function [ output_args ] = get_field_data_heights( lidar_figure, heightMap, baseEasting, baseNorthing, binResolution , specie, reflectance, roi, northing, easting, flight)
 %GET_FIELD_DATA_HEIGHTS Summary of this function goes here
 %   Detailed explanation goes here
 
 
 
-[ specie, reflectance, roi, northing, easting, flight ] = get_field_pixels();
 
 uniqueROIs = unique(roi);
-for i = 1 : numel(uniqueROIs)
+for i = 13 : numel(uniqueROIs)
     
    % For each ROI determine height:
    % Extract each ROI
@@ -27,6 +26,8 @@ for i = 1 : numel(uniqueROIs)
       % Assuming that a pixel might be captured in its actual flight and/or
       % two adjacent flights.
       pixelHeight = getHeight( heightMap, baseEasting, baseNorthing, binResolution, roiEasting(j), roiNorthing(j) );
+      
+      markCoordinateLiDAR( lidar_figure, heightMap, baseEasting, baseNorthing,  binResolution, roiEasting(j), roiNorthing(j) );
       
       maxROIHeight = max([maxROIHeight, pixelHeight]);         
    end

@@ -76,7 +76,7 @@ lasview(lastrim(s,50000),'z'); title('lasview scatter3 point cloud')
 % display binned histogram and map
 temp = Zmap(:);
 figure, hist(temp(temp > 2), HISTOGRAM_BINS), title('Gridded Elevation Histogram') , grid on
-figure, imagesc(flipud(Zmap));  title('Gridded Elevation Map')
+%figure, imagesc(flipud(Zmap));  title('Gridded Elevation Map')
 
 heightMap = Zmap; % Assuming the lidar file is already converted to heights using lastools
 
