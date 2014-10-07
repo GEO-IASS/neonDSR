@@ -5,11 +5,11 @@ function [ imageindex ] = markCoordinateLiDAR( lidar_figure, heightMap, baseX, b
     
 x_index = floor((x - baseX)/bin_resolution + 1);
 y_index = floor((y - baseY)/bin_resolution + 1);
-disp([x , y , x_index, y_index]);
+%disp([x , y , x_index, y_index]);
 if x_index <= size(heightMap, 2) && y_index <= size(heightMap, 1)
         figure(lidar_figure);
         hold on
-        plot(  x_index,  y_index, 'r.', 'MarkerSize', 25)
+        plot(  x_index,  y_index, '.', 'Color', [1 0.78 0.80],  'MarkerSize', 15)
         hold off
         imageindex = [x_index y_index];
 else

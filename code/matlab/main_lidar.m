@@ -31,12 +31,11 @@ toc
 [ specie, reflectance, roi, northing, easting, flight ] = get_field_pixels();
 
 
-lidar_figure = figure; imagesc(heightMap_merge);  title('Gridded Elevation Map')
+lidar_figure = figure; imagesc(heightMap_merge);  title('Gridded Elevation Map'); colormap(gray);
 
 
 
-get_field_data_heights(lidar_figure, heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution, specie, reflectance, roi, northing, easting, flight );
-%% 
+ get_field_data_heights(lidar_figure, heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution, specie, reflectance, roi, northing, easting, flight );
 
 % Mark field data in lidar map
 
