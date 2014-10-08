@@ -1,6 +1,5 @@
 function  get_field_data_heights( lidar_figure, heightMap, baseEasting, baseNorthing, binResolution , specie, reflectance, roi, northing, easting, flight)
-%GET_FIELD_DATA_HEIGHTS Summary of this function goes here
-%   Detailed explanation goes here
+
 
 
 DEBUG = 1;
@@ -59,6 +58,7 @@ for i = 1 : 1% numel(uniqueROIs)
       
       max_neighbor_height = max([p0, p1, p2, p3, p4, p5, p6, p7, p20, p21, p22, p23, p24, p25, p26, p27, p28, p29, p30, p31, p32, p33, p34, p35]);
       
+      % Mark field data in lidar map
       markCoordinateLiDAR( lidar_figure, heightMap, baseEasting, baseNorthing,  binResolution, roiEasting(j), roiNorthing(j) );
       
       maxROIHeight = max([maxROIHeight, pixelHeight, max_neighbor_height]);         

@@ -5,7 +5,7 @@ function [baseEasting, baseNorthing, heightMap] = getHeightMap( lidar_file, bin_
 % convert to height  % THE ALGORITHM IS NOT CORRECT
 %heightMap = lidarElevationToHeight(Zmap, radius);
 %hm = heightMap(:);
-% TODO: keep both a max filter and min filter of lidar points. when getting height consider 
+% keep both a max filter and min filter of lidar points. when getting height consider 
 % all neighbor mins rather than max of mins of neighbors.
 % display height histogram and map
 %figure, hist(hm(hm > 2), HISTOGRAM_BINS),  title('Height Histogram'), grid on

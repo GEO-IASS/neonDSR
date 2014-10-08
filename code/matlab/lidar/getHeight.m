@@ -1,6 +1,9 @@
 function height = getHeight( heightMap, baseEasting, baseNorthing, binResolution, targetEasting, targetNorthing, DEBUG )
-% TODO Looks like the neon website is down and nothin is ready to download
-% for other lidar flights. as we get no signals for certain field sampels
+% You might want to add more flight lines to the aggregate lidar file to
+% make sure you get abundance of point clouds just in case there might be
+% more points fro there. But for now this is good enough with current
+% computation power.
+
 if targetEasting < baseEasting || targetEasting > baseEasting + size(heightMap, 2) * binResolution
     height = NaN;
     disp('out of bound');

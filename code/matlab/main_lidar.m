@@ -21,7 +21,7 @@ tic
 %lidar_file10h = '/cise/homes/msnia/neon/lidar/lastools_heights/DL20100901_osbs_FL10_discrete_lidar_NEON-L1B-height.las';
 %[baseEasting10h, baseNorthing10h, heightMap10h] = getHeightMap(lidar_file10h, binResolution);
 
-% TODO - first convert las files to height in lastools: 
+%  first convert las files to height in lastools: 
 % >lasheight.exe -i ..\..\DL20100901_osbs_FL10_discrete_lidar_NEON-L1B\DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las -replace_z -o height_lidar.las    
 
 lidar_file_merge = '/cise/homes/msnia/neon/lidar/lastools_heights/merge_lidar_7_8_9_10_13_14-height.las';
@@ -35,8 +35,7 @@ lidar_figure = figure; imagesc(heightMap_merge);  title('Gridded Elevation Map')
 
 
 
- get_field_data_heights(lidar_figure, heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution, specie, reflectance, roi, northing, easting, flight );
+get_field_data_heights(lidar_figure, heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution, specie, reflectance, roi, northing, easting, flight );
 
-% Mark field data in lidar map
-
+% TODO: Act on lidar data pixelated and aligned wth field data.
 
