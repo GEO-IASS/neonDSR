@@ -10,6 +10,11 @@ addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/io');
 init();
 global setting;
 
+% TODO I need a random index generator per crowns (for each specie there is
+% a certain number of crowns available. 
+% if I want to do 90-10 on train-test I have to do 90-10 on each specie
+% crowns
+
 
 
 envi03 = load_flight_image('/cise/homes/msnia/neon/morning/f100904t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
