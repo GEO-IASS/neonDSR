@@ -5,15 +5,26 @@ fieldPath = setting.FIELD_PATH;
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io/csvIO'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm'));
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_pixels();
+figure, plot(reflectances'); title('Field Data - Original Form');
+
+reflectances_rwab1 = removeWaterAbsorbtionBands(reflectances,1);
+figure, plot(reflectances_rwab1'); title('Field Data - Removed Water Absorption Bands');
+
+reflectances_rwab0 = removeWaterAbsorbtionBands(reflectances,0);
+figure, plot(reflectances_rwab0'); title('Field Data - Truncated Water Absorption Bands');
+
+reflectances_g16 = gaussianSmoothing(reflectances, 16);
+figure, plot(reflectances_g16'); title('Field Data - Gaussian Smoothing 16');
 
 
 %%
 DEBUG = 1;
 POLYNOMIAL_DEGREE = 3;
-svm_results_gaussian = svmMultiClassKFold_canopy_based(species, rois, reflectances, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
+svm_results_gaussian = svmMultiClassKFold_canopy_based(species, rois, reflectances_rwab0, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
 disp(svm_results_gaussian);
 
 %%
@@ -21,24 +32,24 @@ disp(svm_results_gaussian);
 rng(982451653); % large prime as seed for random generation
 
 
-count = 100;
+count = 16;
 svm_results_gaussian = zeros(count, 1);
-smoothing_windows = zeros(count, 1);
+smoothing_windows = [1, 1, 1, 2, 2, 2, 4, 4, 4, 8, 8, 8, 16, 16, 16];
 
-for i=1:count
+parfor i=1:count
     i
-    smoothing_window_size =  rem(i,10);  % 25 runs per gaussian window
-    smoothing_windows(i) = smoothing_window_size;
+    smoothing_window_size = smoothing_windows(i);
     % Extract ground pixels  
     % make suresmoothing is applied on extracted data with the same level as desired 
     %[specie_titles, reflectances] = extractPixels( envi, fieldPath ); 
-    svm_results_gaussian(i) = svmMultiClassKFold_canopy_based(species, reflectances, 0, 'polynomial', 3);
+    reflectances_g = gaussianSmoothing(reflectances, smoothing_window_size);
+    svm_results_gaussian(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
 end
 figure;
 boxplot(svm_results_gaussian, smoothing_windows);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 
-%---------------------------------------------------------------------
+%% ---------------------------------------------------------------------
 % Evaluate polynomial degree of svm kernel for accuracy
 rng(982451653); % large prime as seed for random generation
 
