@@ -3,13 +3,6 @@ function avg_accuracy = svmMultiClassKFold_canopy_based(species, rois, features,
 %using separate canopies for training and test sets. to make sure I do not
 % use pixels of a tree both for train and test.
 
-% if nargin < 1
-%   debug = 0;
-%   kernel_param = 1;
-% end
-
-
-
 [g gn] = grp2idx(species);      %# nominal class to numeric (string specie to numeric)
 
 %k=10; % one for test 9 for trainning
@@ -35,9 +28,45 @@ cvFolds = crossvalind('Kfold', unique_rois_species, k);   %# get indices of 10-f
 for i = 1:k                          % Run SVM classificatoin k times (k being the # of folds)
     testIdx = (cvFolds == i);        % get test set indices
     trainIdx = ~testIdx;             % get training indices
+    
+    
+    
+    % print how many canopies of each specie is selected for test
+    disp('# Total Crowns, # Test Crowns, Specie');
+    for j = 1:numel(gn)
+       flagged_for_test_species = unique_rois_species(testIdx); 
+       flagged_for_test_species_idx = strcmp(flagged_for_test_species, gn(j));
+       total_species_idx = strcmp(unique_rois_species, gn(j));
+
+       specie = gn(j);
+       disp(sprintf('%d, %d, %s', sum(total_species_idx), sum(flagged_for_test_species_idx), specie{1}));
+    end
+    
              
+    
+    
     pairwise = nchoosek(1:length(gn),2);            %# all-vs-all pairwise models [1,2;1,3;2,3]
     svmModel = cell(size(pairwise,1),1);            %# NchooseK binary-classifers: one classifier for each [1,2;1,3;2,3]
+   
+    
+    
+    
+    % So I create a matrix where the # of columns is the # of separate classifiers
+    % and # of rows is total # of pixels of the canopies that are specified
+    % as test set. Later on this will be used to determine where that test
+    % pixel belongs to.
+    % --
+    % # of pixels in the test set is:
+    no_of_pixels_in_test_set = 0;
+    for j = 1:unique_rois
+        
+        
+    end
+    
+    
+    
+    
+    
     predTest = zeros(sum(testIdx),numel(svmModel)); %# binary predictions - three predictions per test (one for each classfier above)
 
     %# classify using one-against-one approach
@@ -48,14 +77,14 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
 
         % train - test
       %  try
-            if strcmp(kernel, 'polynomial')
+            %if strcmp(kernel, 'polynomial')
                svmModel{j} = svmtrain(features(idx,:), g(idx), ...
                  'BoxConstraint',2e-1, 'Kernel_Function', kernel, 'Polyorder',kernel_param);         
-            elseif strcmp(kernel, 'rbf')
-               svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                 'Method','QP', ...
-                 'BoxConstraint',Inf, 'Kernel_Function', kernel, 'RBF_Sigma',kernel_param);
-            end
+           % elseif strcmp(kernel, 'rbf')
+             %  svmModel{j} = svmtrain(features(idx,:), g(idx), ...
+             %    'Method','QP', ...
+             %    'BoxConstraint',Inf, 'Kernel_Function', kernel, 'RBF_Sigma',kernel_param);
+          %  end
           predTest(:,j) = svmclassify(svmModel{j}, features(testIdx,:));
 
        % catch ME
