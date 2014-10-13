@@ -6,7 +6,7 @@ DEBUG = 1;
 
 uniqueROIs = unique(roi);
 
-for i = 1 : 1% numel(uniqueROIs)
+for i = 1 : numel(uniqueROIs)
     
    % For each ROI determine height:
    % Extract each ROI

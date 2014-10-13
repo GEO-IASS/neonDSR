@@ -1,12 +1,24 @@
-%% SVM performance takes on all pixels and uses them for training/test purposes.
-
+%% SVM performance takes on traon/test sets from mutually exlusive canopy sets (ROI).
+init();
 global setting;
 fieldPath = setting.FIELD_PATH;
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io'));
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io/csvIO'));
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm'));
+
+
+[ species, reflectances, rois, northings, eastings, flights ] = get_field_pixels();
+
+
+%%
+DEBUG = 0;
+POLYNOMIAL_DEGREE = 3;
+svm_results_gaussian = svmMultiClassKFold_canopy_based(species, rois, reflectances, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
+disp(svm_results_gaussian);
 
 %%
 % Evaluate Gaussian filter size on accuracy
 rng(982451653); % large prime as seed for random generation
-
 
 
 count = 100;
@@ -19,8 +31,8 @@ for i=1:count
     smoothing_windows(i) = smoothing_window_size;
     % Extract ground pixels  
     % make suresmoothing is applied on extracted data with the same level as desired 
-    [specie_titles, reflectances] = extractPixels( envi, fieldPath ); 
-    svm_results_gaussian(i) = svmMultiClassKFold(specie_titles, reflectances, 0, 'polynomial', 3);
+    %[specie_titles, reflectances] = extractPixels( envi, fieldPath ); 
+    svm_results_gaussian(i) = svmMultiClassKFold_canopy_based(specie, reflectance, 0, 'polynomial', 3);
 end
 figure;
 boxplot(svm_results_gaussian, smoothing_windows);

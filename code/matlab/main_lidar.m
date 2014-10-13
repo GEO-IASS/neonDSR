@@ -1,8 +1,11 @@
 
-addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/lidar/');
-addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/io/');
-addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/io/csvIO');
+
 init();
+global setting;
+
+addpath(strcat(setting.PREFIX, '/neonDSR/code/matlab/lidar/'));
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io/'));
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io/csvIO'));
 
 binResolution = 2; % bin side length in meters
 
@@ -24,8 +27,7 @@ tic
 %  first convert las files to height in lastools: 
 % >lasheight.exe -i ..\..\DL20100901_osbs_FL10_discrete_lidar_NEON-L1B\DL20100901_osbs_FL10_discrete_lidar_NEON-L1B.las -replace_z -o height_lidar.las    
 
-lidar_file_merge = '/cise/homes/msnia/neon/lidar/lastools_heights/merge_lidar_7_8_9_10_13_14-height.las';
-[baseEasting_merge, baseNorthing_merge, heightMap_merge] =  getHeightMap(lidar_file_merge, binResolution);
+[baseEasting_merge, baseNorthing_merge, heightMap_merge] =  getHeightMap(setting.LIDAR_FILE, binResolution);
 toc
 
 [ specie, reflectance, roi, northing, easting, flight ] = get_field_pixels();
