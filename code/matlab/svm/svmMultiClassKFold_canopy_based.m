@@ -64,14 +64,25 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
     end
     
     
-    
-    
     %prediction of test set for all classifiers
     predTest = zeros(no_of_pixels_in_test_set,numel(svmModel)); % binary predictions - three predictions per test (one for each classfier above)
+    clear no_of_pixels_in_test_set
 
     
-    % TODO: convert train index of canopies to train index for pixels list
-
+    % convert train index of canopies to train index for pixels list
+    pixels_trainIdx = zeros(numel(species),1);
+    for j = 1:numel(unique_rois_species)
+        if trainIdx(j) == 1
+           specie = unique_rois_species(j); 
+           roi = unique_rois(j);
+           or1 = pixels_trainIdx;
+           or2 = rois == roi;
+           pixels_trainIdx =  or1 | or2;
+        end
+    end
+    clear or1 or2 roi specie;
+    pixels_testIdx = ~pixels_trainIdx;
+    
     
     %# classify using one-against-one approach
     for j=1:numel(svmModel)
@@ -79,7 +90,7 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
         selector = any( bsxfun(@eq, g, pairwise(j,:)) , 2 );
         
         
-        idx = trainIdx & selector; % training set items that either belong to claas 1 or 2 that comprise of this binary classifier.
+        idx = pixels_trainIdx & selector; % training set items that either belong to claas 1 or 2 that comprise of this binary classifier.
 
         % train - test
       %  try
@@ -91,13 +102,13 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
              %    'Method','QP', ...
              %    'BoxConstraint',Inf, 'Kernel_Function', kernel, 'RBF_Sigma',kernel_param);
           %  end
-          predTest(:,j) = svmclassify(svmModel{j}, features(testIdx,:));
+          predTest(:,j) = svmclassify(svmModel{j}, features(pixels_testIdx,:));
 
        % catch ME
         %end
     end
     pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
-                           % Find the most frequent value of each column.
+                           % Find the most frequent value of each column. (statistical mode)
 
     %# performance
     [cmat, order] = confusionmat(g(testIdx),pred);
@@ -114,168 +125,5 @@ end
 
 avg_accuracy = sum_accuracy / k;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% here i try to generate train/test indexes myself. later I realized I can
-% still use matlab's crossvalind to generate them. above I am exploring
-% this
-
-unique_species = unique(species);
-
-for i = 1 : numel(unique_species) % for each specie
-    filterIdx = strcmp(species, unique_species(i));
-    rois_specie = rois(filterIdx);
-    rois_specie_uniq = unique(rois_specie); % identify relevant ROIs
-    
-    disp(rois_specie_uniq');
-    
-    % k_fold proportion
-    data_size = numel(rois_specie_uniq);
-    test_sample_size = round(data_size/k); % if equal take one for test, the rest train
-    
-    testIdx0 = randsample(data_size, test_sample_size);
-    trainIdx0 = setxor(total_index, [testIdx0]);
-    
-    features_specie = features(filterIdx);
-    
-    
-    % specify a different fold for each ROI
-   % ----- cvFolds = 
-    
-    % Actual k-fold implemetation
-    for i = 1:k                          % Run SVM classificatoin k times (k being the # of folds)
-        testIdx = (cvFolds == i);        % get test set indices
-        trainIdx = ~testIdx;             % get training indices
-        
-        pairwise = nchoosek(1:length(gn),2);            %# all-vs-all pairwise models [1,2;1,3;2,3]
-        svmModel = cell(size(pairwise,1),1);            %# NchooseK binary-classifers: one classifier for each [1,2;1,3;2,3]
-        predTest = zeros(sum(testIdx),numel(svmModel)); %# binary predictions - three predictions per test (one for each classfier above)
-        
-        %# classify using one-against-one approach
-        for j=1:numel(svmModel)
-            %# get only training instances belonging to this pair
-            selector = any( bsxfun(@eq, g, pairwise(j,:)) , 2 );
-            idx = trainIdx & selector;
-            
-            % train - test
-            %  try
-            if strcmp(kernel, 'polynomial')
-                svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                    'BoxConstraint',2e-1, 'Kernel_Function', kernel, 'Polyorder',kernel_param);
-            elseif strcmp(kernel, 'rbf')
-                svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                    'Method','QP', ...
-                    'BoxConstraint',Inf, 'Kernel_Function', kernel, 'RBF_Sigma',kernel_param);
-            end
-            predTest(:,j) = svmclassify(svmModel{j}, features(testIdx,:));
-            
-            % catch ME
-            %end
-        end
-        pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
-        % Find the most frequent value of each column.
-        
-        %# performance
-        [cmat, order] = confusionmat(g(testIdx),pred);
-        acc = 100*sum(diag(cmat))./sum(cmat(:));
-        if debug
-            fprintf('SVM (1-against-1):\naccuracy = %.2f%%\n', acc);
-            fprintf('Confusion Matrix:\n'), disp(cmat)
-            order
-            gn
-        end
-        
-        sum_accuracy = sum_accuracy + acc;
-    end
-    
-    avg_accuracy = sum_accuracy / k;
-    
-    
-    
-    
-end
-
-
-%%
-sum_accuracy = 0;
-cvFolds = crossvalind('Kfold', specie, k);   %# get indices of 10-fold CV
-
-for i = 1:k                          % Run SVM classificatoin k times (k being the # of folds)
-    testIdx = (cvFolds == i);        % get test set indices
-    trainIdx = ~testIdx;             % get training indices
-             
-    pairwise = nchoosek(1:length(gn),2);            %# all-vs-all pairwise models [1,2;1,3;2,3]
-    svmModel = cell(size(pairwise,1),1);            %# NchooseK binary-classifers: one classifier for each [1,2;1,3;2,3]
-    predTest = zeros(sum(testIdx),numel(svmModel)); %# binary predictions - three predictions per test (one for each classfier above)
-
-    %# classify using one-against-one approach
-    for j=1:numel(svmModel)
-        %# get only training instances belonging to this pair
-        selector = any( bsxfun(@eq, g, pairwise(j,:)) , 2 );
-        idx = trainIdx & selector;
-
-        % train - test
-      %  try
-            if strcmp(kernel, 'polynomial')
-               svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                 'BoxConstraint',2e-1, 'Kernel_Function', kernel, 'Polyorder',kernel_param);         
-            elseif strcmp(kernel, 'rbf')
-               svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                 'Method','QP', ...
-                 'BoxConstraint',Inf, 'Kernel_Function', kernel, 'RBF_Sigma',kernel_param);
-            end
-          predTest(:,j) = svmclassify(svmModel{j}, features(testIdx,:));
-
-       % catch ME
-        %end
-    end
-    pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
-                           % Find the most frequent value of each column.
-
-    %# performance
-    [cmat, order] = confusionmat(g(testIdx),pred);
-    acc = 100*sum(diag(cmat))./sum(cmat(:));
-    if debug 
-      fprintf('SVM (1-against-1):\naccuracy = %.2f%%\n', acc);
-      fprintf('Confusion Matrix:\n'), disp(cmat)
-      order
-      gn
-    end
-    
-    sum_accuracy = sum_accuracy + acc;
-end
-
-avg_accuracy = sum_accuracy / k;
 
 end
