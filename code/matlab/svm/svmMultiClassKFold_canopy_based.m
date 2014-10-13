@@ -30,19 +30,19 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
     trainIdx = ~testIdx;             % get training indices
     
     
-    
-    % print how many canopies of each specie is selected for test
-    disp('# Total Crowns, # Test Crowns, Specie');
-    for j = 1:numel(gn)
-       flagged_for_test_species = unique_rois_species(testIdx); 
-       flagged_for_test_species_idx = strcmp(flagged_for_test_species, gn(j));
-       total_species_idx = strcmp(unique_rois_species, gn(j));
-
-       specie = gn(j);
-       disp(sprintf('%d, %d, %s', sum(total_species_idx), sum(flagged_for_test_species_idx), specie{1}));
+    if debug
+        % print how many canopies of each specie is selected for test
+        disp('# Total Crowns, # Test Crowns, Specie');
+        for j = 1:numel(gn)
+            flagged_for_test_species = unique_rois_species(testIdx);
+            flagged_for_test_species_idx = strcmp(flagged_for_test_species, gn(j));
+            total_species_idx = strcmp(unique_rois_species, gn(j));
+            
+            specie = gn(j);
+            disp(sprintf('%d, %d, %s', sum(total_species_idx), sum(flagged_for_test_species_idx), specie{1}));
+        end
+        clear flagged_for_test_species flagged_for_test_species_idx total_species_idx specie
     end
-    
-             
     
     
     pairwise = nchoosek(1:length(gn),2);            %# all-vs-all pairwise models [1,2;1,3;2,3]
@@ -58,22 +58,28 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
     % --
     % # of pixels in the test set is:
     no_of_pixels_in_test_set = 0;
-    for j = 1:unique_rois
-        
-        
+    test_rois = unique_rois(testIdx);
+    for j = 1:numel(test_rois)
+        no_of_pixels_in_test_set = no_of_pixels_in_test_set + numel(rois(rois == test_rois(j)));
     end
     
     
     
     
-    
-    predTest = zeros(sum(testIdx),numel(svmModel)); %# binary predictions - three predictions per test (one for each classfier above)
+    %prediction of test set for all classifiers
+    predTest = zeros(no_of_pixels_in_test_set,numel(svmModel)); % binary predictions - three predictions per test (one for each classfier above)
 
+    
+    % TODO: convert train index of canopies to train index for pixels list
+
+    
     %# classify using one-against-one approach
     for j=1:numel(svmModel)
         %# get only training instances belonging to this pair
         selector = any( bsxfun(@eq, g, pairwise(j,:)) , 2 );
-        idx = trainIdx & selector;
+        
+        
+        idx = trainIdx & selector; % training set items that either belong to claas 1 or 2 that comprise of this binary classifier.
 
         % train - test
       %  try

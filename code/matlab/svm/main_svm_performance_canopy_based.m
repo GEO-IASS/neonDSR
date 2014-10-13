@@ -11,7 +11,7 @@ addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm'));
 
 
 %%
-DEBUG = 0;
+DEBUG = 1;
 POLYNOMIAL_DEGREE = 3;
 svm_results_gaussian = svmMultiClassKFold_canopy_based(species, rois, reflectances, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
 disp(svm_results_gaussian);
