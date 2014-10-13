@@ -32,7 +32,7 @@ for i=1:count
     % Extract ground pixels  
     % make suresmoothing is applied on extracted data with the same level as desired 
     %[specie_titles, reflectances] = extractPixels( envi, fieldPath ); 
-    svm_results_gaussian(i) = svmMultiClassKFold_canopy_based(specie, reflectance, 0, 'polynomial', 3);
+    svm_results_gaussian(i) = svmMultiClassKFold_canopy_based(species, reflectances, 0, 'polynomial', 3);
 end
 figure;
 boxplot(svm_results_gaussian, smoothing_windows);
