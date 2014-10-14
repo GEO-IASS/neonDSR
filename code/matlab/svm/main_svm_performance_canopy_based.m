@@ -20,10 +20,11 @@ figure, plot(reflectances_rwab0'); title('Field Data - Truncated Water Absorptio
 reflectances_g16 = gaussianSmoothing(reflectances, 16);
 figure, plot(reflectances_g16'); title('Field Data - Gaussian Smoothing 16');
 
-
-%%
 DEBUG = 1;
 POLYNOMIAL_DEGREE = 3;
+
+%%
+
 svm_results_gaussian = svmMultiClassKFold_canopy_based(species, rois, reflectances_rwab0, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
 disp(svm_results_gaussian);
 
@@ -31,12 +32,13 @@ disp(svm_results_gaussian);
 % Evaluate Gaussian filter size on accuracy
 rng(982451653); % large prime as seed for random generation
 
+matlabpool(8)
 
 count = 16;
 svm_results_gaussian = zeros(count, 1);
-smoothing_windows = [1, 1, 1, 2, 2, 2, 4, 4, 4, 8, 8, 8, 16, 16, 16];
+smoothing_windows = [1, 2, 4, 8];
 
-parfor i=1:count
+parfor i=1:numel(smoothing_windows)
     i
     smoothing_window_size = smoothing_windows(i);
     % Extract ground pixels  
@@ -49,36 +51,49 @@ figure;
 boxplot(svm_results_gaussian, smoothing_windows);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 
+figure;
+plot(smoothing_windows, svm_results_gaussian(1:4));
+xlabel('Gaussian window size'); ylabel('Accuracy (%)');
+title('Effects of Gaussian Window Size on Classification Accuracy - Polynimial Kernel Order 3');
+
 %% ---------------------------------------------------------------------
 % Evaluate polynomial degree of svm kernel for accuracy
 rng(982451653); % large prime as seed for random generation
 
 % Extract ground pixels  
-[specie_titles, reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
+%[specie_titles, reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
 
-% polynomial_orders = [ 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.007 0.008 0.009 ...
-%     0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 ...
-%     0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...
-%     1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 ...
-%     2 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 ...
-%     3 3.1 3.15 3.2 3.25  3.3 3.33 3.35 3.4 3.5 3.6 3.7 3.8 3.9...
-%     4 4.1 4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 ...
-%     5 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8 5.9 ...
-%     6 6.1 6.2 6.3 6.4 6.5 6.6 6.7 6.8 6.9 ...
-%     7 8 9 10]; %[ 1 2 3 4 5 6 7 8 9 10];
- polynomial_orders = [ 1];
+ %polynomial_orders = [ 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.007 0.008 0.009 ...
+ %    0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 ...
+ %    0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...
+ %    1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 ...
+ %    2 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 ...
+ %    3 3.1 3.15 3.2 3.25  3.3 3.33 3.35 3.4 3.5 3.6 3.7 3.8 3.9...
+ %    4 4.1 4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 ...
+ %    5 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8 5.9 ...
+ %    6 6.1 6.2 6.3 6.4 6.5 6.6 6.7 6.8 6.9 ...
+ %    7 8 9 10]; %[ 1 2 3 4 5 6 7 8 9 10];
+ %polynomial_orders = [ 1];
+polynomial_orders = [1 2 3 4 5 6 6 7 8 9 10];
 count = numel(polynomial_orders);
 svm_results_poly = zeros(count, 1);
+reflectances_g2 = gaussianSmoothing(reflectances, 2);
 
-for i=1:count
+matlabpool(8)
+
+parfor i=1:count
     i
-    svm_results_poly(i) = svmMultiClassKFold(specie_titles, reflectances, 1, 'polynomial', polynomial_orders(i));
+    %svm_results_poly(i) = svmMultiClassKFold(specie_titles, reflectances, 1, 'polynomial', polynomial_orders(i));
+    svm_results_poly(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, DEBUG, 'polynomial', polynomial_orders(i));
+
 end
 figure;
-semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
+%semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
+plot(polynomial_orders(1:8), svm_results_poly(1:8));
 xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
+title('Effects of Polynomial Order on Classification Accuracy');
 
-%---------------------------------------------------------------------
+%% ---------------------------------------------------------------------
 % Evaluate RBF sigma of svm kernel for accuracy
 rng(982451653); % large prime as seed for random generation
 

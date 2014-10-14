@@ -91,15 +91,17 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
         
         
         idx = pixels_trainIdx & selector; % training set items that either belong to claas 1 or 2 that comprise of this binary classifier.
-        
+        tic
         % train - test
         %  try
         if strcmp(kernel, 'polynomial')
-            OPTIONS = optimset('MaxIter', 100000);
+            OPTIONS = optimset('MaxIter', 1000);
+            OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
+
             svmModel{j} = svmtrain(features(idx,:), g(idx), ...
                 'Method','QP',...
                 'options', OPTIONS,...
-                'BoxConstraint',2e-3,...
+                'BoxConstraint',2e-1,...
                 'Kernel_Function', kernel,...
                 'Polyorder',kernel_param);
         elseif strcmp(kernel, 'rbf')
@@ -110,6 +112,7 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
                 'RBF_Sigma',kernel_param);
         end
         predTest(:,j) = svmclassify(svmModel{j}, features(pixels_testIdx,:));
+        toc
         
         % catch ME
         %end
