@@ -94,7 +94,7 @@ svm_results_poly = zeros(count, 1);
 
 for i=1:count
     i
-    svm_results_poly(i) = svmMultiClassKFold(species, reflectances, 1, 'polynomial', polynomial_orders(i));
+    svm_results_poly(i) = svmMultiClassKFold(species, reflectances_rwab0, 1, 'polynomial', polynomial_orders(i));
 end
 
 delete(gcp)
@@ -110,7 +110,7 @@ toc
 rng(982451653); % large prime as seed for random generation
 
 % Extract ground pixels  
-[specie_titles, reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
+%[specie_titles, reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
 
 % rbf_sigma_values = [ 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.007 0.008 0.009 ...
 %     0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 ...
@@ -121,14 +121,14 @@ rng(982451653); % large prime as seed for random generation
 %     4 4.1 4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 ...
 %     5 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8 5.9 ...
 %     6 6.1 6.2 6.3 6.4 6.5 6.6 6.7 6.8 6.9 ...
-%     7 8 9 10];
+%     7 8 9 10 100 1000 10000 100000];
 rbf_sigma_values =[4.2];
 count = numel(rbf_sigma_values);
 svm_results_rbf = zeros(count, 1);
 
 for i=1:count
     i
-    svm_results_rbf(i) = svmMultiClassKFold(specie_titles, reflectances, 1, 'rbf', rbf_sigma_values(i));
+    svm_results_rbf(i) = svmMultiClassKFold(species, reflectances_rwab0, 1, 'rbf', rbf_sigma_values(i));
 end
 figure;
 semilogx(rbf_sigma_values, svm_results_rbf);
@@ -156,7 +156,7 @@ for i=1:count
     smoothing_windows(i) = smoothing_window_size;
     % Extract ground pixels  
     [specie_titles, reflectances] = extractPixels( envi, smoothing_window_size);    
-    svm_results_gaussian(i) = svmMultiClass(specie_titles, reflectances, 0);
+    svm_results_gaussian(i) = svmMultiClass(species, reflectances_rwab0, 0);
 end
 figure;
 boxplot(svm_results_gaussian, smoothing_windows);
