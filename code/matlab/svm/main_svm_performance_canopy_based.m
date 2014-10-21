@@ -68,9 +68,9 @@ end
 %xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 
 figure;
-plot(smoothing_windows, svm_results_gaussian(1:4));
+plot(smoothing_windows, svm_results_gaussian);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
-title('Effects of Gaussian Window Size on Classification Accuracy - Polynimial Kernel Order 3');
+title(sprintf('Effects of Gaussian Window Size on Classification Accuracy \n (canopy-based) - Polynimial Kernel Order 3'));
 
 %% ---------------------------------------------------------------------
 % Evaluate polynomial degree of svm kernel for accuracy
@@ -90,7 +90,7 @@ rng(982451653); % large prime as seed for random generation
  %    6 6.1 6.2 6.3 6.4 6.5 6.6 6.7 6.8 6.9 ...
  %    7 8 9 10]; %[ 1 2 3 4 5 6 7 8 9 10];
  %polynomial_orders = [ 1];
-polynomial_orders = [1 2 3 4 5 6 6 7 8 9 10];
+polynomial_orders = [1 2 3 4 5 6 6 7 8];  % beyon this point it does not converge
 count = numel(polynomial_orders);
 svm_results_poly = zeros(count, 1);
 reflectances_g2 = gaussianSmoothing(reflectances_rwab0, 2);
@@ -105,7 +105,7 @@ figure;
 %semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
 plot(polynomial_orders(1:8), svm_results_poly(1:8));
 xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
-title('Effects of Polynomial Order on Classification Accuracy');
+title(sprintf('Effects of Polynomial Order on Classification Accuracy (canopy-based)'));
 
 %% ---------------------------------------------------------------------
 % Evaluate RBF sigma of svm kernel for accuracy
@@ -125,14 +125,14 @@ rng(982451653); % large prime as seed for random generation
 %     6 6.1 6.2 6.3 6.4 6.5 6.6 6.7 6.8 6.9 ...
 %     7 8 9 10];
 %rbf_sigma_values =[4.2];
- rbf_sigma_values = [ 0.001 0.01 0.1 1 2 3 4 5 6 7 8 9 10 100 1000];
+ rbf_sigma_values = [ 0.001 0.01 0.1 1 2 3 4 5 6 7 8 9 10 100 1000 10000];
 
-%matlabpool(8)
+matlabpool(8)
 
 count = numel(rbf_sigma_values);
 svm_results_rbf = zeros(count, 1);
 
-for i=1:count
+parfor i=1:count
     i
     %svm_results_rbf(i) = svmMultiClassKFold(specie_titles, reflectances, 1, 'rbf', rbf_sigma_values(i));
     svm_results_rbf(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, DEBUG, 'rbf', rbf_sigma_values(i));
@@ -142,7 +142,56 @@ figure;
 semilogx(rbf_sigma_values, svm_results_rbf);
 grid on
 xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
-title('Effects of RBF Kernel \sigma on SVM Classification Accuracy');
+title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');
+
+%%
+
+%% ---------------------------------------------------------------------
+% Evaluate RBF sigma of svm kernel for accuracy
+rng(982451653); % large prime as seed for random generation
+
+% Extract ground pixels  
+%[specie_titles, reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
+
+% rbf_sigma_values = [ 0.001 0.002 0.003 0.004 0.005 0.006 0.007 0.007 0.008 0.009 ...
+%     0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 ...
+%     0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ...
+%     1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 ...
+%     2 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 ...
+%     3 3.1 3.15 3.2 3.25  3.3 3.33 3.35 3.4 3.5 3.6 3.7 3.8 3.9 ...
+%     4 4.1 4.2 4.3 4.4 4.5 4.6 4.7 4.8 4.9 ...
+%     5 5.1 5.2 5.3 5.4 5.5 5.6 5.7 5.8 5.9 ...
+%     6 6.1 6.2 6.3 6.4 6.5 6.6 6.7 6.8 6.9 ...
+%     7 8 9 10];
+%rbf_sigma_values =[4.2];
+ rbf_sigma_values2 = [20000 40000 60000 80000 100000 1000000 10000000 100000000];
+
+matlabpool(8)
+
+count = numel(rbf_sigma_values2);
+svm_results_rbf2 = zeros(count, 1);
+
+parfor i=1:count
+    i
+    %svm_results_rbf(i) = svmMultiClassKFold(specie_titles, reflectances, 1, 'rbf', rbf_sigma_values(i));
+    svm_results_rbf2(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, DEBUG, 'rbf', rbf_sigma_values2(i));
+
+end
+figure;
+semilogx(rbf_sigma_values2, svm_results_rbf2);
+grid on
+xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
+title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');
+
+%%
+
+figure;
+a = [rbf_sigma_values rbf_sigma_values2];
+b = [svm_results_rbf' svm_results_rbf2'];
+semilogx(a, b);
+grid on
+xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
+title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');
 
 %% verify robustness: We achieve the same performance even in absense of cross-validation 
 % and this demonstrates  the robustness of our classifier implementation
