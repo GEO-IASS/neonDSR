@@ -9,7 +9,10 @@ addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_pixels();
+
 figure, plot(setting.wavelength, reflectances'); title('Field Data - Original Form');
+set(gca,'XTick', 400:200:2500);
+xlabel('Wavelength (nm)'), ylabel('Reflectance');
 
 reflectances_rwab1 = removeWaterAbsorbtionBands(reflectances,1);
 figure, plot(setting.wavelength, reflectances_rwab1'); title('Field Data - Removed Water Absorption Bands');
