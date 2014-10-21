@@ -52,7 +52,7 @@ matlabpool(8)
 
 count = 16;
 svm_results_gaussian = zeros(count, 1);
-smoothing_windows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+smoothing_windows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
 parfor i=1:numel(smoothing_windows)
     i
