@@ -10,6 +10,11 @@ addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_pixels();
 
+% scale reflectance intensity values to [0,1]
+for i=1: size(reflectances, 1)
+reflectances(i,:) = scalePixel(reflectances(i,:));
+end
+
 figure, plot(setting.wavelength, reflectances'); title('Field Data - Original Form');
 set(gca,'XTick', 400:200:2500);
 xlabel('Wavelength (nm)'), ylabel('Reflectance');
