@@ -8,11 +8,28 @@ addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_ATCOR_pixels();
 
-%% Display signals
-% scale reflectance intensity values to [0,1]
 for i=1: size(reflectances, 1)
     reflectances(i,:) = scalePixel(reflectances(i,:));
 end
+
+
+ndvi = toNDVI(reflectances);
+cleared_ndvi_reflectances = reflectances;
+for i=1:numel(ndvi)
+        if ndvi(i) < setting.NDVI_THRESHOLD
+            cleared_ndvi_reflectances(i, :)  = nan;
+        end
+        
+        if cleared_ndvi_reflectances(i,setting.NIR_INDEX) < setting.NIR_THRESHOLD
+            cleared_ndvi_reflectances(i, :)  = nan;
+        end
+    
+end          %   @TODO
+cleared_ndvi_reflectances(isnan(cleared_ndvi_reflectances,:), :) = [];
+
+%% Display signals
+% scale reflectance intensity values to [0,1]
+
 
 figure, plot(setting.wavelength, reflectances'); title('Field Data - Original Form');
 set(gca,'XTick', 400:200:2500); xlabel('Wavelength (nm)'), ylabel('Reflectance');
