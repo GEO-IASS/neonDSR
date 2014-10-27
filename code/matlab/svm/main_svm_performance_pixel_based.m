@@ -58,7 +58,7 @@ parfor i=1:numel(smoothing_windows)
         % make suresmoothing is applied on extracted data with the same level as desired
         %[specie_titles, reflectances] = extractPixels( envi, fieldPath );
         reflectances_g = gaussianSmoothing(reflectances_rwab0, smoothing_window_size);
-        svm_results_gaussian(i) = svmMultiClassKFold(species, reflectances_g, 0, 'polynomial', 3);
+        svm_results_gaussian(i) = svmMultiClassKFold_pixel_based(species, reflectances_g, 0, 'polynomial', 3);
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
     end
@@ -98,7 +98,7 @@ svm_results_poly = nan(count, 1);
 parfor i=1:count
     try
         i
-        svm_results_poly(i) = svmMultiClassKFold(species, reflectances_rwab0, 1, 'polynomial', polynomial_orders(i));
+        svm_results_poly(i) = svmMultiClassKFold_pixel_based(species, reflectances_rwab0, 1, 'polynomial', polynomial_orders(i));
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
     end
@@ -136,7 +136,7 @@ svm_results_rbf = nan(count, 1);
 parfor i=1:count
     try
         i
-        svm_results_rbf(i) = svmMultiClassKFold(species, reflectances_rwab0, 1, 'rbf', rbf_sigma_values(i));
+        svm_results_rbf(i) = svmMultiClassKFold_pixel_based(species, reflectances_rwab0, 1, 'rbf', rbf_sigma_values(i));
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
     end
