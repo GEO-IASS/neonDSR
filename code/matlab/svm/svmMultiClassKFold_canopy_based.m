@@ -1,7 +1,10 @@
-function avg_accuracy = svmMultiClassKFold_canopy_based(species, rois, features, debug, kernel, kernel_param)
+function avg_accuracy = svmMultiClassKFold_canopy_based(species, rois, features, kernel, kernel_param)
 %% This is a k-fold classification all-vs-all (as compared to one-vs-all) based on
 %using separate canopies for training and test sets. to make sure I do not
 % use pixels of a tree both for train and test.
+
+global setting;
+debug = setting.DEBUG;
 
 [g gn] = grp2idx(species);      %# nominal class to numeric (string specie to numeric)
 

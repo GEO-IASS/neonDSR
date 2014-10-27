@@ -18,14 +18,30 @@ global setting;
 
 
 envi03 = load_flight_image('/cise/homes/msnia/neon/morning/f100904t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
+for j = 1: size(envi03.z, 2)
+    for i = 1: size(envi03.z, 1)        
+        envi03.z(i, j, :) = scalePixel(envi03.z(i,j,:));
+    end
+end
 envi03.z = removeWaterAbsorbtionBands(envi03.z, 0);
 [~, envi03_figure, envi03_h] = toRGB(envi03.z, 'Flight 03'); 
 
+
 envi04 = load_flight_image('/cise/homes/msnia/neon/morning//f100904t01p00r04rdn_b_sc01_ort_flaashreflectance_img');
+for j = 1: size(envi04.z, 2)
+    for i = 1: size(envi04.z, 1)        
+        envi04.z(i, j, :) = scalePixel(envi04.z(i,j,:));
+    end
+end
 envi04.z = removeWaterAbsorbtionBands(envi04.z, 0);
 [~, envi04_figure, envi04_h] = toRGB(envi04.z, 'Flight 04'); 
 
 envi05 = load_flight_image('/cise/homes/msnia/neon/morning/f100904t01p00r05rdn_b_sc01_ort_flaashreflectance_img');
+for j = 1: size(envi05.z, 2)
+    for i = 1: size(envi05.z, 1)        
+        envi.z(i, j, :) = scalePixel(envi05.z(i,j,:));
+    end
+end
 envi05.z = removeWaterAbsorbtionBands(envi05.z, 0);
 [~, envi05_figure, envi05_h] = toRGB(envi02.z, 'Flight 05'); 
 

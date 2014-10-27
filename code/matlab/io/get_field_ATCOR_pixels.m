@@ -1,5 +1,6 @@
-function [ specie, reflectance, roi, northing, easting, flight ] = get_field_pixels()
-% load field data csv file and return items.
+function [ specie, reflectance, roi, northing, easting, flight ] = get_field_ATCOR_pixels()
+% load field data csv file and return items. Data given by Sarah Graves are
+% in ATCOR atmospheric correction.
 global setting;
 
 field_trips = csv_read(setting.FIELD_PATH);
