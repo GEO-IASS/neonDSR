@@ -30,7 +30,7 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
       %  try
             if strcmp(kernel, 'polynomial')
                 
-                options = statset( 'MaxIter', Inf);
+                options = statset( 'MaxIter', 15000);
                 
                svmModel{j} = svmtrain(features(idx,:), g(idx), ...
                  'options', options,  'BoxConstraint',2e-1, 'Kernel_Function', kernel, 'Polyorder',kernel_param, 'kktviolationlevel', 0.1, 'tolkkt', 1e-2);         
