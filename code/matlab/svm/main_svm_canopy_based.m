@@ -1,5 +1,6 @@
 
-init();
+tic
+init(); 
 global setting;
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io/csvIO'));
@@ -24,8 +25,20 @@ for i=1:numel(ndvi)
             cleared_ndvi_reflectances(i, :)  = nan;
         end
     
-end          %   @TODO
-cleared_ndvi_reflectances(isnan(cleared_ndvi_reflectances,:), :) = [];
+end         
+low_ndvi_indexes = ~any(~isnan(cleared_ndvi_reflectances), 2);
+
+cleared_ndvi_species = species;
+cleared_ndvi_rois = rois;
+cleared_ndvi_reflectances(low_ndvi_indexes,:)=[]; % from 1269 to 712
+cleared_ndvi_species(low_ndvi_indexes) = [];    %TODO grid search for parameters 
+cleared_ndvi_rois(low_ndvi_indexes) = [];
+
+reflectances = cleared_ndvi_reflectances;
+species = cleared_ndvi_species;
+rois = cleared_ndvi_rois;
+
+toc
 
 %% Display signals
 % scale reflectance intensity values to [0,1]
