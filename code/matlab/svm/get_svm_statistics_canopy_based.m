@@ -1,4 +1,6 @@
-function [svm_results_gaussian svm_results_poly svm_results_rbf ] = svm_performance_canopy_based(species, reflectances, rois)
+function [svm_results_gaussian, svm_results_poly, svm_results_rbf ] = svm_performance_canopy_based(species, reflectances, rois)
+%% This function collects all necerrary statistics from differnet classification schemes
+
 %% ATCOR-based: SVM performance takes on traon/test sets from mutually exlusive canopy sets (ROI).
 init();
 global setting;
@@ -16,7 +18,7 @@ parfor i=1:numel(smoothing_windows)
     try
         i
         smoothing_window_size = smoothing_windows(i);
-        reflectances_g = gaussianSmoothing(reflectances_rwab0, smoothing_window_size);
+        reflectances_g = gaussianSmoothing(reflectances, smoothing_window_size);
         svm_results_gaussian(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g, 'polynomial', POLYNOMIAL_DEGREE);
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
@@ -30,7 +32,7 @@ rng(setting.RANDOM_VALUE_SEED);
 polynomial_orders = setting.SVM_POLYNOMIAL_ORDERS;  % beyon this point it does not converge
 count = numel(polynomial_orders);
 svm_results_poly = NaN(count, 1);
-reflectances_g2 = gaussianSmoothing(reflectances_rwab0, 2);
+reflectances_g2 = gaussianSmoothing(reflectances, 2);
 
 parfor i=1:count
     try
