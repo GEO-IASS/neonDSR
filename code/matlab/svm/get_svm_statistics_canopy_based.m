@@ -1,4 +1,4 @@
-function [svm_results_gaussian, svm_results_poly, svm_results_rbf ] = svm_performance_canopy_based(species, reflectances, rois)
+function [svm_results_gaussian, svm_results_poly, svm_results_rbf ] = get_svm_statistics_canopy_based(species, reflectances, rois)
 %% This function collects all necerrary statistics from differnet classification schemes
 
 %% ATCOR-based: SVM performance takes on traon/test sets from mutually exlusive canopy sets (ROI).

@@ -32,21 +32,21 @@ set(gca,'XTick', 400:200:2500);
 xlabel('Wavelength (nm)'), ylabel('Reflectance');
 
 %%
-[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = svm_performance_canopy_based(species, reflectances, rois);
+[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_svm_statistics_canopy_based(species, reflectances, rois);
 
 figure;
-plot(smoothing_windows, svm_results_gaussian);
+plot(smoothing_windows, svm_gaussian_atcor);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 title(sprintf('Effects of Gaussian Window Size on Classification Accuracy \n (canopy-based) - Polynimial Kernel Order 3'));
 
 figure;
 %semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
-plot(polynomial_orders, svm_results_poly);
+plot(polynomial_orders, svm_poly_atcor);
 xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
 title(sprintf('Effects of Polynomial Order on Classification Accuracy (canopy-based)'));
 
 figure;
-semilogx(setting.SVM_RBF_SIGMA_VALUES, svm_results_rbf);
+semilogx(setting.SVM_RBF_SIGMA_VALUES, svm_rbf_atcor);
 grid on
 xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
 title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');
@@ -55,4 +55,5 @@ title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based
 % best performance confusion matrix
 
 
-[ species, reflectancesF, rois, northings, eastings, flights ] = get_field_FLAASH_pixels(envi03, envi04, envi05);
+[ species, reflectances, rois, northings, eastings, flights ] = get_field_FLAASH_pixels(envi03, envi04, envi05);
+[svm_gaussian_flaash, svm_poly_flaash, svm_rbf_flaash] = get_svm_statistics_canopy_based(species, reflectances, rois);
