@@ -9,6 +9,7 @@ addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_ATCOR_pixels();
 
+% scale reflectance intensity values to [0,1]
 for i=1: size(reflectances, 1)
     reflectances(i,:) = scalePixel(reflectances(i,:));
 end
@@ -34,44 +35,30 @@ cleared_ndvi_reflectances(low_ndvi_indexes,:)=[]; % from 1269 to 712
 cleared_ndvi_species(low_ndvi_indexes) = [];    %TODO grid search for parameters 
 cleared_ndvi_rois(low_ndvi_indexes) = [];
 
-reflectances = cleared_ndvi_reflectances;
-species = cleared_ndvi_species;
-rois = cleared_ndvi_rois;
+
+
+valid_ndvi_reflectances = reflectances;
+valid_ndvi_reflectances(~low_ndvi_indexes,:)=[];
 
 toc
 
 %% Display signals
-% scale reflectance intensity values to [0,1]
 
+visualize_reflectances(cleared_ndvi_reflectances);
+visualize_reflectances(valid_ndvi_reflectances);
 
-figure, plot(setting.wavelength, reflectances'); title('Field Data - Original Form');
-set(gca,'XTick', 400:200:2500); xlabel('Wavelength (nm)'), ylabel('Reflectance');
-
-reflectances_rwab1 = removeWaterAbsorbtionBands(reflectances,1);
-figure, plot(setting.wavelength, reflectances_rwab1'); title('Field Data - Removed Water Absorption Bands');
-set(gca,'XTick', 400:200:2500); xlabel('Wavelength (nm)'), ylabel('Reflectance');
-
-reflectances_rwab0 = removeWaterAbsorbtionBands(reflectances,0);
-chopped_wavelength =  removeWaterAbsorbtionBands(setting.wavelength,0);
-figure, plot(chopped_wavelength, reflectances_rwab0'); title('Field Data - Truncated Water Absorption Bands');
-set(gca,'XTick', 400:200:2500); xlabel('Wavelength (nm)'), ylabel('Reflectance');
-
-reflectances_g16 = gaussianSmoothing(reflectances, 16);
-figure, plot(reflectances_g16'); title('Field Data - Gaussian Smoothing 16');
-set(gca,'XTick', 400:200:2500);
-xlabel('Wavelength (nm)'), ylabel('Reflectance');
 
 %%
-[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_svm_statistics_canopy_based(species, reflectances, rois);
+[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_svm_statistics_canopy_based(cleared_ndvi_species, cleared_ndvi_reflectances, cleared_ndvi_rois);
 
 figure;
-plot(smoothing_windows, svm_gaussian_atcor);
+plot(setting.SVM_GAUSSIAN_SMOOTHING_WINDOWS, svm_gaussian_atcor);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 title(sprintf('Effects of Gaussian Window Size on Classification Accuracy \n (canopy-based) - Polynimial Kernel Order 3'));
 
 figure;
 %semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
-plot(polynomial_orders, svm_poly_atcor);
+plot(setting.SVM_POLYNOMIAL_ORDERS, svm_poly_atcor);
 xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
 title(sprintf('Effects of Polynomial Order on Classification Accuracy (canopy-based)'));
 
