@@ -3,8 +3,11 @@ function avg_accuracy = svmMultiClassKFold_canopy_based(species, rois, features,
 %using separate canopies for training and test sets. to make sure I do not
 % use pixels of a tree both for train and test.
 
+addpath('/opt/zshare/zproject/apps/libsvm-3.19/matlab');
+
 global setting;
 debug = setting.DEBUG;
+rng(setting.RANDOM_VALUE_SEED); 
 
 [g gn] = grp2idx(species);      %# nominal class to numeric (string specie to numeric)
 
@@ -23,6 +26,12 @@ for i = 1:numel(unique_rois)
     unique_rois_species(i) = rois_specie(1);
 end
 
+% shuffle unique ROIs species as they are sorted
+permutation_idx = randperm(numel(unique_rois_species));
+permuted_unique_rois_species = unique_rois_species(permutation_idx);
+unique_rois_species = permuted_unique_rois_species;
+
+
 
 sum_accuracy = 0;
 cvFolds = crossvalind('Kfold', unique_rois_species, k);   %# get indices of 10-fold CV
@@ -32,9 +41,8 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
     testIdx = (cvFolds == i);        % get test set indices
     trainIdx = ~testIdx;             % get training indices
     
-    
+    % print how many canopies of each specie is selected for test
     if debug
-        % print how many canopies of each specie is selected for test
         disp('# Total Crowns, # Test Crowns, Specie');
         for j = 1:numel(gn)
             flagged_for_test_species = unique_rois_species(testIdx);

@@ -9,6 +9,14 @@ addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_ATCOR_pixels();
 
+rng(setting.RANDOM_VALUE_SEED); 
+% shuffle pixels
+permutation_idx = randperm(numel(species));
+species = species(permutation_idx);
+rois = rois(permutation_idx);
+reflectances = reflectances(permutation_idx, :);
+
+
 % scale reflectance intensity values to [0,1]
 for i=1: size(reflectances, 1)
     reflectances(i,:) = scalePixel(reflectances(i,:));
@@ -16,40 +24,40 @@ end
 
 
 ndvi = toNDVI(reflectances);
-cleared_ndvi_reflectances = reflectances;
+green_ndvi_reflectances = reflectances;
 for i=1:numel(ndvi)
         if ndvi(i) < setting.NDVI_THRESHOLD
-            cleared_ndvi_reflectances(i, :)  = nan;
+            green_ndvi_reflectances(i, :)  = nan;
         end
         
-        if cleared_ndvi_reflectances(i,setting.NIR_INDEX) < setting.NIR_THRESHOLD
-            cleared_ndvi_reflectances(i, :)  = nan;
+        if green_ndvi_reflectances(i,setting.NIR_INDEX) < setting.NIR_THRESHOLD
+            green_ndvi_reflectances(i, :)  = nan;
         end
     
 end         
-low_ndvi_indexes = ~any(~isnan(cleared_ndvi_reflectances), 2);
+low_ndvi_indexes = ~any(~isnan(green_ndvi_reflectances), 2);
 
-cleared_ndvi_species = species;
-cleared_ndvi_rois = rois;
-cleared_ndvi_reflectances(low_ndvi_indexes,:)=[]; % from 1269 to 712
-cleared_ndvi_species(low_ndvi_indexes) = [];    %TODO grid search for parameters 
-cleared_ndvi_rois(low_ndvi_indexes) = [];
+green_ndvi_species = species;
+green_ndvi_rois = rois;
+green_ndvi_reflectances(low_ndvi_indexes,:)=[]; % from 1269 to 712
+green_ndvi_species(low_ndvi_indexes) = [];    %TODO grid search for parameters 
+green_ndvi_rois(low_ndvi_indexes) = [];
 
 
 
-valid_ndvi_reflectances = reflectances;
-valid_ndvi_reflectances(~low_ndvi_indexes,:)=[];
+nongreen_ndvi_reflectances = reflectances;
+nongreen_ndvi_reflectances(~low_ndvi_indexes,:)=[];
 
 toc
 
 %% Display signals
 
-visualize_reflectances(cleared_ndvi_reflectances);
-visualize_reflectances(valid_ndvi_reflectances);
+visualize_reflectances(nongreen_ndvi_reflectances);
+visualize_reflectances(green_ndvi_reflectances);
 
 
 %%
-[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_svm_statistics_canopy_based(cleared_ndvi_species, cleared_ndvi_reflectances, cleared_ndvi_rois);
+[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_svm_statistics_canopy_based(green_ndvi_species, green_ndvi_reflectances, green_ndvi_rois);
 
 figure;
 plot(setting.SVM_GAUSSIAN_SMOOTHING_WINDOWS, svm_gaussian_atcor);
@@ -74,3 +82,10 @@ title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_FLAASH_pixels(envi03, envi04, envi05);
 [svm_gaussian_flaash, svm_poly_flaash, svm_rbf_flaash] = get_svm_statistics_canopy_based(species, reflectances, rois);
+
+
+%%
+
+% the final result of cross-validation would be trained on all the data
+% using the parameters that had the best accuracy in average of its k-fold
+% runs.
