@@ -5,6 +5,7 @@ global setting;
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io/csvIO'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm'));
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm/matlab_svm'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_ATCOR_pixels();

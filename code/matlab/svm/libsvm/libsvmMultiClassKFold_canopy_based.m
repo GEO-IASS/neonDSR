@@ -1,7 +1,8 @@
-function avg_accuracy = svmMultiClassKFold_canopy_based(species, rois, features, kernel, kernel_param)
+function avg_accuracy = libsvmMultiClassKFold_canopy_based(species, rois, features, kernel, c, param) 
 %% This is a k-fold classification all-vs-all (as compared to one-vs-all) based on
 %using separate canopies for training and test sets. to make sure I do not
 % use pixels of a tree both for train and test.
+%c is the cost function, param is either gamma or polynomial degre
 
 addpath('/opt/zshare/zproject/apps/libsvm-3.19/matlab');
 

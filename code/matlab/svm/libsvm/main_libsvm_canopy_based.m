@@ -1,51 +1,59 @@
 
 tic
-init(); 
+init();
 global setting;
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io/csvIO'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm'));
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm/libsvm'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_ATCOR_pixels();
 
-rng(setting.RANDOM_VALUE_SEED); 
+
 % shuffle pixels
+rng(setting.RANDOM_VALUE_SEED);
 permutation_idx = randperm(numel(species));
 species = species(permutation_idx);
 rois = rois(permutation_idx);
 reflectances = reflectances(permutation_idx, :);
 
+% scale each feature separately
+% data = reflectances; % scaled_reflectances_01_featurebased
+% minimums = min(data, [], 1);
+% ranges = max(data, [], 1) - minimums;
+% data = (data - repmat(minimums, size(data, 1), 1)) ./ repmat(ranges, size(data, 1), 1);
+% %test_data = (test_data - repmat(minimums, size(test_data, 1), 1)) ./ repmat(ranges, size(test_data, 1), 1);
+% figure, plot(data(1,:)');
 
 % scale reflectance intensity values to [0,1]
-for i=1: size(reflectances, 1)
-    reflectances(i,:) = scalePixel(reflectances(i,:));
+scaled_reflectances_01_global = reflectances;
+for i=1: size(scaled_reflectances_01_global, 1)
+    scaled_reflectances_01_global(i,:) = scalePixel(scaled_reflectances_01_global(i,:));
 end
 
-
-ndvi = toNDVI(reflectances);
-green_ndvi_reflectances = reflectances;
+ndvi = toNDVI(scaled_reflectances_01_global);
+green_ndvi_reflectances = scaled_reflectances_01_global;
 for i=1:numel(ndvi)
-        if ndvi(i) < setting.NDVI_THRESHOLD
-            green_ndvi_reflectances(i, :)  = nan;
-        end
-        
-        if green_ndvi_reflectances(i,setting.NIR_INDEX) < setting.NIR_THRESHOLD
-            green_ndvi_reflectances(i, :)  = nan;
-        end
+    if ndvi(i) < setting.NDVI_THRESHOLD
+        green_ndvi_reflectances(i, :)  = nan;
+    end
     
-end         
+    if green_ndvi_reflectances(i,setting.NIR_INDEX) < setting.NIR_THRESHOLD
+        green_ndvi_reflectances(i, :)  = nan;
+    end
+end
 low_ndvi_indexes = ~any(~isnan(green_ndvi_reflectances), 2);
 
 green_ndvi_species = species;
 green_ndvi_rois = rois;
 green_ndvi_reflectances(low_ndvi_indexes,:)=[]; % from 1269 to 712
-green_ndvi_species(low_ndvi_indexes) = [];    %TODO grid search for parameters 
+green_ndvi_species(low_ndvi_indexes) = [];    %TODO grid search for parameters
 green_ndvi_rois(low_ndvi_indexes) = [];
 
 
 
-nongreen_ndvi_reflectances = reflectances;
+nongreen_ndvi_reflectances = scaled_reflectances_01_global;
 nongreen_ndvi_reflectances(~low_ndvi_indexes,:)=[];
 
 toc
@@ -57,7 +65,7 @@ visualize_reflectances(green_ndvi_reflectances);
 
 
 %%
-[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_svm_statistics_canopy_based(green_ndvi_species, green_ndvi_reflectances, green_ndvi_rois);
+[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_libsvm_statistics_canopy_based(green_ndvi_species, green_ndvi_reflectances, green_ndvi_rois);
 
 figure;
 plot(setting.SVM_GAUSSIAN_SMOOTHING_WINDOWS, svm_gaussian_atcor);
