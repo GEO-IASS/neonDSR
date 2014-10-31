@@ -17,7 +17,6 @@ species = species(permutation_idx);
 rois = rois(permutation_idx);
 reflectances = reflectances(permutation_idx, :);
 
-
 % scale reflectance intensity values to [0,1]
 for i=1: size(reflectances, 1)
     reflectances(i,:) = scalePixel(reflectances(i,:));

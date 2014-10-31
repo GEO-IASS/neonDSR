@@ -1,14 +1,13 @@
-function avg_accuracy = libsvmMultiClassKFold_canopy_based(species, rois, features, kernel, c, param) 
+function avg_accuracy = libsvmMultiClassKFold_canopy_based(species, rois, features, kernel, c, param)
 %% This is a k-fold classification all-vs-all (as compared to one-vs-all) based on
 %using separate canopies for training and test sets. to make sure I do not
 % use pixels of a tree both for train and test.
 %c is the cost function, param is either gamma or polynomial degre
 
-addpath('/opt/zshare/zproject/apps/libsvm-3.19/matlab');
 
 global setting;
 debug = setting.DEBUG;
-rng(setting.RANDOM_VALUE_SEED); 
+rng(setting.RANDOM_VALUE_SEED);
 
 [g gn] = grp2idx(species);      %# nominal class to numeric (string specie to numeric)
 
@@ -78,7 +77,7 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
     
     %prediction of test set for all classifiers
     predTest = zeros(no_of_pixels_in_test_set,numel(svmModel)); % binary predictions - three predictions per test (one for each classfier above)
-    clear no_of_pixels_in_test_set
+    %clear no_of_pixels_in_test_set
     
     
     % convert train index of canopies to train index for pixels list
@@ -92,7 +91,7 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
             pixels_trainIdx =  or1 | or2;
         end
     end
-    clear or1 or2 roi specie;
+   % clear or1 or2 roi specie;
     pixels_testIdx = ~pixels_trainIdx;
     
     
@@ -103,34 +102,36 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
         
         
         idx = pixels_trainIdx & selector; % training set items that either belong to claas 1 or 2 that comprise of this binary classifier.
-        tic
+        %tic
         % train - test
-        %  try
         if strcmp(kernel, 'polynomial')
-            OPTIONS = optimset('MaxIter', 10000);
-            OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
-
-            svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                'Method','QP',...
-                'options', OPTIONS,...
-                'BoxConstraint',Inf,...
-                'Kernel_Function', kernel,...
-                'Polyorder',kernel_param);
+            libsvm_options = [' -s 0 ', ' -t 1 ', ' -c ', num2str(c), ' -d ', num2str(param), ' -q'];
+            model = libsvmtrain(g(idx), features(idx,:), libsvm_options);
+            
+            %             OPTIONS = optimset('MaxIter', 10000);
+            %             OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
+            %
+            %             svmModel{j} = svmtrain(features(idx,:), g(idx), ...
+            %                 'Method','QP',...
+            %                 'options', OPTIONS,...
+            %                 'BoxConstraint',Inf,...
+            %                 'Kernel_Function', kernel,...
+            %                 'Polyorder',kernel_param);
         elseif strcmp(kernel, 'rbf')
-            OPTIONS = optimset('MaxIter', 10000);
-            OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
-            svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                'Method','QP', ...
-                'options', OPTIONS,...
-                'BoxConstraint',Inf,...
-                'Kernel_Function', kernel,...
-                'RBF_Sigma',kernel_param);
+            cmd = [' -c ', c, ' -g ', param];
+            %             OPTIONS = optimset('MaxIter', 10000);
+            %             OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
+            %             svmModel{j} = svmtrain(features(idx,:), g(idx), ...
+            %                 'Method','QP', ...
+            %                 'options', OPTIONS,...
+            %                 'BoxConstraint',Inf,...
+            %                 'Kernel_Function', kernel,...
+            %                 'RBF_Sigma',kernel_param);
         end
-        predTest(:,j) = svmclassify(svmModel{j}, features(pixels_testIdx,:));
-        toc
-        
-        % catch ME
-        %end
+            [predicted_label, accuracy, decision_values_prob_estimates] = libsvmpredict(g(~idx), features(~idx,:), model, '-q');
+        %predTest(:,j) = svmclassify(svmModel{j}, features(pixels_testIdx,:));
+        predTest(:,j) = predicted_label;
+        %toc
     end
     pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
     % Find the most frequent value of each column. (statistical mode)

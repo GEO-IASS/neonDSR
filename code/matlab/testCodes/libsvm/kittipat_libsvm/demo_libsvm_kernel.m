@@ -22,6 +22,8 @@
 
 % read the data set
 %[heart_scale_label, heart_scale_inst] = libsvmread(fullfile(dirData,'heart_scale'));
+[heart_scale_label, heart_scale_inst] = libsvmread('/opt/zshare/zproject/apps/libsvm-3.19/heart_scale');
+
 [N D] = size(heart_scale_inst);
 
 % Determine the train and test index

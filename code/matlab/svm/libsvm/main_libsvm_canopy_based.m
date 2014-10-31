@@ -4,9 +4,10 @@ init();
 global setting;
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io/csvIO'));
-addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/svm/libsvm'));
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
+addpath('/opt/zshare/zproject/apps/libsvm-3.19/matlab');
+
 
 [ species, reflectances, rois, northings, eastings, flights ] = get_field_ATCOR_pixels();
 
@@ -65,21 +66,21 @@ visualize_reflectances(green_ndvi_reflectances);
 
 
 %%
-[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_libsvm_statistics_canopy_based(green_ndvi_species, green_ndvi_reflectances, green_ndvi_rois);
+[libsvm_gaussian_atcor, libsvm_poly_atcor, libsvm_rbf_atcor] = get_libsvm_statistics_canopy_based(green_ndvi_species, green_ndvi_reflectances, green_ndvi_rois);
 
 figure;
-plot(setting.SVM_GAUSSIAN_SMOOTHING_WINDOWS, svm_gaussian_atcor);
+plot(setting.SVM_GAUSSIAN_SMOOTHING_WINDOWS, libsvm_gaussian_atcor);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 title(sprintf('Effects of Gaussian Window Size on Classification Accuracy \n (canopy-based) - Polynimial Kernel Order 3'));
 
 figure;
 %semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
-plot(setting.SVM_POLYNOMIAL_ORDERS, svm_poly_atcor);
+plot(setting.SVM_POLYNOMIAL_ORDERS, libsvm_poly_atcor);
 xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
 title(sprintf('Effects of Polynomial Order on Classification Accuracy (canopy-based)'));
 
 figure;
-semilogx(setting.SVM_RBF_SIGMA_VALUES, svm_rbf_atcor);
+semilogx(setting.SVM_RBF_SIGMA_VALUES, libsvm_rbf_atcor);
 grid on
 xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
 title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');

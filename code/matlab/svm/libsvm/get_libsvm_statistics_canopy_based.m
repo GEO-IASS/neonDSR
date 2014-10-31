@@ -5,6 +5,8 @@ function [svm_results_gaussian, svm_results_poly, svm_results_rbf ] = get_libsvm
 init();
 global setting;
 
+svm_results_gaussian = 0; svm_results_poly = 0; svm_results_rbf = 0;
+
 %matlabpool(8)
 
 POLYNOMIAL_DEGREE = 3;
@@ -21,10 +23,10 @@ reflectances_g2 = gaussianSmoothing(reflectances, 2);
 for c=1:numel(setting.LIBSVM_COST_VALUES)
     for p=1:numel(setting.SVM_POLYNOMIAL_ORDERS)
         try
-            svm_results_poly(c, p) = libsvmMultiClassKFold_canopy_based(species, rois, reflectances_g2, 'polynomial', polynomial_orders(p));
-            disp(['done Poly ' p])
+            svm_results_poly(c, p) = libsvmMultiClassKFold_canopy_based(species, rois, reflectances_g2, 'polynomial', setting.LIBSVM_COST_VALUES(c), setting.SVM_POLYNOMIAL_ORDERS(p));
+            disp(['-------------------done Poly ' num2str(setting.SVM_POLYNOMIAL_ORDERS(p)) ' cost ' num2str(setting.LIBSVM_COST_VALUES(c))])
         catch me
-            fprintf('Polynomial order #%i failed training: %s\n',setting.SVM_POLYNOMIAL_ORDERS(p),me.message)
+            fprintf('Polynomial order #%i and cost %d failed training: %s\n',setting.SVM_POLYNOMIAL_ORDERS(p),setting.LIBSVM_COST_VALUES(c),me.message)
         end
     end
 end
