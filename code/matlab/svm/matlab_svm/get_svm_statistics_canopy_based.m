@@ -9,12 +9,12 @@ svm_results_gaussian = 0; svm_results_poly = 0; svm_results_rbf = 0;
 POLYNOMIAL_DEGREE = 3;
 
 %%
-% % Evaluate Gaussian filter size on accuracy
-% rng(setting.RANDOM_VALUE_SEED);
-%
+% Evaluate Gaussian filter size on accuracy
+rng(setting.RANDOM_VALUE_SEED);
+
 % smoothing_windows = setting.SVM_GAUSSIAN_SMOOTHING_WINDOWS;
 % svm_results_gaussian = nan(numel(smoothing_windows), 1);
-%
+% 
 % parfor i=1:numel(smoothing_windows)
 %     try
 %         i
@@ -25,6 +25,7 @@ POLYNOMIAL_DEGREE = 3;
 %         fprintf('Gaussian smoothing #%i failed training: %s\n', smoothing_windows(i), me.message)
 %     end
 % end
+
 
 % ---------------------------------------------------------------------
 % Evaluate polynomial degree of svm kernel for accuracy
@@ -37,22 +38,22 @@ svm_results_poly = NaN(numel(sr), numel(sc));
 reflectances_g2 = gaussianSmoothing(reflectances, 2);
 
 
-% parfor p=1:numel(sr)
-%     temp = nan(1, numel(sc));
-%     for c=1:numel(sc)
-%         try
-%             %svm_results_poly(p, c) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, 'polynomial', sp(p), sc(c) , matlabSVM_OR_libSVM);
-%             temp(c) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, 'polynomial', sr(p), sc(c) , matlabSVM_OR_libSVM);
-%            % disp('done Poly')
-%             fprintf('Done poly %i cost %d\n',sr(p), sc(c));
-%             
-%         catch me
-%             fprintf('poly %i cost %d failed training: %s\n',sr(p), sc(c),me.message)
-%             rethrow(me);
-%         end
-%         svm_results_poly(p, :) = temp;
-%     end
-% end
+parfor p=1:numel(sr)
+    temp = nan(1, numel(sc));
+    for c=1:numel(sc)
+        try
+            %svm_results_poly(p, c) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, 'polynomial', sp(p), sc(c) , matlabSVM_OR_libSVM);
+            temp(c) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, 'polynomial', sr(p), sc(c) , matlabSVM_OR_libSVM);
+           % disp('done Poly')
+            fprintf('Done poly %i cost %d\n',sr(p), sc(c));
+            
+        catch me
+            fprintf('poly %i cost %d failed training: %s\n',sr(p), sc(c),me.message)
+            rethrow(me);
+        end
+        svm_results_poly(p, :) = temp;
+    end
+end
 
 
 
