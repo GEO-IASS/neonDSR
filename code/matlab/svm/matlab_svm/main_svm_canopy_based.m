@@ -48,6 +48,9 @@ green_ndvi_rois(low_ndvi_indexes) = [];
 nongreen_ndvi_reflectances = reflectances;
 nongreen_ndvi_reflectances(~low_ndvi_indexes,:)=[];
 
+matlabpool(8)
+
+
 toc
 
 %% Display signals
@@ -57,7 +60,9 @@ visualize_reflectances(green_ndvi_reflectances);
 
 
 %%
-[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_svm_statistics_canopy_based(green_ndvi_species, green_ndvi_reflectances, green_ndvi_rois);
+tic
+[svm_gaussian_atcor, svm_poly_atcor, svm_rbf_atcor] = get_svm_statistics_canopy_based(green_ndvi_species, green_ndvi_reflectances, green_ndvi_rois, 'libsvm');
+toc
 
 figure;
 plot(setting.SVM_GAUSSIAN_SMOOTHING_WINDOWS, svm_gaussian_atcor);
@@ -66,8 +71,15 @@ title(sprintf('Effects of Gaussian Window Size on Classification Accuracy \n (ca
 
 figure;
 %semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
-plot(setting.SVM_POLYNOMIAL_ORDERS, svm_poly_atcor);
-xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
+%plot(setting.SVM_POLYNOMIAL_ORDERS, svm_poly_atcor);
+plot(svm_poly_atcor)
+figure 
+surf(setting.LIBSVM_COST_VALUES, setting.SVM_POLYNOMIAL_ORDERS, svm_poly_atcor)
+zlabel('Prediction Accuracy')
+xlabel('C'); ylabel('Polynomial Degree');
+[v,ind]=max(svm_poly_atcor);
+[v1,ind1]=max(max(svm_poly_atcor));
+disp(sprintf('The largest element in this matrix is %f at (%d,%d).', v1, ind(ind1), ind1 ));
 title(sprintf('Effects of Polynomial Order on Classification Accuracy (canopy-based)'));
 
 figure;

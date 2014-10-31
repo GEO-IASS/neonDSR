@@ -1,13 +1,31 @@
-function avg_accuracy = svmMultiClassKFold_canopy_based(species, rois, features, kernel, kernel_param)
+function avg_accuracy = svmMultiClassKFold_canopy_based(species, rois, features, kernel, kernel_param, cost, matlabSVM_OR_libSVM)
 %% This is a k-fold classification all-vs-all (as compared to one-vs-all) based on
 %using separate canopies for training and test sets. to make sure I do not
 % use pixels of a tree both for train and test.
+%
+% Tuning an SVM Classifier   http://www.mathworks.com/help/stats/support-vector-machines-svm.html
+% Try tuning parameters of your classifier according to this scheme:
+% 1. Pass the data to fitcsvm, and set the name-value pair arguments 'KernelScale','auto'. Suppose that the trained SVM model is called SVMModel. The software uses a heuristic procedure to select the kernel scale. The heuristic procedure uses subsampling. Therefore, to reproduce results, set a random number seed using rng before training the classifier.
+% 2. Cross validate the classifier by passing it to crossval. By default, the software conducts 10-fold cross validation.
+% 3. Pass the cross-validated SVM model to kFoldLoss to estimate and retain the classification error.
+% 4. Retrain the SVM classifier, but adjust the 'KernelScale' and 'BoxConstraint' name-value pair arguments.
+%  - BoxConstraint ? One strategy is to try a geometric sequence of the box constraint parameter. For example, take 11 values, from 1e-5 to 1e5 by a factor of 10. Increasing BoxConstraint might decrease the number of support vectors, but also might increase training time.
+%  - KernelScale ? One strategy is to try a geometric sequence of the RBF sigma parameter scaled at the original kernel scale. Do this by:
+%   - Retrieving the original kernel scale, e.g., ks, using dot notation: ks = SVMModel.KernelParameters.Scale.
+%   - Use as new kernel scales factors of the original. For example, multiply ks by the 11 values 1e-5 to 1e5, increasing by a factor of 10.
+% Choose the model that yields the lowest classification error.
+
+if nargin < 6
+    cost = 1; % default boxconstraint is 1
+    matlabSVM_libSVM = 'matlab';
+end
 
 addpath('/opt/zshare/zproject/apps/libsvm-3.19/matlab');
 
-global setting;
-debug = setting.DEBUG;
-rng(setting.RANDOM_VALUE_SEED); 
+%global setting;
+debug = 0;%setting.DEBUG;
+%rng(setting.RANDOM_VALUE_SEED);
+rng(982451653);
 
 [g gn] = grp2idx(species);      %# nominal class to numeric (string specie to numeric)
 
@@ -103,33 +121,44 @@ for i = 1:k                          % Run SVM classificatoin k times (k being t
         
         idx = pixels_trainIdx & selector; % training set items that either belong to claas 1 or 2 that comprise of this binary classifier.
         tic
-        % train - test
-        %  try
-        if strcmp(kernel, 'polynomial')
-            OPTIONS = optimset('MaxIter', 10000);
-            OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
-
-            svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                'Method','QP',...
-                'options', OPTIONS,...
-                'BoxConstraint',Inf,...
-                'Kernel_Function', kernel,...
-                'Polyorder',kernel_param);
-        elseif strcmp(kernel, 'rbf')
-            OPTIONS = optimset('MaxIter', 10000);
-            OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
-            svmModel{j} = svmtrain(features(idx,:), g(idx), ...
-                'Method','QP', ...
-                'options', OPTIONS,...
-                'BoxConstraint',Inf,...
-                'Kernel_Function', kernel,...
-                'RBF_Sigma',kernel_param);
-        end
-        predTest(:,j) = svmclassify(svmModel{j}, features(pixels_testIdx,:));
-        toc
         
-        % catch ME
-        %end
+        % train - test
+        if strcmp(matlabSVM_OR_libSVM, 'matlab')
+            if strcmp(kernel, 'polynomial')
+                OPTIONS = optimset('MaxIter', 10000);
+                OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
+                
+                svmModel{j} = svmtrain(features(idx,:), g(idx), ...
+                    'Method','QP',...
+                    'options', OPTIONS,...
+                    'BoxConstraint',Inf,...
+                    'Kernel_Function', kernel,...
+                    'Polyorder',kernel_param);
+            elseif strcmp(kernel, 'rbf')
+                OPTIONS = optimset('MaxIter', 10000);
+                OPTIONS = optimset(OPTIONS, 'UseParallel', 'always');
+                svmModel{j} = svmtrain(features(idx,:), g(idx), ...
+                    'Method','QP', ...
+                    'options', OPTIONS,...
+                    'BoxConstraint',Inf,...
+                    'Kernel_Function', kernel,...
+                    'RBF_Sigma',kernel_param);
+            end
+            predTest(:,j) = svmclassify(svmModel{j}, features(pixels_testIdx,:));
+            toc
+        elseif strcmp(matlabSVM_OR_libSVM, 'libsvm')
+            if strcmp(kernel, 'polynomial')
+                libsvm_options = [' -s 0 ', ' -t 1 ', ' -c ', num2str(cost), ' -d ', num2str(kernel_param), ' -q'];
+            elseif strcmp(kernel, 'rbf')
+                libsvm_options = [' -s 0 ', ' -t 2 ',' -c ',  num2str(cost), ' -g ', num2str(kernel_param), ' -q'];  % -g  gamma
+            end
+            model = libsvmtrain(g(idx), features(idx,:), libsvm_options);
+            
+            [predicted_label, accuracy, decision_values_prob_estimates] = libsvmpredict(g(pixels_testIdx),features(pixels_testIdx,:), model, '-q');
+            predTest(:,j) = predicted_label;
+            
+            
+        end
     end
     pred = mode(predTest,2);   %# voting: clasify as the class receiving most votes
     % Find the most frequent value of each column. (statistical mode)
