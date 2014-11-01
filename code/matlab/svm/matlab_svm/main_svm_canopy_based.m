@@ -241,8 +241,8 @@ title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based
 % best performance confusion matrix
 
 
-[ species, reflectances, rois, northings, eastings, flights ] = get_field_FLAASH_pixels(envi03, envi04, envi05);
-[svm_gaussian_flaash, svm_poly_flaash, svm_rbf_flaash] = get_svm_statistics_canopy_based(species, reflectances, rois);
+[ speciesFLAASH, reflectancesFLAASH, roisFLAASH, northingsFLAASH, eastingsFLAASH, flightsFLAASH ] = get_field_FLAASH_pixels(envi03, envi04, envi05);
+[svm_gaussian_flaash, svm_poly_flaash, svm_rbf_flaash] = get_svm_statistics_canopy_based(speciesFLAASH, reflectancesFLAASH, roisFLAASH);
 
 
 %%
