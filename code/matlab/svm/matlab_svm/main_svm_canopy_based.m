@@ -121,9 +121,7 @@ figure
 surf(setting.LIBSVM_COST_VALUES, setting.SVM_POLYNOMIAL_ORDERS, svm_poly_atcor)
 zlabel('Prediction Accuracy')
 xlabel('C'); ylabel('Polynomial Degree');
-[v,ind]=max(svm_poly_atcor);
-[v1,ind1]=max(max(svm_poly_atcor));
-disp(sprintf('The largest element in this matrix is %f at (%d,%d).', v1, ind(ind1), ind1 ));
+[v,ind]=max(svm_poly_atcor); [v1,ind1]=max(max(svm_poly_atcor)); disp(sprintf('Max in svm_poly_atcor is %f at (%d,%d).', v1, ind(ind1), ind1 ));
 title(sprintf('Effects of Polynomial Order on Classification Accuracy (canopy-based)'));
 
 figure;
@@ -134,9 +132,7 @@ figure
 surf(setting.LIBSVM_COST_VALUES, setting.SVM_RBF_SIGMA_VALUES, svm_rbf_atcor)
 zlabel('Prediction Accuracy')
 xlabel('C'); ylabel('Polynomial Degree');
-[v,ind]=max(svm_rbf_atcor);
-[v1,ind1]=max(max(svm_rbf_atcor));
-disp(sprintf('The largest element in this matrix is %f at (%d,%d).', v1, ind(ind1), ind1 ));
+[v,ind]=max(svm_rbf_atcor); [v1,ind1]=max(max(svm_rbf_atcor)); disp(sprintf('Max in svm_rbf_atcor is %f at (%d,%d).', v1, ind(ind1), ind1 ));
 xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
 title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');
 
@@ -182,9 +178,7 @@ figure
 surf(setting.LIBSVM_COST_VALUES, setting.SVM_POLYNOMIAL_ORDERS, libsvm_poly_atcorFULL)
 zlabel('Prediction Accuracy')
 xlabel('C'); ylabel('Polynomial Degree');
-[v,ind]=max(libsvm_poly_atcorFULL);
-[v1,ind1]=max(max(libsvm_poly_atcorFULL));
-disp(sprintf('The largest element in this matrix is %f at (%d,%d).', v1, ind(ind1), ind1 ));
+[v,ind]=max(libsvm_poly_atcorFULL); [v1,ind1]=max(max(libsvm_poly_atcorFULL)); disp(sprintf('Max in libsvm_poly_atcorFULL is %f at (%d,%d).', v1, ind(ind1), ind1 ));
 title(sprintf('Effects of Polynomial Order on Classification Accuracy (canopy-based)'));
 
 figure;
@@ -195,9 +189,7 @@ figure
 surf(setting.LIBSVM_COST_VALUES, setting.SVM_RBF_SIGMA_VALUES, libsvm_rbf_atcorFULL)
 zlabel('Prediction Accuracy')
 xlabel('C'); ylabel('Polynomial Degree');
-[v,ind]=max(libsvm_rbf_atcorFULL);
-[v1,ind1]=max(max(libsvm_rbf_atcorFULL));
-disp(sprintf('The largest element in this matrix is %f at (%d,%d).', v1, ind(ind1), ind1 ));
+[v,ind]=max(libsvm_rbf_atcorFULL); [v1,ind1]=max(max(libsvm_rbf_atcorFULL)); disp(sprintf('Max in libsvm_rbf_atcorFULL is %f at (%d,%d).', v1, ind(ind1), ind1 ));
 xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
 title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');
 
