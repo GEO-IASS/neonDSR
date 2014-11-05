@@ -1,5 +1,4 @@
 
-tic
 init(); 
 global setting;
 addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io'));
@@ -48,10 +47,25 @@ green_ndvi_rois(low_ndvi_indexes) = [];
 nongreen_ndvi_reflectances = reflectances;
 nongreen_ndvi_reflectances(~low_ndvi_indexes,:)=[];
 
+
+%%
+uniq_rois = unique(rois);
+
+pixel_per_roi = zeros(numel(uniq_rois),1);
+class_per_roi = zeros(numel(uniq_rois),1);
+for i=1:numel(uniq_rois)
+pixel_per_roi(i) = sum(rois==i);
+    class_per_roi = 
+end
+disp('done')
+
+scatter(uniq_rois, pixel_per_roi)
+
+
+%%
 matlabpool(8)
 
 
-toc
 
 %% Display signals
 
