@@ -19,14 +19,14 @@ envi = enviread(envi_file_path);
 
 envi.z = double(envi.z);
 
-for j = 1: size(envi.z, 2)
-    for i = 1: size(envi.z, 1)
-        if i == 300 && j == 300
-        disp('w')
-        end
-        envi.z(i, j, :) = scalePixel(envi.z(i,j,:));
-    end
-end
+%for j = 1: size(envi.z, 2)
+%    for i = 1: size(envi.z, 1)
+%        if i == 300 && j == 300
+%        disp('w')
+%        end
+%        envi.z(i, j, :) = scalePixel(envi.z(i,j,:));
+%    end
+%end
 
 
 end

@@ -41,8 +41,8 @@ POLYNOMIAL_DEGREE = 3;
 
 %%
 
-svm_results_gaussian = svmMultiClassKFold_canopy_based(species, rois, reflectances_rwab0, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
-disp(svm_results_gaussian);
+svm_results_canopy_gaussian = svmMultiClassKFold_canopy_based(species, rois, reflectances_rwab0, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
+disp(svm_results_canopy_gaussian);
 
 %%
 % Evaluate Gaussian filter size on accuracy
@@ -51,7 +51,7 @@ rng(982451653); % large prime as seed for random generation
 %matlabpool(8)
 
 count = 16;
-svm_results_gaussian = nan(count, 1);
+svm_results_canopy_gaussian = nan(count, 1);
 smoothing_windows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
 parfor i=1:numel(smoothing_windows)
@@ -62,7 +62,7 @@ parfor i=1:numel(smoothing_windows)
         % make suresmoothing is applied on extracted data with the same level as desired
         %[specie_titles, reflectances] = extractPixels( envi, fieldPath );
         reflectances_g = gaussianSmoothing(reflectances_rwab0, smoothing_window_size);
-        svm_results_gaussian(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
+        svm_results_canopy_gaussian(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g, DEBUG, 'polynomial', POLYNOMIAL_DEGREE);
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
     end
@@ -72,7 +72,7 @@ end
 %xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 
 figure;
-plot(smoothing_windows, svm_results_gaussian);
+plot(smoothing_windows, svm_results_canopy_gaussian);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
 title(sprintf('Effects of Gaussian Window Size on Classification Accuracy \n (canopy-based) - Polynimial Kernel Order 3'));
 
@@ -85,7 +85,7 @@ rng(982451653); % large prime as seed for random generation
 
 polynomial_orders = [1 2 3 4 5 6 6 7 8];  % beyon this point it does not converge
 count = numel(polynomial_orders);
-svm_results_poly = NaN(count, 1);
+svm_results_canopy_poly = NaN(count, 1);
 reflectances_g2 = gaussianSmoothing(reflectances_rwab0, 2);
 
 reflectances_g4 = gaussianSmoothing(reflectances_rwab0, 4);
@@ -96,7 +96,7 @@ reflectances_g4 = gaussianSmoothing(reflectances_rwab0, 4);
 parfor i=1:count
     try
         i        
-        svm_results_poly(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g4, DEBUG, 'polynomial', polynomial_orders(i));
+        svm_results_canopy_poly(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g4, DEBUG, 'polynomial', polynomial_orders(i));
         
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
@@ -104,7 +104,7 @@ parfor i=1:count
 end
 figure;
 %semilogx(polynomial_orders(1:numel(polynomial_orders)), svm_results_poly(1:numel(polynomial_orders)),'marker', 's');
-plot(polynomial_orders(1:8), svm_results_poly(1:8));
+plot(polynomial_orders(1:8), svm_results_canopy_poly(1:8));
 xlabel('SVM Kernel - polynomial degree'); ylabel('Accuracy (%)');
 title(sprintf('Effects of Polynomial Order on Classification Accuracy (canopy-based)'));
 
@@ -121,19 +121,19 @@ rbf_sigma_values = [ 0.001 0.01 0.1 1 2 3 4 5 6 7 8 9 10 100 1000 10000, ...
 %matlabpool(8)
 
 count = numel(rbf_sigma_values);
-svm_results_rbf = zeros(count, 1);
+svm_results_canopy_rbf = zeros(count, 1);
 
 parfor i=1:count
     try
         i
         %svm_results_rbf(i) = svmMultiClassKFold(specie_titles, reflectances, 1, 'rbf', rbf_sigma_values(i));
-        svm_results_rbf(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g4, DEBUG, 'rbf', rbf_sigma_values(i));
+        svm_results_canopy_rbf(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g4, DEBUG, 'rbf', rbf_sigma_values(i));
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
     end
 end
 figure;
-semilogx(rbf_sigma_values, svm_results_rbf);
+semilogx(rbf_sigma_values, svm_results_canopy_rbf);
 grid on
 xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
 title('Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');
@@ -151,7 +151,7 @@ rng(982451653); % large prime as seed for random generation
 
 
 count = 100;
-svm_results_gaussian = NaN(count, 1);
+svm_results_canopy_gaussian = NaN(count, 1);
 smoothing_windows = zeros(count, 1);
 
 for i=1:count
@@ -161,11 +161,38 @@ for i=1:count
         smoothing_windows(i) = smoothing_window_size;
         % Extract ground pixels
         [specie_titles, reflectances] = extractPixels( envi, smoothing_window_size);
-        svm_results_gaussian(i) = svmMultiClass(specie_titles, reflectances, 0);
+        svm_results_canopy_gaussian(i) = svmMultiClass(specie_titles, reflectances, 0);
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
     end
 end
 figure;
-boxplot(svm_results_gaussian, smoothing_windows);
+boxplot(svm_results_canopy_gaussian, smoothing_windows);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%
+
+
+%%
+
+
+%%
+
