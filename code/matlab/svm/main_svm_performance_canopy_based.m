@@ -48,7 +48,7 @@ disp(svm_results_gaussian);
 % Evaluate Gaussian filter size on accuracy
 rng(982451653); % large prime as seed for random generation
 
-matlabpool(8)
+%matlabpool(8)
 
 count = 16;
 svm_results_gaussian = nan(count, 1);
@@ -88,12 +88,15 @@ count = numel(polynomial_orders);
 svm_results_poly = NaN(count, 1);
 reflectances_g2 = gaussianSmoothing(reflectances_rwab0, 2);
 
+reflectances_g4 = gaussianSmoothing(reflectances_rwab0, 4);
+
+
 %matlabpool(8)
 
 parfor i=1:count
     try
         i        
-        svm_results_poly(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, DEBUG, 'polynomial', polynomial_orders(i));
+        svm_results_poly(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g4, DEBUG, 'polynomial', polynomial_orders(i));
         
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
@@ -124,7 +127,7 @@ parfor i=1:count
     try
         i
         %svm_results_rbf(i) = svmMultiClassKFold(specie_titles, reflectances, 1, 'rbf', rbf_sigma_values(i));
-        svm_results_rbf(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g2, DEBUG, 'rbf', rbf_sigma_values(i));
+        svm_results_rbf(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g4, DEBUG, 'rbf', rbf_sigma_values(i));
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
     end
