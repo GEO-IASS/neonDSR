@@ -11,10 +11,10 @@ addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
 
 rng(setting.RANDOM_VALUE_SEED); 
 % shuffle pixels
-permutation_idx = randperm(numel(species));
-species = species(permutation_idx);
-rois = rois(permutation_idx);
-reflectances = reflectances(permutation_idx, :);
+%permutation_idx = randperm(numel(species));
+%species = species(permutation_idx);
+%rois = rois(permutation_idx);
+%reflectances = reflectances(permutation_idx, :);
 
 % scale reflectance intensity values to [0,1]
 for i=1: size(reflectances, 1)
@@ -49,18 +49,6 @@ nongreen_ndvi_reflectances(~low_ndvi_indexes,:)=[];
 
 
 %%
-uniq_rois = unique(rois);
-
-pixel_per_roi = zeros(numel(uniq_rois),1);
-class_per_roi = zeros(numel(uniq_rois),1);
-for i=1:numel(uniq_rois)
-pixel_per_roi(i) = sum(rois==i);
-    class_per_roi = 
-end
-disp('done')
-
-scatter(uniq_rois, pixel_per_roi)
-
 
 %%
 matlabpool(8)

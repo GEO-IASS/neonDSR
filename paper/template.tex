@@ -332,41 +332,59 @@ Altogether we identified species for 1269 pixels. In Table \ref{table:field data
 \scalebox{0.65}{
 \begin{tabular}{ccccccccccccc}
 &\multicolumn{8}{ c }{Broad Leaf}&\multicolumn{4}{ c }{Conifer}\\
- \textbf{Specie} & \multicolumn{2}{c}{Oak (other)} & \multicolumn{2}{c}{Laurel Oak} & \multicolumn{2}{c}{Live Oak} & \multicolumn{2}{c|}{Turkey Oak} & \multicolumn{2}{c}{Pine  (other)} & \multicolumn{2}{c}{Longleaf Pine} \\ 
- & ROI Id & \# of Pixels & ROI Id & \# of Pixels & ROI Id & \# of Pixels & ROI Id & \multicolumn{1}{c|}{\# of Pixels} & ROI Id &  \# of Pixels & ROI Id & \# of Pixels \\ %\cline{2}
- & 23 & \multicolumn{1}{ c| }{62} & 52 &\multicolumn{1}{ c| }{29} & 4  &\multicolumn{1}{ c| }{48} & 10 & \multicolumn{1}{ c| }{73}& 20 & \multicolumn{1}{ c| }{68} &  12  &107\\
- & 19 & \multicolumn{1}{ c| }{19} & 50 &\multicolumn{1}{ c| }{20} & 13 &\multicolumn{1}{ c| }{37} & 15 & \multicolumn{1}{ c| }{34}& 14 & \multicolumn{1}{ c| }{67} &  9   &30\\ 
- & 17 & \multicolumn{1}{ c| }{15} & 49 &\multicolumn{1}{ c| }{17} & 28 &\multicolumn{1}{ c| }{22} & 21 & \multicolumn{1}{ c| }{33}& 2  & \multicolumn{1}{ c| }{30} &  45  &23\\
- & 35 & \multicolumn{1}{ c| }{15} & 48 &\multicolumn{1}{ c| }{9 } & 29 &\multicolumn{1}{ c| }{22} & 11 & \multicolumn{1}{ c| }{26}& 5  & \multicolumn{1}{ c| }{24} &  18  &22\\
- & 36 & \multicolumn{1}{ c| }{10} & 53 &\multicolumn{1}{ c| }{6 } & 30 &\multicolumn{1}{ c| }{22} & 6  & \multicolumn{1}{ c| }{23}& 3  & \multicolumn{1}{ c| }{20} &  44  &21\\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 34 & \multicolumn{1}{ c| }{23}& 42 & \multicolumn{1}{ c| }{17} &  37  &17\\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 31 & \multicolumn{1}{ c| }{18}& 43 & \multicolumn{1}{ c| }{16} &  16  &16\\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 25 & \multicolumn{1}{ c| }{17}& 1  & \multicolumn{1}{ c| }{13} &  40  &15\\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 26 & \multicolumn{1}{ c| }{16}& 22 & \multicolumn{1}{ c| }{10} &  47  &14\\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 32 & \multicolumn{1}{ c| }{16}& 38 & \multicolumn{1}{ c| }{10} &  39  &12\\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 27 & \multicolumn{1}{ c| }{15}&    & \multicolumn{1}{ c| }{}   &  41  &12\\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 7  & \multicolumn{1}{ c| }{14}&    & \multicolumn{1}{ c| }{}   &  46  &11\\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 24 & \multicolumn{1}{ c| }{13}&    & \multicolumn{1}{ c| }{}   &  8   &7 \\
- &    & \multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } &    &\multicolumn{1}{ c| }{  } & 33 & \multicolumn{1}{ c| }{13}&    & \multicolumn{1}{ c| }{}   &      &  \\
-\textbf{Total} & 5 ROIs & 121 Pixels & 5 ROIs & 81 Pixels & 5 ROIs & 151 Pixels & 14 ROIs & \multicolumn{1}{ c| }{ 334 Pixels } & 10 ROIs & 275 Pixels& 13 ROIs& 307 Pixels\\%\cline{2-9}\cline{11-12}
-\textbf{Partial Total} &\multicolumn{8}{ c| }{29 ROIs - 687 Pixels}&\multicolumn{4}{ c }{23 ROIs - 582 Pixels}\\ \hline
+ \textbf{Specie} & \multicolumn{2}{c}{Oak (other)} & \multicolumn{2}{c}{Laurel Oak} & \multicolumn{2}{c}{Live Oak} & \multicolumn{2}{c||}{Turkey Oak} & \multicolumn{2}{c}{Pine  (other)} & \multicolumn{2}{c}{Longleaf Pine} \\ 
+ & ROI Id & \# of Pixels              & ROI Id & \# of Pixels         & ROI Id & \# of Pixels         & ROI Id & \multicolumn{1}{c||}{\# of Pixels} & ROI Id &  \# of Pixels    & ROI Id & \# of Pixels \\ %\cline{2}
+ & 23     & \multicolumn{1}{ c| }{62} & 52 &\multicolumn{1}{ c| }{29} & 4  &\multicolumn{1}{ c| }{48} & 10 & \multicolumn{1}{ c|| }{73}& 20        & \multicolumn{1}{ c| }{68} &  12    &107\\
+ & 19     & \multicolumn{1}{ c| }{19} & 50 &\multicolumn{1}{ c| }{20} & 13 &\multicolumn{1}{ c| }{37} & 15 & \multicolumn{1}{ c|| }{34}& 14        & \multicolumn{1}{ c| }{67} &  9     &30\\ 
+ & 17     & \multicolumn{1}{ c| }{15} & 49 &\multicolumn{1}{ c| }{17} & 28 &\multicolumn{1}{ c| }{22} & 21 & \multicolumn{1}{ c|| }{33}& 2         & \multicolumn{1}{ c| }{30} &  45    &23\\
+ & 35     & \multicolumn{1}{ c| }{15} & 48 &\multicolumn{1}{ c| }{9 } & 29 &\multicolumn{1}{ c| }{22} & 11 & \multicolumn{1}{ c|| }{26}& 5         & \multicolumn{1}{ c| }{24} &  18    &22\\
+ & 36     & \multicolumn{1}{ c| }{10} & 53 &\multicolumn{1}{ c| }{6 } & 30 &\multicolumn{1}{ c| }{22} & 6  & \multicolumn{1}{ c|| }{23}& 3         & \multicolumn{1}{ c| }{20} &  44    &21\\
+ &        &                           &    &                          &    &                          & 34 & \multicolumn{1}{ c|| }{23}& 42        & \multicolumn{1}{ c| }{17} &  37    &17\\
+ &        &                           &    &                          &    &                          & 31 & \multicolumn{1}{ c|| }{18}& 43        & \multicolumn{1}{ c| }{16} &  16    &16\\
+ &        &                           &    &                          &    &                          & 25 & \multicolumn{1}{ c|| }{17}& 1         & \multicolumn{1}{ c| }{13} &  40    &15\\
+ &        &                           &    &                          &    &                          & 26 & \multicolumn{1}{ c|| }{16}& 22        & \multicolumn{1}{ c| }{10} &  47    &14\\
+ &        &                           &    &                          &    &                          & 32 & \multicolumn{1}{ c|| }{16}& 38        & \multicolumn{1}{ c| }{10} &  39    &12\\
+ &        &                           &    &                          &    &                          & 27 & \multicolumn{1}{ c|| }{15}&           &                           &  41    &12\\
+ &        &                           &    &                          &    &                          & 7  & \multicolumn{1}{ c|| }{14}&           &                           &  46    &11\\
+ &        &                           &    &                          &    &                          & 24 & \multicolumn{1}{ c|| }{13}&           &                           &  8     &7 \\
+ &        &                           &    &                          &    &                          & 33 & \multicolumn{1}{ c|| }{13}&           &                           &        &  \\
+\textbf{Total} & 5 ROIs & 121 Pixels & 5 ROIs & 81 Pixels & 5 ROIs & 151 Pixels & 14 ROIs & \multicolumn{1}{ c|| }{ 334 Pixels } & 10 ROIs & 275 Pixels& 13 ROIs& 307 Pixels\\%\cline{2-9}\cline{11-12}
+\textbf{Partial Total} &\multicolumn{8}{ c|| }{29 ROIs - 687 Pixels}&\multicolumn{4}{ c }{23 ROIs - 582 Pixels}\\ \hline
 \textbf{Grand Total} & \multicolumn{12}{c}{52 ROIs - 1269 Pixels}     
 \end{tabular}
 }
- \caption{Field Data Specifications}
-    \label{table:field data}
+	
+\caption{Field Data Specifications}
+\label{table:field data}
 
 \end{table}
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[tp]
+  % Fixed length
+  \centering
+  \includegraphics[height=3in,keepaspectratio]{./images/fieldData.png}%
+   \caption{Field Data Distribution of ROIs}
+ \label{fig:lidar}
+\end{figure}
+
 
 The closer ROI Ids are means that they are collected at a closer vicinity (geographically/temporally), and the more distant ROI ids means that canopies are more apart. 
 You can see that some species have lots of abundance (334 for Turkey Oak) and some have few (81 for Laurel Oak) this bias in population size inadverently affect classification accuracy.
 
-The Oak  (other) species represent generic oak specie (\textit{specie details unknown}). Live Oak is specifically Sand Live Oak (\textit{quercus geminata}), Laurel Oak represents \textit{Quercus Hemisphaerica}, Turkey Oak is \textit{Quercus Laevis}, Longleaf Pine is \textit{Pinus Palustris}, and Pine (other) represents a mixture of different varieties of pines:  Longleaf Pine (\textit{Pinus palustris}), Loblolly Pine(\textit{Pinus Taeda}) or Slash Pine (\textit{Pinus Elliottii}).
+The Oak  (other) species represent generic oak specie (\textit{specie details unknown}). Live Oak is specifically Sand Live Oak (\textit{Quercus Geminata}), Laurel Oak represents \textit{Quercus Hemisphaerica}, Turkey Oak is \textit{Quercus Laevis}, Longleaf Pine is \textit{Pinus Palustris}, and Pine (other) represents a mixture of different varieties of pines:  Longleaf Pine (\textit{Pinus palustris}), Loblolly Pine(\textit{Pinus Taeda}) or Slash Pine (\textit{Pinus Elliottii}).
 
+We use a combination of grid search and heuristics to adjust SVM parameters for better performance.
 
 \subsection{Preprocessing}
 
-We load hyperspectral images in Matlab using an in-house upgraded version of \texttt{enviread}, initially developed by Dr. Ian Howat at Ohio State University \cite{howat2007enviread}. We check for the consistency of calibration and uniformness of pixel sizes. As different flights have different altitudes and hence pixel resolutions, this is an essential step to account for. Defining a hyperspectral image $I$ with dimensionality $(x,y,w,z)$, where $x \in X = [167000, 833000 ]$ meters represents the range of UTM Easting values, $y \in Y = [0, 9400000]$ meters represents UTM Northing values, $w \in W = \{1, \dotsc, 224\}$ is the index of the reflectance wavelengths, and $z \in Z = \{1, \dotsc, 60 \}$ is the UTM zone of the image. Based on our observations, we take constant $\xi = 10000$ as a cut-off point to avoid erroneous sensor readings. There are some noises in JPL AVIRIS measurements; the range of hyperspectral reflectance values is in range $[-32762, 32724]$ One should note that reflectance is the proportion of sun radiance signals which should be a positive value, but in normalized form reflectance is between zero and one. Below you can see the normalization process:
+We load hyperspectral images in Matlab using an in-house upgraded version of \texttt{enviread}, initially developed by Dr. Ian Howat at Ohio State University \cite{howat2007enviread}. 
+We check for the consistency of calibration and uniformness of pixel sizes. 
+As different flights have different altitudes and hence pixel resolutions, this is an essential step to account for. 
+Defining a hyperspectral image $I$ with dimensionality $(x,y,w,z)$, where $x \in X = [167000, 833000 ]$ meters represents the range of UTM Easting values, $y \in Y = [0, 9400000]$ meters represents UTM Northing values, $w \in W = \{1, \dotsc, 224\}$ is the index of the reflectance wavelengths, and $z \in Z = \{1, \dotsc, 60 \}$ is the UTM zone of the image. 
+Based on our observations, we take constant $\xi = 10000$ as a cut-off point to avoid erroneous sensor readings. 
+There are some noises in JPL AVIRIS measurements such as negative reflectance values; 
+the range of hyperspectral reflectance values is in range $[-32762, 32724]$: one should note that reflectance is the proportion of sun radiance signals which should be a positive value, but in normalized form reflectance is between zero and one. Below you can see the normalization process:
 
 \begin{equation}
 I_{xywz} = \left\{ \begin{array}{rcl}
@@ -376,36 +394,55 @@ I_{xywz} = \left\{ \begin{array}{rcl}
 \end{array}\right.
 \end{equation}
 
-To normalize we set negative reflectance values to zero and values greater than 10,000 to 10,000. To enhance the intensity of readings we take the square-root of signal returns. This procedure is due to the following facts: a) There is no standard output of reflectance data and even reflectance of a single crown at different pixels can be quiet different. Unlike minerals that have fixed and known reflectance values, trees can different signal returns based on generation, condition of growth (water quality, climate, soil, and etc) which can make this task challenging. b) We do not have ground reflectance values produced by NEON available to us. c) Due to low resolution of images signals are all mixed. Due to these reasons, empirically obtained thresholds and ranges are inevitable. Regarding square root, one should note that without taking the square root the images lack proper day-light intensity and appear dark.
+To normalize we set negative reflectance values to zero and values greater than 10,000 to 10,000. 
+To enhance the intensity of readings we take the square-root of signal returns. 
+This procedure is due to the following facts: 
+a) There is no standard output of reflectance data and even reflectance of a single crown at different pixels can be quiet different.
+ Unlike minerals that have fixed and known reflectance values, trees can different signal returns based on generation, condition of growth (water quality, climate, soil, and etc) which can make this task challenging. 
+ b) We do not have ground reflectance values produced by NEON available to us. 
+ c) Due to low resolution of images signals are all mixed. 
+ Due to these reasons, empirically obtained thresholds and ranges are inevitable. 
+ Regarding square root, one should note that without taking the square root the images lack proper day-light intensity and appear dark.
 
 \subsubsection{Filter Water Absorption Bands}
 
-In our calculations wavelengths corresponding to strong water vapor absorption bands in the atmosphere are excluded. This includes 1333.2$nm$ to 1482.7$nm$, 1791.6$n m$ to 1967.4$n m$, and 2406.9$n m$ to 2496.2$n m$. Due to strong absorption at those wavelengths, a small radiance signal is measured by the instrument. This leads to errors in the reflectance calculation (as several highly random upward spikes in reflectance plots). 
+In our calculations wavelengths corresponding to strong water vapor absorption bands in the atmosphere are excluded. 
+This includes 1333.2$nm$ to 1482.7$nm$, 1791.6$n m$ to 1967.4$n m$, and 2406.9$n m$ to 2496.2$n m$. 
+Due to strong absorption at those wavelengths, a small radiance signal is measured by the instrument. 
+This leads to errors in the reflectance calculation (as several highly random upward spikes in reflectance plots). 
 
-\subsubsection{Filter Non-vegetated Pixels}
+\subsubsection{Filter Non-vegetated/Shaded Pixels}
 
-
-To properly classify tree species we get rid of pixels not belonging to planetary material, such as roads, clouds and any not-vegetated area. A good filter for this task is to use the Normalized Difference Vegetation Index (NDVI). NDVI is defined as below:
+A filter of $NIR < 0.33$  excludes heavily shaded samples  which usually have distorted reflectance signals \cite{colgan2012mapping}. 
+Normalized Difference Vegetation Index (NDVI) is an index which shows how green a pixel is and is usually used to remove material that does not belong to planetary material such as roads, clouds and any not-vegetated area, even grass and so on. By properly applying an NDVI filter you will end up in major tree crowns.
+As you can see in \ref{table:field data}, we have tens of pixels per ROI and considering that each pixel is about $3m$ wide and the fact that the species look into do not have wide crowns; this means that ROIs are generously marked and span several tree crowns. 
+This includes the empty spaces between crowns, some shady pixels, understory grass, and etc. 
+From within such generous canopy the initial belief is that to properly classify tree species we should get rid of low NDVI pixels from such large canopies. 
+Contrary to this belief due to the mixing nature of hyperspectral pixels and aggregate operation of classificaion techniques in multi-dimensional space, removing low NDVI pixels from tree canopies degraded classification performance by about 10\%. The take away of this experiment was that for specifically marked canopies it is better to preserve even low NDVI pixel as they might have some added value in the aggregate operation of the classification algorithm.
+NDVI is defined as below:
 
 \begin{equation}\label{xx}
 NDVI  = \frac{NIR - VIS}{NIR + VIS}
 \end{equation}
 
-where is $NIR$ the reflectance in the reflective near-infrared wavelengths (725-1100 $n m$) and $VIS$ is the reflectance in the visible (red) wavelengths (580-680 $n m$). The principle behind this is that $VIS$ is in a part of the spectrum where chlorophyll causes considerable absorption of incoming radiation, and the $NIR$ is in a spectral region where spongy mesophyll leaf structure leads to considerable reflectance \cite{tucker1979red, jackson1983discrimination}. For this purpose we chose the band at 665.6 $n m$ for red and 734.1 $n m$ for near-infrared. By filtering out pixels with $NDVI < 0.4$ we are essentially removing pixels that are not green. 
-
-\subsubsection{Filter Shaded Pixels}
-
-A filter of $NIR < 0.33$  excludes heavily shaded samples  which usually have distorted reflectance signals \cite{colgan2012mapping}. By performing previous filters we get rid of roads, clouds, shades and grassy areas and we are left with mostly tree canopies where we can apply the classification.
+where is $NIR$ the reflectance in the reflective near-infrared wavelengths (725-1100 $n m$) and $VIS$ is the reflectance in the visible (red) wavelengths (580-680 $n m$). 
+The principle behind this is that $VIS$ is in a part of the spectrum where chlorophyll causes considerable absorption of incoming radiation, and the $NIR$ is in a spectral region where spongy mesophyll leaf structure leads to considerable reflectance \cite{tucker1979red, jackson1983discrimination}. 
+For this purpose we chose the band at 665.6 $n m$ for red and 734.1 $n m$ for near-infrared. 
+By filtering out pixels with $NDVI < 0.4$ we are essentially removing pixels that are not green. 
 
 \subsubsection{Gaussian Filter}
 
-Real-life sensor measurements are far from perfect and there are many nosy readings along different bands. We take advantage of abundance of bands (224 bands) and take use of their aggregated information by applying a Gaussian filter. We take a Gaussian window $w$ of size $N > 0$, the coefficients of a Gaussian window are computed as below:
+Real-life sensor measurements are far from perfect and there are many nosy readings along different bands. 
+We take advantage of abundance of bands (224 bands) and take use of their aggregated information by applying a Gaussian filter. 
+We take a Gaussian window $w$ of size $N > 0$, the coefficients of a Gaussian window are computed as below:
 
 \begin{equation}
 w(n) = e^{-\frac{1}{2}(\alpha \frac{n}{N/2})^2}
 \end{equation}  
 
-where $-\frac{(N-1)}{2} \leq n \leq \frac{(N-1)}{2}$, and $\alpha$ is inversely proportional to the standard deviation ($\sigma$) of a Gaussian random variable ($\sigma = \frac{N}{2\alpha}$). Once we have Gaussian parameters we perform convolution to apply the smoothing factor. By convolving vectors $u \in \mathbb{R}^m$ and $v\in \mathbb{R}^n$, we will have vector $w\in \mathbb{R}^{m+n-1}$ such that: 
+where $-\frac{(N-1)}{2} \leq n \leq \frac{(N-1)}{2}$, and $\alpha$ is inversely proportional to the standard deviation ($\sigma$) of a Gaussian random variable ($\sigma = \frac{N}{2\alpha}$). 
+Once we have Gaussian parameters we perform convolution to apply the smoothing factor. 
+By convolving vectors $u \in \mathbb{R}^m$ and $v\in \mathbb{R}^n$, we will have vector $w\in \mathbb{R}^{m+n-1}$ such that: 
 
 \begin{equation}
 w(k)=\sum_j u(j)v(k-j+1)
@@ -414,16 +451,22 @@ w(k)=\sum_j u(j)v(k-j+1)
 
 \subsection{Support Vector Machines}
 
-It is well known in literature that Support Vector Machines (SVM) outperforms other algorithms on species classification \cite{colgan2012mapping, baldeck2014landscape, cho2012mapping}. We perform species classification using \textit{non-linear multi-class SVM} from two perspectives. 
+It is well known in literature that Support Vector Machines (SVM) outperforms other algorithms on species classification \cite{colgan2012mapping, baldeck2014landscape, cho2012mapping}. 
+Our focus is on the impact of atmospheric corrections (FLAASH vs ATCOR) both at pixel level and canopy level classification.
+We perform both canopy-based and pixel-based species classification using \textit{non-linear multi-class SVM} from two implementation perspectives. 
 
 
 \begin{itemize}
 \item SVM with $\frac{2}{3}$ train, $\frac{1}{3}$ test with no-substitution sampling.
-\item SVM classification with $k$-fold cross validation where $k=10$. This means we perform classification 10 times where at each time a separate non-overlapping portion of ground data is specified for train and test purposes. The ratio of train vs test is 9 to 1 from total samples.
+\item SVM classification with $k$-fold cross validation where $k=10$. 
+This means we perform classification 10 times where at each time a separate non-overlapping portion of ground data is specified for train and test purposes. 
+The ratio of train vs test is 9 to 1 from total samples.
 \end{itemize}
 
 
-This setup asserts the utility of cross-validation and the robustness of our approach in classification. By observing similar accuracies in cross validation runs and the $\frac{2}{3}$ to $\frac{1}{3}$ setup we observe that our training is robust in terms of selection of ground data and we do not have  over-fitting or under-fitting in our classifier. As the field data is ordered by ROI, in both of the scenarios we shuffle the data before each run to make sure, this issue will not bias the training process.
+This setup asserts the utility of cross-validation and the robustness of our approach in classification. 
+By observing similar accuracies in cross validation runs and the $\frac{2}{3}$ to $\frac{1}{3}$ setup we observe that our training is robust in terms of selection of ground data and we do not have over-fitting or under-fitting in our classifier. 
+As the field data is ordered by ROI, in both of the scenarios we shuffle the data before each run to make sure, this issue will not bias the training process.
 
 Classifier non-linearity comes from taking the following non-linear functions as kernel for SVM: 
 
@@ -432,7 +475,8 @@ Classifier non-linearity comes from taking the following non-linear functions as
 \item Radial Basis Function (RBF) kernel
 \end{itemize}
 
-Regarding multi-class classification, we create $\binom{c}{2}$ classifiers where $c$ is the number of classes. We train all the classifiers and to decide on the class a given test case belongs to, we perform majority voting among classifiers. 
+Regarding multi-class classification, we create $\binom{c}{2}$ classifiers where $c$ is the number of classes. 
+We train all the classifiers and to decide on the class a given test case belongs to, we perform majority voting among classifiers to decide the class of each pixel. 
 
 
 
@@ -447,7 +491,16 @@ In our classification setup we first analyze the performance of our algorithm in
 
 
 
-In k-fold scenario, first we show the effect of preprocessing filters. These analysis are done over ATCOR data with SVM polynomial degree of 3. In Figure \ref{fig:before-after removing water absorbtion bands} we show how removing water absorption bands helps us improve prediction accuracy. Before removing these bands (Figure \ref{fig:before removing water absorbtion bands}) prediction accuracy starts at about 76\% and rises to about 84\% as we increase Gaussian window size (about 8\% increase). There is a positive slope across different window sizes which means we can expect better accuracy the bigger the window size gets. This comes from the fact that water absorption bands add to randomness and as we increase window size this randomness is dissolved to the majority of neighbors and has less and less impact as window size increases. After removing water absorption bands (Figure \ref{fig:after removing water absorbtion bands}), prediction accuracy starts at 93.5\% and rises to about 94.5\% which is minimal change but on average you can see that applying a Gaussian filter increases accuracy by small margins (maximum 1\%). As window size increases you can see that there is no predictable impact of Gaussian smoothing in accuracy; sometimes it increases and sometimes it decreases accuracy as window size increases without any predictable behavior. This is due to the fact that all the currently available data has meaning (not noisy) and increasing window size beyond certain point just takes data away from their original meaning which can either help or harm accuracy in unpredictable ways. 
+In k-fold scenario, first we show the effect of preprocessing filters. 
+These analysis are done over ATCOR data with SVM polynomial degree of 3. 
+In Figure \ref{fig:before-after removing water absorbtion bands} we show how removing water absorption bands helps us improve prediction accuracy. 
+Before removing these bands (Figure \ref{fig:before removing water absorbtion bands}) prediction accuracy starts at about 76\% and rises to about 84\% as we increase Gaussian window size (about 8\% increase). 
+There is a positive slope across different window sizes which means we can expect better accuracy the bigger the window size gets. 
+This comes from the fact that water absorption bands add to randomness and as we increase window size this randomness is dissolved to the majority of neighbors and has less and less impact as window size increases. 
+After removing water absorption bands (Figure \ref{fig:after removing water absorbtion bands}), prediction accuracy starts at 93.5\% and rises to about 94.5\% which is minimal change but on average you can see that applying a Gaussian filter increases accuracy by small margins (maximum 1\%). 
+As window size increases you can see that there is no predictable impact of Gaussian smoothing in accuracy; 
+sometimes it increases and sometimes it decreases accuracy as window size increases without any predictable behavior. 
+This is due to the fact that all the currently available data has meaning (not noisy) and increasing window size beyond certain point just takes data away from their original meaning which can either help or harm accuracy in unpredictable ways. 
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
@@ -472,15 +525,26 @@ In k-fold scenario, first we show the effect of preprocessing filters. These ana
  \label{fig:atmospheric correction}
 \end{figure}
 
-Next, we look at the effect of atmospheric correction on prediction accuracy in Figure \ref{fig:atmospheric correction}. As you can see in Figure \ref{fig:atmospheric correction:flaash}, FLAASH atmospherically corrected data yields 91\% of prediction accuracy while Figure \ref{fig:atmospheric correction:atcor} ATCOR results in more that 93.5\%. We observe the same behavior across Gaussian smoothing widths in both corrections. Similar behavior is observed as we analyze different parameters for the classification algorithms. As you can see in Figure \ref{fig:parameter tuning} in the high regions of the accuracy axis, ATCOR outperforms FLAASH with a good margin. In Figure \ref{fig:parameter tuning:poly} at polynomial degree zero we have the maximum accuracy of prediction where ATCOR is ahead by 5\%, although at degree one FLAASH improves but again we see the same performance for degrees two and three. In Figure \ref{fig:parameter tuning:RBF} there is dominance for ATCOR data across a wide regions of $\sigma$ in RBF function kernel.
+Next, we look at the effect of atmospheric correction on prediction accuracy in Figure \ref{fig:atmospheric correction}. 
+As you can see in Figure \ref{fig:atmospheric correction:flaash}, FLAASH atmospherically corrected data yields 91\% of prediction accuracy while Figure \ref{fig:atmospheric correction:atcor} ATCOR results in more that 93.5\%. 
+We observe the same behavior across Gaussian smoothing widths in both corrections. 
+Similar behavior is observed as we analyze different parameters for the classification algorithms. 
+As you can see in Figure \ref{fig:parameter tuning} in the high regions of the accuracy axis, ATCOR outperforms FLAASH with a good margin. 
+In Figure \ref{fig:parameter tuning:poly} at polynomial degree zero we have the maximum accuracy of prediction where ATCOR is ahead by 5\%, although at degree one FLAASH improves but again we see the same performance for degrees two and three. 
+In Figure \ref{fig:parameter tuning:RBF} there is dominance for ATCOR data across a wide regions of $\sigma$ in RBF function kernel.
 
-On comparing the kernel type for SVM, we see prediction accuracy of 98.26\% for polynomial kernel function, and for RBF we have 93.48\%. According to the confusion matrix in Table \ref{table:confusion matrix}. In RBF, two \textit{Pine (other)} pixels are confused with Longleaf Pine in RBF kernel, and one Longleaf Pine confused with Turkey Oak. On the other hand, Turkey Oak is confused to \textit{Pine (other)} in Polynomial kernel.
+On comparing the kernel type for SVM, we see prediction accuracy of 98.26\% for polynomial kernel function, and for RBF we have 93.48\%. 
+According to the confusion matrix in Table \ref{table:confusion matrix}. 
+In RBF, two \textit{Pine (other)} pixels are confused with Longleaf Pine in RBF kernel, and one Longleaf Pine confused with Turkey Oak. 
+On the other hand, Turkey Oak is confused to \textit{Pine (other)} in Polynomial kernel.
 
 
 
 
 
-On robustness of our classification scheme from the Figure \ref{fig:atmospheric correction} and Figure \ref{fig:parameter tuning} you can see that in the box plot, the 25th and 75th percentiles are less than 4\% long in the accuracy axis. This means that our classification is always within $\pm 2$ of the median, and that we are stable in terms of visited ground data. This is further asserted in Figure \ref{fig:robustness}, where even after taking $\frac{2}{3}$ for training and $\frac{1}{3}$ for test, we received similar results as the k-fold scenario with 4\% as the length of 25th-75th percentile. 
+On robustness of our classification scheme from the Figure \ref{fig:atmospheric correction} and Figure \ref{fig:parameter tuning} you can see that in the box plot, the 25th and 75th percentiles are less than 4\% long in the accuracy axis. 
+This means that our classification is always within $\pm 2$ of the median, and that we are stable in terms of visited ground data. 
+This is further asserted in Figure \ref{fig:robustness}, where even after taking $\frac{2}{3}$ for training and $\frac{1}{3}$ for test, we received similar results as the k-fold scenario with 4\% as the length of 25th-75th percentile. 
 
 
 
@@ -592,7 +656,12 @@ On robustness of our classification scheme from the Figure \ref{fig:atmospheric 
 
 \section{Conclusions}
 
-Identifying species using remote sensing technologies such as hyperspectral and LiDAR sensors has a critical utility in studying global warming, bio-mass estimation, carbon preserves, invasive species identification and etc. NEON is about to begin a thirty-year ecological monitoring project at continental scale where one aspect of which is remote sensing. In this paper we perform species classification using SVM over AVIRIS hyperspectral data available via NEON portal from Ordway Swisher Biological Station in north-central Florida. We evaluate the effects of ATCOR and FLAASH atmospheric corrections and Gaussian Filters on prediction accuracy. We found predictors such as NDVI, NIR and water apsorbtion bands to be very helpful in enhancing prediction accuracy. Our results show we can classify tree species with average 98.26\% $\pm 2\%$ accuracy (incuding the 25th and 75th percentiles)  using Support Vector Machines with Polynomial function kernel of first degree. We statistically verify robustness of our classification scheme.
+Identifying species using remote sensing technologies such as hyperspectral and LiDAR sensors has a critical utility in studying global warming, bio-mass estimation, carbon preserves, invasive species identification and etc. 
+NEON is about to begin a thirty-year ecological monitoring project at continental scale where one aspect of which is remote sensing. 
+In this paper we perform species classification using SVM over AVIRIS hyperspectral data available via NEON portal from Ordway Swisher Biological Station in north-central Florida.
+ We evaluate the effects of ATCOR and FLAASH atmospheric corrections and Gaussian Filters on prediction accuracy. 
+ We found predictors such as NDVI, NIR and water apsorbtion bands to be very helpful in enhancing prediction accuracy. 
+ Our results show we can classify tree species with average 98.26\% $\pm 2\%$ accuracy (incuding the 25th and 75th percentiles) using Support Vector Machines with Polynomial function kernel of first degree. We statistically verify robustness of our classification scheme.
 
 %\acknowledgements{Acknowledgements}
 
