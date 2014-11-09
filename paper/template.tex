@@ -487,13 +487,14 @@ We train all the classifiers and to decide on the class a given test case belong
 
 \section{Results and Discussion}
 
-In our classification setup we first analyze the performance of our algorithm in the k-fold setup, then we show the results of the basic $\frac{2}{3}$ train, $\frac{1}{3}$ test scenario and demonstrate the robustness of our classifier (avoid over-fitting/under-fitting).
-
-
-
-In k-fold scenario, first we show the effect of preprocessing filters. 
-These analysis are done over both ATCOR and FLAASH data with SVM polynomial degree of 3 and RBF ($C = +\infty, \sigma=10^4$); the parameters were chosen using a mix of grid search and heuristic optimization. 
-Cost of $\infty$ means that we have little to zero tolerance for improperly classified samples.
+We study the impact of optimzing classifier parameters on FLAASH and ATCOR atmospheric corrections. 
+Our focus is on the impact of data pre-processing filters on the performance of the species classificaion while we compare the two. 
+An implementation of a one-vs-one multi-class k-fold cross-validation setup of SVM using non-linear kernels (polynomial and radial basis) functions is used for our model. 
+In our scenario $k=5$ as for some of our species we only have 5 canopies and we canot $k>5$ for a valid implementation of k-fold cross validation.
+Majority vote determines the specie of a pixel. 
+Test and train sets are canopy-aware, meaning that pixels of a single canopy is either used for training or test sets and not both.
+A mixture of grid search and heuristic optimization determines various parameters for SVM kernels, but for brevity we only present 2D diagrams here as other parameters settings are out of scope of this project. 
+Specifically we set a cost of $C = \infty$ for misclassification, meaning that we have little to zero tolerance for improperly classified samples.
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
 %\begin{figure}[tp]
@@ -506,19 +507,28 @@ Cost of $\infty$ means that we have little to zero tolerance for improperly clas
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[tp]
+\begin{figure}[t]
   % Fixed length
   \centering
   \subcaptionbox{Before removing water absorption bands\label{fig:before removing wab}}{\includegraphics[height=2.5in,keepaspectratio]{./images/before-removing-wab.eps}}
   \subcaptionbox{After removing water absorption bands\label{fig:after removing wab}}{\includegraphics[height=2.5in,keepaspectratio]{./images/gaussian_window.eps}}\hspace{1em}%
-    \subcaptionbox{After removing low NDVI NIR pixels\label{fig:after removing NDVI NIR}}{\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
+   % \subcaptionbox{After removing low NDVI NIR pixels\label{fig:after removing NDVI NIR}}{\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
 
    \caption{Impact of Gaussian Window on Prediction Accuracy}
+       \label{fig:water absorption bands}
+\end{figure}
+
+\begin{figure}[t]
+  % Fixed length
+  \centering
+    {\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
+
+   \caption{Impact of Removing low NDVI and NIR pixels\label{fig:after removing NDVI NIR}}
        \label{fig:parameter tuning}
 \end{figure}
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[tp]
+\begin{figure}[t]
   % Fixed length
   \centering
   \subcaptionbox{Tuning polynomial order for SVM with polynomial kernel function\label{fig:parameter tuning:poly}}{\includegraphics[height=2.5in,keepaspectratio]{./images/poly.eps}}\hspace{1em}%
@@ -529,15 +539,15 @@ Cost of $\infty$ means that we have little to zero tolerance for improperly clas
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[tp]
+%\begin{figure}[tp]
   % Fixed length
-  \centering
-    \subcaptionbox{After removing low NDVI NIR pixels\label{fig:after removing NDVI NIR}}{\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
-    \subcaptionbox{Generic 2/3 vs 1/3 train and test sets. Asserting non-overfitting SVM model\label{fig:13 23}}{\includegraphics[height=2.5in,keepaspectratio]{./images/F-svm-13-23.eps}}\hspace{1em}%
+%  \centering
+%    \subcaptionbox{After removing low NDVI NIR pixels\label{fig:after removing NDVI NIR}}{\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
+%    \subcaptionbox{Generic 2/3 vs 1/3 train and test sets. Asserting non-overfitting SVM model\label{fig:13 23}}{\includegraphics[height=2.5in,keepaspectratio]{./images/F-svm-13-23.eps}}\hspace{1em}%
 
-   \caption{Impact of Gaussian Window on Prediction Accuracy}
-       \label{fig:parameter tuning}
-\end{figure}
+%   \caption{Impact of Gaussian Window on Prediction Accuracy}
+%       \label{fig:parameter tuning}
+%\end{figure}
 
 % water absorption bands
 %ndvi nir
@@ -548,9 +558,9 @@ Cost of $\infty$ means that we have little to zero tolerance for improperly clas
 
 % outlier detection via one class svm for future paper.
 
-In Figure \ref{fig:before-after removing water absorbtion bands} we show how removing water absorption bands helps us improve prediction accuracy. 
-Before removing these bands (Figure \ref{fig:before removing water absorbtion bands}) prediction accuracy starts at about 76\% and rises to about 84\% as we increase Gaussian window size (about 8\% increase). 
-There is a positive slope across different window sizes which means we can expect better accuracy the bigger the window size gets. 
+In Figure \ref{fig:water absorption bands} we show how removing water absorption bands helps us improve prediction accuracy. 
+Before removing these bands (Figure \ref{fig:before removing wab}) prediction accuracy starts at about 66\% and rises to about 71\% as we increase Gaussian window size (about 5\% performance improvement). 
+There is a positive trend across different window sizes which means we can expect better accuracy the bigger the window size gets. 
 This comes from the fact that water absorption bands add to randomness and as we increase window size this randomness is dissolved to the majority of neighbors and has less and less impact as window size increases. 
 After removing water absorption bands (Figure \ref{fig:after removing water absorbtion bands}), prediction accuracy starts at 93.5\% and rises to about 94.5\% which is minimal change but on average you can see that applying a Gaussian filter increases accuracy by small margins (maximum 1\%). 
 As window size increases you can see that there is no predictable impact of Gaussian smoothing in accuracy; 
@@ -642,14 +652,14 @@ This is further asserted in Figure \ref{fig:robustness}, where even after taking
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[t]
+%\begin{figure}[t]
   % Fixed length
-  \centering
-  \includegraphics[height=2.5in,keepaspectratio]{./images/atcor_flaash/robustness.eps}
-   \caption{Verifying robustness of classification by applying a $\frac{2}{3}$ training $\frac{1}{3}$ test using polynomial kernel of degree 3}
-       \label{fig:robustness}
+%  \centering
+%  \includegraphics[height=2.5in,keepaspectratio]{./images/atcor_flaash/robustness.eps}
+%   \caption{Verifying robustness of classification by applying a $\frac{2}{3}$ training $\frac{1}{3}$ test using polynomial kernel of degree 3}
+%       \label{fig:robustness}
 
-\end{figure}
+%\end{figure}
 
 
 
