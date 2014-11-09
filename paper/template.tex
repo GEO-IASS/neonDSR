@@ -363,7 +363,7 @@ Altogether we identified species for 1269 pixels. In Table \ref{table:field data
 \begin{figure}[tp]
   % Fixed length
   \centering
-  \includegraphics[height=3in,keepaspectratio]{./images/fieldData.png}%
+  \includegraphics[height=3in,keepaspectratio]{./images/fieldData.eps}%
    \caption{Field Data Distribution of ROIs}
  \label{fig:lidar}
 \end{figure}
@@ -492,7 +492,62 @@ In our classification setup we first analyze the performance of our algorithm in
 
 
 In k-fold scenario, first we show the effect of preprocessing filters. 
-These analysis are done over ATCOR data with SVM polynomial degree of 3. 
+These analysis are done over both ATCOR and FLAASH data with SVM polynomial degree of 3 and RBF ($C = +\infty, \sigma=10^4$); the parameters were chosen using a mix of grid search and heuristic optimization. 
+Cost of $\infty$ means that we have little to zero tolerance for improperly classified samples.
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+%\begin{figure}[tp]
+%  % Fixed length
+%  \centering
+%  \includegraphics[height=3in,keepaspectratio]{./images/gaussian_window.eps}%
+%   \caption{Impact of Gaussian Window on Prediction Accuracy}
+% \label{fig:lidar}
+%\end{figure}
+
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[tp]
+  % Fixed length
+  \centering
+  \subcaptionbox{Before removing water absorption bands\label{fig:before removing wab}}{\includegraphics[height=2.5in,keepaspectratio]{./images/before-removing-wab.eps}}
+  \subcaptionbox{After removing water absorption bands\label{fig:after removing wab}}{\includegraphics[height=2.5in,keepaspectratio]{./images/gaussian_window.eps}}\hspace{1em}%
+    \subcaptionbox{After removing low NDVI NIR pixels\label{fig:after removing NDVI NIR}}{\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
+
+   \caption{Impact of Gaussian Window on Prediction Accuracy}
+       \label{fig:parameter tuning}
+\end{figure}
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[tp]
+  % Fixed length
+  \centering
+  \subcaptionbox{Tuning polynomial order for SVM with polynomial kernel function\label{fig:parameter tuning:poly}}{\includegraphics[height=2.5in,keepaspectratio]{./images/poly.eps}}\hspace{1em}%
+  \subcaptionbox{Tuning $\sigma$ in SVM with RBF kernel function\label{fig:parameter tuning:RBF}}{\includegraphics[height=2.5in,keepaspectratio]{./images/rbf.eps}}
+   \caption{Parameter tuning for classification algorithms}
+       \label{fig:parameter tuning}
+\end{figure}
+
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[tp]
+  % Fixed length
+  \centering
+    \subcaptionbox{After removing low NDVI NIR pixels\label{fig:after removing NDVI NIR}}{\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
+    \subcaptionbox{Generic 2/3 vs 1/3 train and test sets. Asserting non-overfitting SVM model\label{fig:13 23}}{\includegraphics[height=2.5in,keepaspectratio]{./images/F-svm-13-23.eps}}\hspace{1em}%
+
+   \caption{Impact of Gaussian Window on Prediction Accuracy}
+       \label{fig:parameter tuning}
+\end{figure}
+
+% water absorption bands
+%ndvi nir
+% gaussian
+%poly rbf
+%1/3 2/3
+%conifer vs broadleaf (2 class)
+
+% outlier detection via one class svm for future paper.
+
 In Figure \ref{fig:before-after removing water absorbtion bands} we show how removing water absorption bands helps us improve prediction accuracy. 
 Before removing these bands (Figure \ref{fig:before removing water absorbtion bands}) prediction accuracy starts at about 76\% and rises to about 84\% as we increase Gaussian window size (about 8\% increase). 
 There is a positive slope across different window sizes which means we can expect better accuracy the bigger the window size gets. 
@@ -504,26 +559,26 @@ This is due to the fact that all the currently available data has meaning (not n
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[t]
-  % Fixed length
-  \centering
-  \subcaptionbox{Before removing water absorption bands\label{fig:before removing water absorbtion bands}}{\includegraphics[height=2.3in,keepaspectratio]{./images/gaussian_window.eps}}\hspace{1em}%
-  \subcaptionbox{After removing water absorption bands\label{fig:after removing water absorbtion bands}}{\includegraphics[height=2.3in,keepaspectratio]{./images/gaussian_window_filtered_water_absorbtion_bands.eps}}
-   \caption{Impact of preprocessing filters on classification accuracy using polynomial kernel degree 3 on ATCOR data before and after applying pre-processing filters}
- \label{fig:before-after removing water absorbtion bands}
-\end{figure}
+%\begin{figure}[t]
+%  % Fixed length
+%  \centering
+%  \subcaptionbox{Before removing water absorption bands\label{fig:before removing water absorbtion bands}}{\includegraphics[height=2.3in,keepaspectratio]{./images/gaussian_window.eps}}\hspace{1em}%
+%  \subcaptionbox{After removing water absorption bands\label{fig:after removing water absorbtion bands}}{\includegraphics[height=2.3in,keepaspectratio]{./images/gaussian_window_filtered_water_absorbtion_bands.eps}}
+%   \caption{Impact of preprocessing filters on classification accuracy using polynomial kernel degree 3 on ATCOR data before and after applying pre-processing filters}
+% \label{fig:before-after removing water absorbtion bands}
+%\end{figure}
 
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[t]
+%\begin{figure}[t]
   % Fixed length
-  \centering
-  \subcaptionbox{FLAASH atmospheric correction\label{fig:atmospheric correction:flaash}}{\includegraphics[height=2.3in,keepaspectratio]{./images/atcor_flaash/gaussian_flaash.eps}}\hspace{1em}%
-  \subcaptionbox{ATCOR atmospheric correction\label{fig:atmospheric correction:atcor}}{\includegraphics[height=2.3in,keepaspectratio]{./images/atcor_flaash/gaussian_atcor.eps}}
-   \caption{Impact of atmospheric correction on classification accuracy}
- \label{fig:atmospheric correction}
-\end{figure}
+%  \centering
+%  \subcaptionbox{FLAASH atmospheric correction\label{fig:atmospheric correction:flaash}}{\includegraphics[height=2.3in,keepaspectratio]{./images/atcor_flaash/gaussian_flaash.eps}}\hspace{1em}%
+%  \subcaptionbox{ATCOR atmospheric correction\label{fig:atmospheric correction:atcor}}{\includegraphics[height=2.3in,keepaspectratio]{./images/atcor_flaash/gaussian_atcor.eps}}
+%   \caption{Impact of atmospheric correction on classification accuracy}
+% \label{fig:atmospheric correction}
+%\end{figure}
 
 Next, we look at the effect of atmospheric correction on prediction accuracy in Figure \ref{fig:atmospheric correction}. 
 As you can see in Figure \ref{fig:atmospheric correction:flaash}, FLAASH atmospherically corrected data yields 91\% of prediction accuracy while Figure \ref{fig:atmospheric correction:atcor} ATCOR results in more that 93.5\%. 
@@ -556,15 +611,15 @@ This is further asserted in Figure \ref{fig:robustness}, where even after taking
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[t]
+%\begin{figure}[t]
   % Fixed length
-  \centering
-  \subcaptionbox{Tuning polynomial order for SVM with polynomial kernel function\label{fig:parameter tuning:poly}}{\includegraphics[height=2.5in,keepaspectratio]{./images/atcor_flaash/poly_atcor_flaash.eps}}\hspace{1em}%
-  \subcaptionbox{Tuning $\sigma$ in SVM with RBF kernel function\label{fig:parameter tuning:RBF}}{\includegraphics[height=2.5in,keepaspectratio]{./images/atcor_flaash/rbf_atcor_flaash.eps}}
-   \caption{Parameter tuning for classification algorithms}
-       \label{fig:parameter tuning}
-
-\end{figure}
+%  \centering
+%  \subcaptionbox{Tuning polynomial order for SVM with polynomial kernel function\label{fig:parameter tuning:poly}}{\includegraphics[height=2.5in,keepaspectratio]{./images/atcor_flaash/poly_atcor_flaash.eps}}\hspace{1em}%
+%  \subcaptionbox{Tuning $\sigma$ in SVM with RBF kernel function\label{fig:parameter tuning:RBF}}{\includegraphics[height=2.5in,keepaspectratio]{./images/atcor_flaash/rbf_atcor_flaash.eps}}
+%   \caption{Parameter tuning for classification algorithms}
+%       \label{fig:parameter tuning}
+%
+%\end{figure}
 
 
 

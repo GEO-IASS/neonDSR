@@ -21,7 +21,7 @@ for i=1: size(F_reflectances, 1)
     F_reflectances(i,:) = scalePixel(F_reflectances(i,:));
 end
 
-figure, plot(setting.wavelength, F_reflectances'); title('Field Data - Original Form');
+figure, plot(setting.wavelength, F_reflectances'); title('FLAASH: Field Data - Original Form');
 set(gca,'XTick', 400:200:2500);
 xlabel('Wavelength (nm)'), ylabel('Reflectance');
 
@@ -44,11 +44,13 @@ xlabel('Wavelength (nm)'), ylabel('Reflectance');
 
 F_DEBUG = 1;
 F_POLYNOMIAL_DEGREE = 3;
+RBF_SIGMA = 10000;
+
 
 %%
 
-F_svm_results_canopy_gaussian = svmMultiClassKFold_canopy_based(F_species, F_rois, F_reflectances_rwab0, F_DEBUG, 'polynomial', F_POLYNOMIAL_DEGREE);
-disp(F_svm_results_canopy_gaussian);
+temp = svmMultiClassKFold_canopy_based(F_species, F_rois, F_reflectances_rwab0, F_DEBUG, 'polynomial', F_POLYNOMIAL_DEGREE);
+disp(temp);
 
 %%
 % Evaluate Gaussian filter size on accuracy
@@ -68,7 +70,7 @@ parfor i=1:numel(F_smoothing_windows)
         % make suresmoothing is applied on extracted data with the same level as desired
         %[specie_titles, F_reflectances] = extractPixels( envi, fieldPath );
         F_reflectances_g = gaussianSmoothing(F_reflectances_rwab0, F_smoothing_window_size);
-        F_svm_results_canopy_gaussian(i) = svmMultiClassKFold_canopy_based(F_species, F_rois, F_reflectances_g, F_DEBUG, 'polynomial', F_POLYNOMIAL_DEGREE);
+        F_svm_results_canopy_gaussian(i) = svmMultiClassKFold_canopy_based(F_species, F_rois, F_reflectances_g, F_DEBUG, 'rbf', RBF_SIGMA);
     catch me
         fprintf('image #%i failed training: %s\n',i,me.message)
     end
@@ -80,7 +82,7 @@ end
 figure;
 plot(F_smoothing_windows, F_svm_results_canopy_gaussian);
 xlabel('Gaussian window size'); ylabel('Accuracy (%)');
-title(sprintf('FLAASH: Effects of Gaussian Window Size on Classification Accuracy \n (canopy-based) - Polynimial Kernel Order 3'));
+title(sprintf('FLAASH: Effects of Gaussian Window Size on Classification Accuracy \n (canopy-based) - rbf 10000'));
 
 % ---------------------------------------------------------------------
 % Evaluate polynomial degree of svm kernel for accuracy
@@ -143,3 +145,120 @@ semilogx(F_rbf_sigma_values, F_svm_results_canopy_rbf);
 grid on
 xlabel('SVM Kernel - RBF (\sigma)'); ylabel('Accuracy (%)');
 title('FLAASH: Effects of RBF Kernel \sigma on SVM Classification Accuracy (canopy-based)');
+
+
+
+%% verify robustness: We achieve the same performance even in absense of cross-validation
+% and this demonstrates  the robustness of our classifier implementation
+% and data model.
+
+% Evaluate Gaussian filter size on accuracy
+rng(982451653); % large prime as seed for random generation
+
+count = 80;
+F_svm_results_canopy_gaussian13_23 = nan(count, 1);
+smoothing_windows_13_23 = zeros(count, 1);
+
+for i=1:count
+    try
+        i
+        smoothing_window_size =  rem(i,16);  % 5 runs per gaussian window
+        smoothing_windows_13_23(i) = smoothing_window_size;
+        
+        reflectances_g = gaussianSmoothing(reflectances_rwab0, smoothing_window_size);
+        F_svm_results_canopy_gaussian13_23(i) = svmMultiClass_canopy_based(species, rois, reflectances_g, DEBUG, 'rbf', RBF_SIGMA)
+    catch me
+        fprintf('image #%i failed training: %s\n',i,me.message)
+    end
+end
+figure;
+boxplot(F_svm_results_canopy_gaussian13_23, smoothing_windows_13_23);
+xlabel('Gaussian window size'); ylabel('Accuracy (%)');
+
+
+
+
+
+
+
+%%
+
+
+%%
+
+%%
+
+%%
+
+
+
+% Evaluate Gaussian filter size on accuracy after removing low NDVI NIR
+
+F_ndvi = toNDVI(F_reflectances);
+F_green_ndvi_reflectances = F_reflectances;
+for i=1:numel(F_ndvi)
+        if F_ndvi(i) < setting.NDVI_THRESHOLD
+            F_green_ndvi_reflectances(i, :)  = nan;
+        end
+        
+        if F_green_ndvi_reflectances(i,setting.NIR_INDEX) < setting.NIR_THRESHOLD
+            F_green_ndvi_reflectances(i, :)  = nan;
+        end
+    
+end         
+F_low_ndvi_indexes = ~any(~isnan(F_green_ndvi_reflectances), 2);
+
+F_green_ndvi_species = species;
+F_green_ndvi_rois = rois;
+F_green_ndvi_reflectances(F_low_ndvi_indexes,:)=[]; % from 1269 to 712
+F_green_ndvi_species(F_low_ndvi_indexes) = [];    %TODO grid search for parameters 
+F_green_ndvi_rois(F_low_ndvi_indexes) = [];
+
+
+
+F_nongreen_ndvi_reflectances = reflectances;
+F_nongreen_ndvi_reflectances(~F_low_ndvi_indexes,:)=[];
+
+
+
+
+
+
+
+
+
+
+
+% Evaluate Gaussian filter size on accuracy without removing water absorption bands
+
+rng(982451653); % large prime as seed for random generation
+
+%matlabpool(8)
+
+count = 16;
+F_svm_results_canopy_gaussian_before_removing_wab = nan(count, 1);
+smoothing_windows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+
+parfor i=1:numel(smoothing_windows)
+    try
+        i
+        smoothing_window_size = smoothing_windows(i);
+        % Extract ground pixels
+        % make suresmoothing is applied on extracted data with the same level as desired
+        %[specie_titles, reflectances] = extractPixels( envi, fieldPath );
+        reflectances_g = gaussianSmoothing(reflectances, smoothing_window_size);
+        F_svm_results_canopy_gaussian_after_removing_ndvi(i) = svmMultiClassKFold_canopy_based(species, rois, reflectances_g, DEBUG, 'rbf', RBF_SIGMA);
+    catch me
+        fprintf('image #%i failed training: %s\n',i,me.message)
+    end
+end
+%figure;
+%boxplot(svm_results_gaussian, smoothing_windows);
+%xlabel('Gaussian window size'); ylabel('Accuracy (%)');
+
+figure;
+plot(smoothing_windows, F_svm_results_canopy_gaussian_after_removing_ndvi);
+xlabel('Gaussian window size'); ylabel('Accuracy (%)');
+title(sprintf('FLAASH: Effects of Gaussian Window Size on Classification Accuracy \n (canopy-based) - rbf 10000 - before removing water abrosption bands'));
+
+
