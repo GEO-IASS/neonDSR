@@ -31,7 +31,10 @@ figure, plot(chopped_wavelength, reflectances_rwab0'); title('Field Data - Trunc
 set(gca,'XTick', 400:200:2500);
 xlabel('Wavelength (nm)'), ylabel('Reflectance');
 
-reflectances_g16 = gaussianSmoothing(reflectances, 16);
+reflectances_g8 = gaussianSmoothing(reflectances_rwab0, 8);
+
+
+reflectances_g16 = gaussianSmoothing(reflectances_rwab0, 16);
 figure, plot(reflectances_g16'); title('Field Data - Gaussian Smoothing 16');
 set(gca,'XTick', 400:200:2500);
 xlabel('Wavelength (nm)'), ylabel('Reflectance');
@@ -42,8 +45,7 @@ RBF_SIGMA = 10000;
 
 %%
 
-reflectances_g3 = gaussianSmoothing(reflectances, 3);
-temp = svmMultiClassKFold_canopy_based(species, rois, reflectances_rwab0, DEBUG, 'rbf', 10000);
+temp = svmMultiClassKFold_canopy_based(species, rois, reflectances_g8, DEBUG, 'rbf', 10000);
 disp(temp);
 
 %%
@@ -85,7 +87,7 @@ rng(982451653); % large prime as seed for random generation
 % Extract ground pixels
 %[specie_titles, reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
 
-polynomial_orders = [1 2 3 4 5 6 6 7 8];  % beyon this point it does not converge
+polynomial_orders = [1 2 3 4 5 6 7 8];  % beyon this point it does not converge
 count = numel(polynomial_orders);
 svm_results_canopy_poly = NaN(count, 1);
 reflectances_g2 = gaussianSmoothing(reflectances_rwab0, 2);

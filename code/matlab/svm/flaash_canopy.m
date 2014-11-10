@@ -48,8 +48,9 @@ RBF_SIGMA = 10000;
 
 
 %%
+F_reflectances_g4 = gaussianSmoothing(F_reflectances, 4);
 
-temp = svmMultiClassKFold_canopy_based(F_species, F_rois, F_reflectances_rwab0, F_DEBUG, 'polynomial', F_POLYNOMIAL_DEGREE);
+temp = svmMultiClassKFold_canopy_based(F_species, F_rois, F_reflectances_g4, F_DEBUG, 'rbf', RBF_SIGMA);
 disp(temp);
 
 %%
@@ -91,7 +92,7 @@ rng(982451653); % large prime as seed for random generation
 % Extract ground pixels
 %[specie_titles, F_reflectances] = extractPixels( envi, 4 ); % Gaussian window of size 4
 
-F_polynomial_orders = [1 2 3 4 5 6 6 7 8];  % beyon this point it does not converge
+F_polynomial_orders = [1 2 3 4 5 6 7 8];  % beyon this point it does not converge
 F_count = numel(F_polynomial_orders);
 F_svm_results_canopy_poly = NaN(F_count, 1);
 F_reflectances_g2 = gaussianSmoothing(F_reflectances_rwab0, 2);

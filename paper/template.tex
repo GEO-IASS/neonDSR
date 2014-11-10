@@ -128,20 +128,18 @@ Conservation, 349 Newins Ziegler Hall, Gainesville, Florida
 
 % Abstract (Do not use inserted blank lines, i.e. \\) 
 \abstract{Identifying savannah species at ecological scale is a key step in measuring biomass, carbon reserves, drought and invasive species spread predictions. 
-In this paper we perform classification and geo-mapping of tree species from hyperspectral imagery collected using AVIRIS airborne sensors both at pixel and canopy level. 
+In this paper we perform classification and geo-mapping of tree species from hyperspectral imagery collected using AVIRIS airborne sensors at pixel level. 
 We provide a thorough comparison of the effects of ATCOR and FLAASH atmospheric corrections in prediction accuracy. 
 We exploit Gaussian Filters to eliminate sensor measurements and calibration errors, to the best of our knowledge we are the first in employing Gaussian Filters for hyperspectral species classification. 
-This study classifies four common savannah tree species in Ordway-Swisher Biological Station in north-central Florida, USA. 
+This is a pilot study for NEON in Ordway-Swisher Biological Station in north-central Florida. 
 Among indexes we found that applying NDVI and NIR wavelength (734.1$ n m$) threshold filters do not play constructive roles in SVM model performance for species classification. 
 We observed that removal of water absorption bands to be most helpful.  
-Species classification was performed using variety of Support Vector Machine kernels where Polynomial Kernel outperformed others. 
-Our classification produces accurate predictions of 85\% 
-%$\pm 2\%$ (incuding the 25th and 75th percentiles)
- at \textit{pixel level} and 74\% at \textit{canopy level}. 
- This research was performed as a pilot study for the National Ecological Observatory Network-Airborne Observation Platform protocols.}
+Species classification was performed using variety of Support Vector Machine kernels where Radial Basis outperformed others. 
+Our classification produces accurate predictions of about 75\%. 
+}
 
 % Keywords: add 3 to 10 keywords
-\keyword{Species classification; Hyperspectral; High spatial and spectral resolution; Pixel-level classification; Support Vector Machines; Ordway-Swisher Biological Station;  National Ecological Observatory Network; Airborne Observation Platform protocols; NEON-AOP}
+\keyword{Species classification; Hyperspectral; High spatial and spectral resolution; Pixel-level classification; Support Vector Machines; Ordway-Swisher Biological Station;  National Ecological Observatory Network; Airborne Observation Platform protocols;} % NEON-AOP
 
 % The fields PACS, MSC, and JEL may be left empty or commented out if not applicable
 %\PACS{}
@@ -452,21 +450,11 @@ w(k)=\sum_j u(j)v(k-j+1)
 \subsection{Support Vector Machines}
 
 It is well known in literature that Support Vector Machines (SVM) outperforms other algorithms on species classification \cite{colgan2012mapping, baldeck2014landscape, cho2012mapping}. 
-Our focus is on the impact of atmospheric corrections (FLAASH vs ATCOR) both at pixel level and canopy level classification.
-We perform both canopy-based and pixel-based species classification using \textit{non-linear multi-class SVM} from two implementation perspectives. 
+Our focus is on the impact of atmospheric corrections (FLAASH vs ATCOR) at pixel level classification using \textit{non-linear multi-class SVM}. 
+We parametrize SVM with $k$-fold cross validation where $k=5$, which means for each model we perform classification 5 times where at each time a separate non-overlapping portion of ground data is specified for train and test purposes. 
+The ratio of train vs test is 4 to 1 from total samples.
+We 
 
-
-\begin{itemize}
-\item SVM with $\frac{2}{3}$ train, $\frac{1}{3}$ test with no-substitution sampling.
-\item SVM classification with $k$-fold cross validation where $k=10$. 
-This means we perform classification 10 times where at each time a separate non-overlapping portion of ground data is specified for train and test purposes. 
-The ratio of train vs test is 9 to 1 from total samples.
-\end{itemize}
-
-
-This setup asserts the utility of cross-validation and the robustness of our approach in classification. 
-By observing similar accuracies in cross validation runs and the $\frac{2}{3}$ to $\frac{1}{3}$ setup we observe that our training is robust in terms of selection of ground data and we do not have over-fitting or under-fitting in our classifier. 
-As the field data is ordered by ROI, in both of the scenarios we shuffle the data before each run to make sure, this issue will not bias the training process.
 
 Classifier non-linearity comes from taking the following non-linear functions as kernel for SVM: 
 
@@ -476,8 +464,10 @@ Classifier non-linearity comes from taking the following non-linear functions as
 \end{itemize}
 
 Regarding multi-class classification, we create $\binom{c}{2}$ classifiers where $c$ is the number of classes. 
+In this case $c=6$, hence we train $\binom{6}{2} = 15$ classifiers at each iteration of $k$-fold.
 We train all the classifiers and to decide on the class a given test case belongs to, we perform majority voting among classifiers to decide the class of each pixel. 
-
+We avoid aggregating canopy pixels classes to determine the class of the canopy as this process can be performed using heuristics such as majority of pixels or etc, which is irrelevant to the purpose of pixel-level classification.
+Furthermore, it might not be always feasible to assume that we always know the correct boundaries of a canopy in new data sets.
 
 
 
@@ -496,6 +486,8 @@ Test and train sets are canopy-aware, meaning that pixels of a single canopy is 
 A mixture of grid search and heuristic optimization determines various parameters for SVM kernels, but for brevity we only present 2D diagrams here as other parameters settings are out of scope of this project. 
 Specifically we set a cost of $C = \infty$ for misclassification, meaning that we have little to zero tolerance for improperly classified samples.
 
+
+
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
 %\begin{figure}[tp]
 %  % Fixed length
@@ -505,37 +497,6 @@ Specifically we set a cost of $C = \infty$ for misclassification, meaning that w
 % \label{fig:lidar}
 %\end{figure}
 
-
-% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[t]
-  % Fixed length
-  \centering
-  \subcaptionbox{Before removing water absorption bands\label{fig:before removing wab}}{\includegraphics[height=2.5in,keepaspectratio]{./images/before-removing-wab.eps}}
-  \subcaptionbox{After removing water absorption bands\label{fig:after removing wab}}{\includegraphics[height=2.5in,keepaspectratio]{./images/gaussian_window.eps}}\hspace{1em}%
-   % \subcaptionbox{After removing low NDVI NIR pixels\label{fig:after removing NDVI NIR}}{\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
-
-   \caption{Impact of Gaussian Window on Prediction Accuracy}
-       \label{fig:water absorption bands}
-\end{figure}
-
-\begin{figure}[t]
-  % Fixed length
-  \centering
-    {\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
-
-   \caption{Impact of Removing low NDVI and NIR pixels\label{fig:after removing NDVI NIR}}
-       \label{fig:parameter tuning}
-\end{figure}
-
-% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
-\begin{figure}[t]
-  % Fixed length
-  \centering
-  \subcaptionbox{Tuning polynomial order for SVM with polynomial kernel function\label{fig:parameter tuning:poly}}{\includegraphics[height=2.5in,keepaspectratio]{./images/poly.eps}}\hspace{1em}%
-  \subcaptionbox{Tuning $\sigma$ in SVM with RBF kernel function\label{fig:parameter tuning:RBF}}{\includegraphics[height=2.5in,keepaspectratio]{./images/rbf.eps}}
-   \caption{Parameter tuning for classification algorithms}
-       \label{fig:parameter tuning}
-\end{figure}
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
@@ -558,14 +519,30 @@ Specifically we set a cost of $C = \infty$ for misclassification, meaning that w
 
 % outlier detection via one class svm for future paper.
 
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[b!] %bthp
+  % Fixed length
+  \centering
+  \subcaptionbox{Before removing water absorption bands\label{fig:before removing wab}}{\includegraphics[height=2.5in,keepaspectratio]{./images/before-removing-wab.eps}}
+  \subcaptionbox{After removing water absorption bands\label{fig:after removing wab}}{\includegraphics[height=2.5in,keepaspectratio]{./images/gaussian_window.eps}}\hspace{1em}%
+   % \subcaptionbox{After removing low NDVI NIR pixels\label{fig:after removing NDVI NIR}}{\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
+
+   \caption{Impact of Gaussian Window on Prediction Accuracy}
+       \label{fig:water absorption bands}
+\end{figure}
+
+
 In Figure \ref{fig:water absorption bands} we show how removing water absorption bands helps us improve prediction accuracy. 
 Before removing these bands (Figure \ref{fig:before removing wab}) prediction accuracy starts at about 66\% and rises to about 71\% as we increase Gaussian window size (about 5\% performance improvement). 
 There is a positive trend across different window sizes which means we can expect better accuracy the bigger the window size gets. 
-This comes from the fact that water absorption bands add to randomness and as we increase window size this randomness is dissolved to the majority of neighbors and has less and less impact as window size increases. 
-After removing water absorption bands (Figure \ref{fig:after removing water absorbtion bands}), prediction accuracy starts at 93.5\% and rises to about 94.5\% which is minimal change but on average you can see that applying a Gaussian filter increases accuracy by small margins (maximum 1\%). 
+This stems from the fact that water absorption bands add to randomness and as we increase window size this randomness is dissolved to the majority of neighbors and would have less and less impact as window size increases. 
+After removing water absorption bands (Figure \ref{fig:after removing wab}) prediction accuracy starts at 74\% and rises to about 76.5\% at a window size of 8. 
+Beyond that there is no significant change in accuracy.
+%which is minimal change but on average you can see that applying a Gaussian filter increases accuracy by small margins (maximum 1\%). 
 As window size increases you can see that there is no predictable impact of Gaussian smoothing in accuracy; 
-sometimes it increases and sometimes it decreases accuracy as window size increases without any predictable behavior. 
-This is due to the fact that all the currently available data has meaning (not noisy) and increasing window size beyond certain point just takes data away from their original meaning which can either help or harm accuracy in unpredictable ways. 
+This is due to the fact that all the currently available data signals has soem level of inherent entropy (less noisy) and increasing window size beyond certain point just takes data away from their original meaning which can either help or harm accuracy in unpredictable ways. 
+
+
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
@@ -590,26 +567,68 @@ This is due to the fact that all the currently available data has meaning (not n
 % \label{fig:atmospheric correction}
 %\end{figure}
 
-Next, we look at the effect of atmospheric correction on prediction accuracy in Figure \ref{fig:atmospheric correction}. 
-As you can see in Figure \ref{fig:atmospheric correction:flaash}, FLAASH atmospherically corrected data yields 91\% of prediction accuracy while Figure \ref{fig:atmospheric correction:atcor} ATCOR results in more that 93.5\%. 
-We observe the same behavior across Gaussian smoothing widths in both corrections. 
-Similar behavior is observed as we analyze different parameters for the classification algorithms. 
-As you can see in Figure \ref{fig:parameter tuning} in the high regions of the accuracy axis, ATCOR outperforms FLAASH with a good margin. 
-In Figure \ref{fig:parameter tuning:poly} at polynomial degree zero we have the maximum accuracy of prediction where ATCOR is ahead by 5\%, although at degree one FLAASH improves but again we see the same performance for degrees two and three. 
-In Figure \ref{fig:parameter tuning:RBF} there is dominance for ATCOR data across a wide regions of $\sigma$ in RBF function kernel.
-
-On comparing the kernel type for SVM, we see prediction accuracy of 98.26\% for polynomial kernel function, and for RBF we have 93.48\%. 
-According to the confusion matrix in Table \ref{table:confusion matrix}. 
-In RBF, two \textit{Pine (other)} pixels are confused with Longleaf Pine in RBF kernel, and one Longleaf Pine confused with Turkey Oak. 
-On the other hand, Turkey Oak is confused to \textit{Pine (other)} in Polynomial kernel.
+Next, we look at the impact of removing low NDVI-NIR pixels from dataset. As you can see in Figure \ref{fig:after removing NDVI NIR} there is a general degradation of performance from the previous scenairo that we used the whole dataset. 
+In FLASSH dataset we are at about 70\% and ATCOR yields 66\% accuracy.
+This is due to the fact that pixel size is large ($3m$) and canopies are large as well. 
+According to Table \ref{table:field data}, canopy sizes are in the range of $[6,107]$ pixels. 
+This generous marking of canopies includes areas with little green-ness, shaddows, branches and etc (low NDVI and low NIR values). 
+But you should note that due to the mixing nature of reflectance values, even low NDVI/NIR pixels of a continous canopy still contains signals from the underlying species,
+Which might not be as green.
+Here we can see that including low NDVI/NIR pixels of a continous canopy actually helps the performance of the classification model with an impact of about 4\%.
 
 
+\begin{figure}[tp]
+  % Fixed length
+  \centering
+    {\includegraphics[height=2.5in,keepaspectratio]{./images/after-removing-ndvi-nir.eps}}\hspace{1em}%
+
+   \caption{Impact of Removing low NDVI and NIR pixels}
+       \label{fig:after removing NDVI NIR}
+\end{figure}
+
+
+Finally, we look at the effect of atmospheric correction on prediction accuracy vs classification model parameters.
+$C, \sigma, P, MaxIter$ and \textit{optimization method} are the knobs of SVM that we tune in a mixture of grid and heuristic search.
+$C$ stands for cost or penalty of misclassification against simplicity of the decision surface, $\sigma$ (or also known as $\gamma$ in literature) defines how far the influence of a single training example reaches, with low values meaning 'far' and high values meaning 'close' in RBF function.
+$P$ is the polinomial degree for polynomial function as kernel. $MaxIter$ is the maximum number of iterations the optimization function is supposed to run. 
+and \textit{optimization method} defines what optimization method we select. 
+For parameters except $\sigma$ and $P$ we set $C=+\infty$, $ MaxIter=10,000$ and \textit{optimization method} to quadratic programming. 
+In what follows we evaluate the impact of $P$ and $\sigma$ respectively as demonstrated in Figure \ref{fig:parameter tuning}.
+ 
+Figure \ref{fig:parameter tuning:poly} demonstrates the impact of polynomial degree $P$ on prediction accuracy using a polynomial kernel in SVM. 
+FLAASH atmospherically corrected data yields 73.5\% of accuracy while ATCOR results in 69.8\%.
+The simpler the polinomial, the better the performance; with more complicated polynomial we get a high bias classification model which performs poorly when evaluated on test data.
+For FLAASH atmospheric correction with $P \geq 3$ the optimization function does not reach cnvergence in the number of $MaxIter$. 
+On the other hand, ATCOR data performs as predicted, the data seems to be showing a linear separability which as the kernel becomes more complex shows signs of overfitting as FLAASH.
+Accuracy gets as low as 10.8\% and 11.3\% with polinomila degrees of 7 and 8.
+
+The Radial Basis kernel has better performance yields than polynomial.
+As shown in Figure \ref{fig:parameter tuning:RBF}, with a peak at 75.3\% we achieve the best results using FLAASH data while ATCOR comes close at 74.9\%.
+RBF does not show good performance at either too low or too high $\sigma$ values.
+$\sigma$ is the inverse of the width of the RBF kernel (roughly defining the area of influence of a support vector); 
+in other terms, it defines how much influence a single training example has.
+The larger $\sigma$ is, the closer other examples must be to be affected.
+As RBF takes data to a higher dimentionality, on what $\sigma$ provides:
+A small $\sigma$ gives you a pointed bump in the higher dimensions, a large gamma gives you a softer, broader bump.
+So neither extreme shows a good fit and a middle point of $\sigma=10,000$ provides best results.
+On the negative side, FLAASH begins with an accuracy of 0\% and ATCOR at 19.9\%, but they quickly get to a stable region close by to each other while FLAASH demonstrates superior performance in most of the cases.
+There is a good range of $\sigma$ values ($[10, 10000]$) where we reach a somehow plain in prediction accuracy which shows a more robust performance than polynomia. 
+
+% http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
+\begin{figure}[t]
+  % Fixed length
+  \centering
+  \subcaptionbox{Tuning polynomial order for SVM with polynomial kernel function\label{fig:parameter tuning:poly}}{\includegraphics[height=2.5in,keepaspectratio]{./images/poly.eps}}\hspace{1em}%
+  \subcaptionbox{Tuning $\sigma$ in SVM with RBF kernel function\label{fig:parameter tuning:RBF}}{\includegraphics[height=2.5in,keepaspectratio]{./images/rbf.eps}}
+   \caption{Parameter tuning for classification algorithms}
+       \label{fig:parameter tuning}
+\end{figure}
 
 
 
-On robustness of our classification scheme from the Figure \ref{fig:atmospheric correction} and Figure \ref{fig:parameter tuning} you can see that in the box plot, the 25th and 75th percentiles are less than 4\% long in the accuracy axis. 
-This means that our classification is always within $\pm 2$ of the median, and that we are stable in terms of visited ground data. 
-This is further asserted in Figure \ref{fig:robustness}, where even after taking $\frac{2}{3}$ for training and $\frac{1}{3}$ for test, we received similar results as the k-fold scenario with 4\% as the length of 25th-75th percentile. 
+%On robustness of our classification scheme from the Figure \ref{fig:atmospheric correction} and Figure \ref{fig:parameter tuning} you can see that in the box plot, the 25th and 75th percentiles are less than 4\% long in the accuracy axis. 
+%This means that our classification is always within $\pm 2$ of the median, and that we are stable in terms of visited ground data. 
+%This is further asserted in Figure \ref{fig:robustness}, where even after taking $\frac{2}{3}$ for training and $\frac{1}{3}$ for test, we received similar results as the k-fold scenario with 4\% as the length of 25th-75th percentile. 
 
 
 
@@ -636,19 +655,36 @@ This is further asserted in Figure \ref{fig:robustness}, where even after taking
 \begin{table}[t]
 \begin{center}
 
-\begin{tabular}{llllll}
-                                       &                       & \multicolumn{4}{c}{Predicted Class}                                                                          \\ \cline{3-6} 
-                                       & \diag{.1em}{2.5cm}{Poly}{RBF} & \multicolumn{1}{c|}{Live Oak} & \multicolumn{1}{c|}{Turkey Oak} & \multicolumn{1}{c|}{Longleaf Pine} & \multicolumn{1}{c|}{Pine (other)} \\ \cline{2-6} 
-\multicolumn{1}{l|}{\multirow{3}{*}{\begin{sideways}Known Class\end{sideways}}} & \multicolumn{1}{l|}{Live Oak}      & \diag{.1em}{2.4cm}{9}{9} & \diag{.1em}{2.4cm}{0}{0} & \diag{.1em}{2.4cm}{0}{0} & \diag{.1em}{2.4cm}{0}{0} \\ \cline{2-6} 
-\multicolumn{1}{l|}{}                                                           & \multicolumn{1}{l|}{Turkey Oak}    & \diag{.1em}{2.4cm}{0}{0} & \diag{.1em}{2.4cm}{10}{13} & \diag{.1em}{2.4cm}{0}{0} & \diag{.1em}{2.4cm}{3}{0} \\ \cline{2-6} 
-\multicolumn{1}{l|}{}                                                           & \multicolumn{1}{l|}{Longleaf Pine} & \diag{.1em}{2.4cm}{0}{0} & \diag{.1em}{2.4cm}{0}{1} & \diag{.1em}{2.4cm}{15}{14} & \diag{.1em}{2.4cm}{0}{0} \\ \cline{2-6} 
-\multicolumn{1}{l|}{}                                                           & \multicolumn{1}{l|}{Pine (other)}  & \diag{.1em}{2.4cm}{0}{0} & \diag{.1em}{2.4cm}{0}{0} & \diag{.1em}{2.4cm}{0}{2} & \diag{.1em}{2.4cm}{9}{7} \\ \cline{2-6} 
+\scalebox{0.85}{
+
+
+\begin{tabular}{lllllllll|}
+& & \multicolumn{6}{c}{Predicted Class}                                                                         \\  \cline{3-9}  
+                                                                                &                                         & \multicolumn{1}{|c|}{Pine (other)} & \multicolumn{1}{c|}{Longleaf Pine} & \multicolumn{1}{c|}{Turkey Oak} & \multicolumn{1}{c|}{Live Oak} & \multicolumn{1}{c|}{Oak (other)} & \multicolumn{1}{c|}{Laurel Oak} & $\mathbf{\sum}$\\  \cline{2-9} 
+\multicolumn{1}{c|}{\multirow{7}{*}{\begin{sideways}Known Class\end{sideways}}} & \multicolumn{1}{c|}{Pine (other)}       & \multicolumn{1}{c|}{10}   & \multicolumn{1}{c|}{10} & \multicolumn{1}{c|}{3}  & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{23} \\ \cline{2-9}  
+\multicolumn{1}{c|}{}                                                           & \multicolumn{1}{c|}{Longleaf Pine}      & \multicolumn{1}{c|}{20}   & \multicolumn{1}{c|}{36} & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{4} & \multicolumn{1}{c|}{60}\\ \cline{2-9}  
+\multicolumn{1}{c|}{}                                                           & \multicolumn{1}{c|}{Turkey Oak}         & \multicolumn{1}{c|}{1}    & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{62} & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{63}\\ \cline{2-9} 
+\multicolumn{1}{c|}{}                                                           & \multicolumn{1}{c|}{Live Oak}           & \multicolumn{1}{c|}{0}    & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{44} & \multicolumn{1}{c|}{4} & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{48}\\ \cline{2-9} 
+\multicolumn{1}{c|}{}                                                           & \multicolumn{1}{c|}{Oak (other)}        & \multicolumn{1}{c|}{0}    & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{1} & \multicolumn{1}{c|}{9} & \multicolumn{1}{c|}{10}\\ \cline{2-9} 
+\multicolumn{1}{c|}{}                                                           & \multicolumn{1}{c|}{Laurel Oak}         & \multicolumn{1}{c|}{1}    & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0}  & \multicolumn{1}{c|}{0} & \multicolumn{1}{c|}{5} &  \multicolumn{1}{c|}{6}\\ \cline{2-9} 
+\multicolumn{1}{c|}{}                                                           & \multicolumn{1}{c|}{$\mathbf{\sum}$}    & \multicolumn{1}{c|}{32}    & \multicolumn{1}{c|}{46}  & \multicolumn{1}{c|}{65}  & \multicolumn{1}{c|}{44}  & \multicolumn{1}{c|}{5} & \multicolumn{1}{c|}{18} &  \multicolumn{1}{c|}{210}\\ \cline{2-9} 
+
+
 \end{tabular}
- \caption{Classification Confusion Matrix using Polynomial function kernel and RBF function kernel}
+}
+ \caption{Demo of confusion matrix using RBF kernel function with accuracy 75.2\% near peak}
     \label{table:confusion matrix}\end{center}
+    
 \end{table}
 
-
+Table \ref{table:confusion matrix} demonstrates the confusion matrix of the proposed clasification model at a near peak setup (75.2\%). 
+You can see that the majority of missclassifications are between Pine (other) class and Longleaf Pine. 
+Similar misclassification can be found between Oak (other) and other types of Oak. 
+This is due ot the fact that this class of Oak or Pines is a mixture of different types of Oak or Pine repectively which might include Longleaf Pine or Laurel Oak and such conformance migt be unavoidable. 
+The main advantage of this approach is that there is mere misclassification between oak vs Pine category.
+The oak category is rarely misclassified as pine, but pines have been mistaken with Turkey Oak and Laurel Oak. 
+One should also note that different species of oak are not misclassified to each other. 
+Laurel Oak, Turkey Oak and Live Oak are not mistaken for each other, this shows a good intra broad-leaf species classification.  
 
 
 % http://tex.stackexchange.com/questions/42968/reduction-of-space-between-two-sub-figures
@@ -722,11 +758,11 @@ This is further asserted in Figure \ref{fig:robustness}, where even after taking
 \section{Conclusions}
 
 Identifying species using remote sensing technologies such as hyperspectral and LiDAR sensors has a critical utility in studying global warming, bio-mass estimation, carbon preserves, invasive species identification and etc. 
-NEON is about to begin a thirty-year ecological monitoring project at continental scale where one aspect of which is remote sensing. 
-In this paper we perform species classification using SVM over AVIRIS hyperspectral data available via NEON portal from Ordway Swisher Biological Station in north-central Florida.
- We evaluate the effects of ATCOR and FLAASH atmospheric corrections and Gaussian Filters on prediction accuracy. 
- We found predictors such as NDVI, NIR and water apsorbtion bands to be very helpful in enhancing prediction accuracy. 
- Our results show we can classify tree species with average 98.26\% $\pm 2\%$ accuracy (incuding the 25th and 75th percentiles) using Support Vector Machines with Polynomial function kernel of first degree. We statistically verify robustness of our classification scheme.
+In this paper we perform species classification using SVM over AVIRIS hyperspectral data available via NEON from Ordway Swisher Biological Station in north-central Florida.
+Our focus is on comparing FLAASH and ATCOR atmospheric corrections while we analize pre-processing techniques both at signal level (Gaussian Filter, Water Absorption Bands Filter) and pixel level (NDVI and NIR Filters).
+We found Gaussian Filter and Water Absorption Bands Filter to be helpful in prediction model performance but NDVI and NIR degraded the performance when applied to continous canopies of similar species. 
+In all these scenarios we compared FLAASH and ATCOR atmospheric corrections and noted that FLAASH data supersedes ATCOR in majority of the scenarios.
+Our model performed robust in intra broad-leaf classification with minor inter conifer/broad-leaf misclassifications.
 
 %\acknowledgements{Acknowledgements}
 
