@@ -12,6 +12,8 @@ http://www.nsf.gov/news/special_reports/science_nation/neon.jsp
 For compelete documentation visit https://sites.google.com/site/neondsrwiki/home
 
 
+http://www.rese.ch/products/atcor/compare.html
+
 Correction Features	  ATCOR	  FLAASH
 variable visibility 	yes 	yes 
 aerosol type detection 	yes 	no 
