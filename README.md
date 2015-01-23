@@ -1,10 +1,12 @@
 neon
 ====
-
-Lidar Matlab code (UCSB)[http://geog.ucsb.edu/~malonzo/matlab_code.html]
 Big data analytics on Neon dataset on hyperspectral images.
 
-http://www.nsf.gov/news/special_reports/science_nation/neon.jsp
+
+
+Lidar Matlab code [UCSB](http://geog.ucsb.edu/~malonzo/matlab_code.html)
+
+
 
 
 
@@ -13,7 +15,7 @@ http://www.nsf.gov/news/special_reports/science_nation/neon.jsp
 For compelete documentation visit https://sites.google.com/site/neondsrwiki/home
 
 
-http://www.rese.ch/products/atcor/compare.html
+Comparison of ATCOR vs FLAASH [here](http://www.rese.ch/products/atcor/compare.html)
 
 Correction Features	  ATCOR	  FLAASH
 variable visibility 	yes 	yes 
