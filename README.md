@@ -8,6 +8,8 @@ Lidar Matlab code [UCSB](http://geog.ucsb.edu/~malonzo/matlab_code.html)
 
 
 
+Linux alternatives to visualize and analyze LiDAR datasets [Link](http://gis.stackexchange.com/questions/63077/linux-alternatives-to-visualize-and-analyze-lidar-datasets)
+
 
 
 
