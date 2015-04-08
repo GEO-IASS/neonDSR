@@ -1,0 +1,317 @@
+\chapter{MATH, FIGURES, AND TABLES}
+\section{Text Flow: Problems and Solutions}
+Let's face it. LaTeX is used because you can type very complicated formulas and equations without ever touching a mouse! And in most situations, where the spacing requirements are not as demanding as the UF Theses and Dissertation requirements, LaTeX's  love of white space would not pose a problem.
+
+%\begin{algorithm}
+%\caption{Euclid’s algorithm}\label{euclid}
+%\begin{algorithmic}[1]
+%\Procedure{Euclid}{$a,b$}\Comment{The g.c.d. of a and b}
+%\State $r\gets a\bmod b$
+%\While{$r\not=0$}\Comment{We have the answer if r is 0}
+%\State $a\gets b$
+%\State $b\gets r$
+%\State $r\gets a\bmod b$
+%\EndWhile\label{euclidendwhile}
+%\State \textbf{return} $b$\Comment{The gcd is b}
+%\EndProcedure
+%\end{algorithmic}
+%\end{algorithm}
+
+However, you ARE producing this document for the UF Graduate School and their spacing requirements ARE quite demanding. Pages, other than the last page of a chapter, are supposed to be full. LaTeX has a tendency to break a page early rather than split a display element (equation array, align, theorem, table, figure, etc.). To help in this matter there are three lines in the preamble of the ufsampleETD.tex file. These are:
+\begin{verbatim}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+\end{verbatim}
+
+However, even with these commands LaTeX likes to break pages rather than equation arrays, theorems, postulates, proofs, etc. If you find that these elements are causing pages to break badly you can un-comment the command \verb=\allowdisplaybreaks= and with any luck, that will cure the problem. If not, it may be necessary to break the displays manually which is always the last resort and only done just before final submission.
+\section{Equation Notes}
+Again, one of the major reasons for using LaTeX in the first place is how it handles the mathematics displays. However, there are a few details you need to be aware of:
+\begin{itemize}
+
+    \item If you place an extra carriage return before or after an equation LaTeX will place some extra ``paragraph'' spacing around the equation. Try to avoid this.
+    \item If you want to explain your notation in the equation with a list of statements such as; ``where $Z = \gamma$,'' do so in paragraph form rather than a vertical list.
+    \item  While every equation does not have to be labeled, determining which items should and should not be labeled can get tricky. Since LaTeX generates the labels automatically it's usually best to let it label as it sees fit. In equation arrays that leads to a final result it's certainly acceptable to suppress the labels on preliminary steps by using the \verb+\nonumber+ command as long as the last line of the procedure has a label.
+
+\end{itemize}
+
+\section{Tables, Figures, and Subfigures}
+
+\subsection{Tables}
+
+Typically, the standard LaTeX table environment is used. Table captions need to be \underline{above} the table, and typically there should not be any vertical lines in the table. Formatting tables in a landscape page is explained in section ~\ref{landscape}.
+
+\begin{table}[htbp]
+    \caption{A sample Table}\label{first}
+    \begin{tabularx}{6.5in}{XXX}
+      \hline
+      First & Second & Third \\
+      \hline
+      12 & 45 & 26 \\
+      17 & 32 & 93 \\
+      text & 51 & can be there too. \\	
+      \epsfig{figure=images/cat.eps, scale=1} & 28 & Figures too - a cat. \\
+      \begin{turn}{0}\epsfig{figure=images/mouse.eps, scale=0.25}\end{turn} & 000 & and a mouse! \\
+      \hline
+    \end{tabularx}
+\end{table}
+
+
+\subsection{Figures}
+You can either use \texttt{$\backslash$includegraphics} or {$\backslash$epsfig} commands to include your figures. The appropriate packages are included in the packages.tex file. For additional precaution, a copy of \texttt{rotating.sty} is included in the template. Please do not delete this file. Note that the caption for the figures is \underline{below} the figure. The figures in the table above was inserted with $\backslash$epsfig. Below is a sample file with \texttt{$\backslash$includegraphics}:
+
+\begin{figure}[htbp]
+  \centering
+    \includegraphics[width=3in, scale=0.5]{images/LaTeX2e_logo.eps}
+    \caption[\LaTeX 2\ensuremath{\epsilon} logo(resized for no reason)]{\LaTeX 2\ensuremath{\epsilon} logo, resized for no reason. This caption is being extended in order to test that it has the correct indentation.}
+\end{figure}
+
+\subsection{Subfigures}
+
+In addition to the standard \LaTeX options for scaling and rotation, the \texttt{rotating} package has additional options for turning and rotating both text and figures/tables. Please look at the documentation of this package for further details.
+
+For subfigures, please use \red{\texttt{subfigure}} command (see \url{chapter4.tex} for code). We have
+made some slight modifications to the subfigure.sty file to match the Editorial Office specification so make sure it is in the same folder as the ufsampleETD.tex file when you compile your document.
+
+\begin{figure}[htbp]
+  \begin{center}
+    \centering
+    \mbox{
+      \subfigure[]{\epsfig{file=images/mouse.eps, scale=0.6}} \quad
+      \subfigure[]{\begin{turn}{20}\epsfig{file=images/mouse.eps, scale=0.6}\end{turn}} \quad
+     }
+    \mbox{
+      \subfigure[]{\begin{turn}{-20}\epsfig{file=images/cat.eps, scale=3}\end{turn}} \quad
+      \subfigure[]{\begin{turn}{-10}\epsfig{file=images/mouse.eps, scale=0.6}\end{turn}} \quad
+      }
+    \caption[Tom and Jerry]{Tom and Jerries? A) Mouse 1 B) mouse 2 C) Hungry Cat D) mouse 3}
+    \label{mice}
+  \end{center}
+\end{figure}
+
+There is some fancy formatting possible with \texttt{subfigure}. For instance, it is possible (but not suggested) to list the captions of each subfigure in the List of Figures in the table of contents. Please look at the documentation of \texttt{subfigure} package for details.
+
+
+\section{Formatting in Landscape Mode}\label{landscape}
+
+There are many ways to format figures and tables in a landscape. Depending on what you want to use, you can use one of the following enviroments:
+
+\begin{itemize}
+\singlespacing
+\item The \texttt{landscape} environment \vspace{-12pt}
+\item The \texttt{sidewaysfigure} environment \vspace{-12pt}
+\item The \texttt{sidewaystable} environment
+\end{itemize}
+\doublespacing
+
+%%%  \addtocontents{toc}{\protect\pagebreak}% This command starts a new page in the TOC
+%%%%%%%%%%%% it allowa you to force a subheading to the next page if necessary
+
+\subsection{The \texttt{landscape} environment}
+The \texttt{landscape} environment starts by default a new page, because it changes the two lengths $\backslash$paperwidth and $\backslash$paperheight. Typically you will use the {\texttt{landscape} if you want to have an \underline{\textbf{entire} section or a subsection} in landscape mode (i.e. both text and figures/tables). This should not be used for a just single figure or a table (Use \blue{\texttt{sidewaysfigure}} and  \blue{\texttt{sidewaystable}} described in sub-section \ref{side} instead). In the chapter4.tex file we demonstrate how to force a page break in the Table of Contents. Something that often needs to be done but is not documented in most LaTeX tutorials.
+
+The following sub-subsection is included in an environment like:
+
+\singlespacing
+\begin{verbatim}
+\begin{landscape}
+\subsubsection{Sample Landscape Page}\label{ps}
+Note that even though we are in landscape mode,
+only the text part is in landscape.
+The header and footer (for example the page number) are still
+in portrait mode. This $\backslash$begin$\{$landscape$\}$
+environment is part of the lscape package. Look at the documentation
+of this package for further details and options.
+\end{landscape}
+\end{verbatim}
+\doublespacing
+
+The $\backslash$begin$\{$landscape$\}$ immediately starts the new page, a lot of vertical whitespace, like the one on this page, maybe possible.
+
+The subsubsection command also represents a common error in dissertation/thesis construction. There is only one heading at that level. Whenever a section is divided, it must be divided into two segments - otherwise there is no reason to introduce another category.
+
+\begin{landscape}
+\subsubsection{Sample Landscape Page}\label{ps}
+It's Important to remember that no headings or paragraph text should actually be on a landscaped page. Only the Figure or Table and their captions. In addition, the landscaped page should be rotated in the pdf so the text on the landscaped page is readable without turning your head sideways. Note that even though we are in landscape mode, only the text part is in landscape, the header and footer (that implement, for example the page number) are still in portrait mode. This  \texttt{landscape} environment is part of the  \texttt{lscape} package. Look at the documentation of this package for more details and options.
+\end{landscape}
+
+
+\subsection{\texttt{sidewaysfigure} and \texttt{sidewaystable} Environments}
+\label{side}
+With large figures and tables with lots of columns, it is sometimes necessary to rotate them to landscape mode. The \texttt{sidewaysfigure} and the \texttt{sidewaystable} environments from the \texttt{rotating} package can be used for this. Sample code for these two environments are give below:
+
+\singlespacing
+\noindent \underline{A Landscape Figure}:
+\begin{verbatim}
+\begin{sidewaysfigure}
+\centerline{\epsfig{figure=images/figurename.eps, scale=0.5}}
+\caption{Your Caption for the figue}
+\end{sidewaysfigure}
+
+Note: Change value of scale to change your figure size.
+      1 is 100%, i.e. original size. You can go beyond 1
+      if your file is in a scalable vector graphics format
+      like .eps
+\end{verbatim}
+\doublespacing
+
+\singlespacing
+\noindent \underline{A Landscape Table}:
+\begin{verbatim}
+\begin{sidewaystable}
+\centering %optional
+\begin{tabular}{rl}
+\end{tabular}
+\caption{Your Caption for the table}
+\end{sidewaystable}
+\end{verbatim}
+\doublespacing
+
+The above code will produce a figure/table rotated by 90$^\circ$ in the counter-clockwise direction, and will also rotate the caption accordingly as per the Editorial Office requirements. Both these environments are ``intelligent'' in the sense that they will put your figure/table in a new landscape page and will \textbf{NOT} leave empty whitespace before the figure like the \texttt{landscape} environment. The following 'Lorem Ipsum' paragraphs demonstrate this.
+
+% Example of a landscape page setup, this command along with the lscape package effectively rotates all the input
+% the tags 90 degrees CCW, but keeps the page orientation
+
+\begin{sidewaysfigure}
+\centerline{\epsfig{figure=images/theworld.eps, scale=0.75}} %change value of scale (between 0 to 1) to change your figure size. 1 is 100%, ie original size.
+\caption[A landscape figure]{You can turn the world on its heels.}
+\end{sidewaysfigure}
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer
+ante. Ut tincidunt ultrices turpis. Phasellus nonummy pulvinar sem.
+Donec sem nisl, rhoncus eu, porttitor in, blandit nec, arcu.
+Vestibulum tincidunt ante. Pellentesque quis massa. Proin vehicula
+feugiat turpis. Aenean at tellus sed justo ornare dictum. Nullam sit
+amet libero nec lorem sodales cursus. Donec tortor nulla, convallis
+in, suscipit in, posuere at, nunc.
+
+Aliquam tortor risus, ultricies sed, eleifend in, congue quis,
+justo. Pellentesque egestas orci non urna. Phasellus ligula. Ut
+nonummy. Suspendisse potenti. Donec posuere justo quis eros. In
+erat. Nunc aliquam metus sed dui. Fusce justo felis, posuere a,
+elementum non, semper eget, mi. Morbi iaculis lorem at sem.
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+posuere cubilia Curae; Cum sociis natoque penatibus et magnis dis
+parturient montes, nascetur ridiculus mus. Phasellus velit. Maecenas
+libero tortor, pharetra id, dictum ac, lacinia vestibulum, urna.
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In libero
+nunc, fringilla a, condimentum lobortis, consequat eget, quam.
+Phasellus eget nisi. Maecenas risus ligula, euismod a, tristique
+non, sagittis eu, quam. Donec metus nunc, varius ut, lacinia sit
+amet, pellentesque ac, mauris. Nulla mollis aliquam metus.
+
+\begin{sidewaystable}
+\centering
+    \caption{The Same Table as ~\ref{first}, but in landscape mode}\label{second}
+    \begin{tabular}{rl}
+      \hline
+      First & Second \\
+      \hline
+      12 & 26 \\
+      17 & 93 \\
+      text & can be there too. \\	
+      \epsfig{figure=images/cat.eps, scale=1} & Figures too - a cat. \\
+      \begin{turn}{0}\epsfig{figure=images/mouse.eps, scale=0.25}\end{turn} & and a mouse! \\
+      \hline
+    \end{tabular}
+\end{sidewaystable}
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer
+ante. Ut tincidunt ultrices turpis. Phasellus nonummy pulvinar sem.
+Donec sem nisl, rhoncus eu, porttitor in, blandit nec, arcu.
+Vestibulum tincidunt ante. Pellentesque quis massa. Proin vehicula
+feugiat turpis. Aenean at tellus sed justo ornare dictum. Nullam sit
+amet libero nec lorem sodales cursus. Donec tortor nulla, convallis
+in, suscipit in, posuere at, nunc.
+%\begin{definition}
+%\begin{algorithm}
+%  \caption{Counting mismatches between two packed DNA strings
+%    \label{alg:packed-dna-hamming}}
+%  \begin{algorithmic}[1]
+%    \Require{$x$ and $y$ are packed DNA strings of equal length $n$}
+%    \Statex
+%    \Function{Distance}{$x, y$}
+%      \Let{$z$}{$x \oplus y$} \Comment{$\oplus$: bitwise exclusive-or}
+%      \Let{$\delta$}{$0$}
+%      \For{$i \gets 1 \textrm{ to } n$}
+%        \If{$z_i \neq 0$}
+%          \Let{$\delta$}{$\delta + 1$}
+%        \EndIf
+%      \EndFor
+%      \State \Return{$\delta$}
+%    \EndFunction
+%  \end{algorithmic}
+%\end{algorithm}
+%\end{definition}
+Aliquam tortor risus, ultricies sed, eleifend in, congue quis,
+justo. Pellentesque egestas orci non urna. Phasellus ligula. Ut
+nonummy. Suspendisse potenti. Donec posuere justo quis eros. In
+erat. Nunc aliquam metus sed dui. Fusce justo felis, posuere a,
+elementum non, semper eget, mi. Morbi iaculis lorem at sem.
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+posuere cubilia Curae; Cum sociis natoque penatibus et magnis dis
+parturient montes, nascetur ridiculus mus. Phasellus velit. Maecenas
+libero tortor, pharetra id, dictum ac, lacinia vestibulum, urna.
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. In libero
+nunc, fringilla a, condimentum lobortis, consequat eget, quam.
+Phasellus eget nisi. Maecenas risus ligula, euismod a, tristique
+non, sagittis eu, quam. Donec metus nunc, varius ut, lacinia sit
+amet, pellentesque ac, mauris. Nulla mollis aliquam metus.
+
+
+\section{Some bugs and fixes}
+
+A quirk in the \LaTeX 2\ensuremath{\epsilon} template is
+the centering of table and figure captions \ldots which the editorial
+office will not accept. This is actually only a problem for captions
+that are less than the width of the paper(within the margins that
+is). A fix has already been implemented in the template for this issue.
+
+However, if you find your short captions are
+being centered in spite of the new caption package options, try
+using the following codes, which each differ ever so slightly
+depending if the caption is for a table or figure. Inserting the
+given code in the table or figure environments just after you
+declare the start of that environment for each table or $\backslash$landscape environment figure that
+has a short caption that is being centered:
+
+\singlespacing%
+\noindent \underline{For Tables}:
+
+\begin{verbatim}
+  \makeatletter
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{#1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    #1: #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\box\@tempboxa\hfil}%
+  \fi}
+\makeatother
+\end{verbatim}
+
+\vspace{12pt}
+
+\noindent \underline{For Figures}:
+\begin{verbatim}
+\makeatletter
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{#1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    #1: #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
+\makeatother
+\end{verbatim}
+\doublespacing
+
+
+
+
+

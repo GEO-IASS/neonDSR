@@ -16,25 +16,32 @@ for i=1: size(reflectances, 1)
 end
 
 figure, plot(setting.wavelength, reflectances'); title('Field Data - Original Form');
-set(gca,'XTick', 400:200:2500);
+%set(gca,'XTick', 400:200:2500);
+set(gca,'XTick', 500:500:2500);
 xlabel('Wavelength (nm)'), ylabel('Reflectance');
 
-reflectances_rwab1 = removeWaterAbsorbtionBands(reflectances,1);
-figure, plot(setting.wavelength, reflectances_rwab1'); title('Field Data - Removed Water Absorption Bands');
-set(gca,'XTick', 400:200:2500);
+% reflectances_rwab1 = removeWaterAbsorbtionBands(reflectances,1);
+% figure, plot(setting.wavelength, reflectances_rwab1'); title('Field Data - Removed Water Absorption Bands');
+% set(gca,'XTick', 400:200:2500);
+% xlabel('Wavelength (nm)'), ylabel('Reflectance');
+% 
+% 
+% reflectances_rwab0 = removeWaterAbsorbtionBands(reflectances,0);
+% chopped_wavelength =  removeWaterAbsorbtionBands(setting.wavelength,0);
+% figure, plot(chopped_wavelength, reflectances_rwab0'); title('Field Data - Truncated Water Absorption Bands');
+% set(gca,'XTick', 400:200:2500);
+% xlabel('Wavelength (nm)'), ylabel('Reflectance');
+
+reflectances_g16 = gaussianSmoothing(reflectances, 8);
+figure, plot(setting.wavelength, reflectances_g16'); title('Field Data - Gaussian Smoothing 8');
+pp = 24;
+%set(gcf,'PaperUnits','points','PaperSize',[pp,pp],'PaperPosition',[0,0,pp,pp])
+%set(gcf,'PaperUnits','inches','PaperPosition',[0 0 4*.8 3*.8])
+set(gca,'XTick', 500:500:2500);
 xlabel('Wavelength (nm)'), ylabel('Reflectance');
+%print -dpng filename.png -r100
 
 
-reflectances_rwab0 = removeWaterAbsorbtionBands(reflectances,0);
-chopped_wavelength =  removeWaterAbsorbtionBands(setting.wavelength,0);
-figure, plot(chopped_wavelength, reflectances_rwab0'); title('Field Data - Truncated Water Absorption Bands');
-set(gca,'XTick', 400:200:2500);
-xlabel('Wavelength (nm)'), ylabel('Reflectance');
-
-reflectances_g16 = gaussianSmoothing(reflectances, 16);
-figure, plot(reflectances_g16'); title('Field Data - Gaussian Smoothing 16');
-set(gca,'XTick', 400:200:2500);
-xlabel('Wavelength (nm)'), ylabel('Reflectance');
 
 DEBUG = 1;
 POLYNOMIAL_DEGREE = 3;

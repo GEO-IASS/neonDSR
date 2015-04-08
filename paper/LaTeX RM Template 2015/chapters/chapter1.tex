@@ -1,0 +1,124 @@
+\chapter{CONTACT INFORMATION}%
+
+\section{Graduate School Editorial Office}%
+This office is a division of the UF Graduate School and the Office of the Provost and is in place to ensure consistent formatting for all documents published by the University of Florida. This office is comprised of the editors, who will review the document after submission to the Graduate School. \cite{Bailey}
+\subsection{224-B HUB (352) 392-1282}
+The Graduate School Editorial Office provides definitive answers for unique formatting issues not addressed by the formatting guidelines or the consultants in the Application Support Center (ASC). We work hand-in-hand with the ASC Lab in our mission to help students navigate smoothly through the thesis and dissertation submission process. 
+\subsection{gradedit@aa.ufl.edu}
+Questions regarding the following items should be addressed to the Graduate School Editorial Office: \cite{ahal:2005,dici:1989b,datt:1995}
+
+   \begin{enumerate}
+   \item First and final submission requirements \vspace{-10 pt}
+   \item Final clearance requirements \vspace{-10 pt}
+   \item Required forms \vspace{-10 pt}
+   \item Clearing prior \vspace{-10 pt}
+   \item Required journal article
+   \end{enumerate}
+
+In addition, the Graduate School Editorial Office can provide assistance with any questions regarding the online Electronic Document Management (EDM) system. For more information from the Graduate School, consult the following: If you are a doctoral student, please visit our checklist:
+
+\url{http://www.graduateschool.ufl.edu/files/checklist-dissertation.pdf}
+
+\noindent If you are a master?s thesis student, please visit our checklist:
+
+\url{http://www.graduateschool.ufl.edu/files/checklist-thesis.pdf}
+
+\noindent All posted deadlines are available at
+
+\url{http://www.graduateschool.ufl.edu/files/editorial-deadlines.pdf}
+
+\noindent Graduate Catalog:
+
+\url{http://gradcatalog.ufl.edu/}
+
+The Editorial Office is comprised of
+    \begin{itemize}
+    \item Lisa De LaCure, Editor \vspace{-10 pt}
+    \item Anna Pardo, Editor \vspace{-10 pt}
+    \item Stacy Wallace, Coordinator \vspace{-10 pt}
+    \item Cara Mannion, Office Assistant
+    \end{itemize}
+
+
+
+\section{Application Support Center (ASC)}
+The Application Support Center office is a division of Academic Technology as a section of the Help Desk. It is in place to provide assistance to students formatting their thesis or dissertation for publication by the University of Florida. This office is not a part of the Graduate School.
+\subsection{224 HUB (352) 392-4357 (Choose Option 5)}
+However, the office does offer technical assistance to graduate students. The office is comprised of the technical consultants, who report to the UF Help Desk. In addition to their other duties, they will help guide thesis and dissertation students through the submission process and will troubleshoot the preliminary electronic document BEFORE submission to the Graduate School.
+\subsection{asc-hd@ufl.edu}
+The ASC Lab employs consultants for the purpose of assisting students with formatting issues such as:
+    \begin{itemize}
+    \item using the template \vspace{-10 pt}
+    \item formatting figures or tables \vspace{-10 pt}
+    \item compiling the document
+    \end{itemize}
+    
+Typically, students bring their files on a portable media storage device, or laptop, for troubleshooting. Allowing consultants to view the pdf of your file in order to make suggestions regarding format. Consultants are not responsible for fixing any formatting issues but will point out formatting errors for you to fix. If there are any issues which you do not know how to correct we will make every effort to find a solution to your problem and help you correct the issue. \citet{Antonio02}
+
+The ASC is comprised of
+    \begin{itemize}
+    \item J. K. Booth, ASC Manager \vspace{-10 pt}
+    \item The ASC Support Staff Team
+    \end{itemize}
+    
+There have been no major formatting changes since August, 2006. However, we have made several improvements to the LaTeX Template since then so it's always advisable to work with latest version possible. Download the .zip file that comprises the LaTeX Template and extract the folder containing the template files. Change the name of the folder to avoid any possibility of overwriting your files should you need to re-extract the folder again later in the process. \citep{Bailey}
+\section{Basic Tools Needed}
+You must have access to an installation of \LaTeX. We use MiKTeX (current version is 2.9) and suggest you download and install the complete (approx 500 MB) version rather than the minimal installation. Our template uses several packages in addition to the basic build that are absolutely necessary for it to work. \citep{ahal:2005,dici:1989b,datt:1995} 
+\section{MiKTeX}
+This template assumes that you have MiKTeX 2.5 or later installed on your system. This setup is supposed to auto-install any packages that are called but not already installed as long as you are connected to the Internet. We recommend that if you need to install MiKTeX that you select the complete installation if possible.
+\subsection{Required Files and Programs} %
+To correctly implement the UF ETD \LaTeXe  template in accordance with the UF Gradschool Editorial Office Guildlines. The following files and/or packages are required: %
+\begin{enumerate} %
+    \item MiKTex \vspace{-10pt}%
+    \item Some text editor \vspace{-10pt}
+    \item Hanging Package \vspace{-10pt}%
+    \item Caption Package \vspace{-10pt}%
+    \item Hyperref Package %
+ \end{enumerate} %NOTE: this paragraph continues without an indent.
+ % If you put a space between the list and the next paragraph it will automatically start a new paragraph
+ This is an example of a ``short'' list. Not because there's only 5 items on the list but because each item is less than one line in length. Since short lists are relatively rare the default spacing for the itemize and enumerate environments is for the ``long'' list where at least one item on the list wraps to a second line. In order to generate a correct short list you need to insert a \verb=\vspace{-10pt}= command after all but the last item on the short list.
+
+The enumerate and itemize environments have been modified to meet Editorial Office guidelines (A special thank you to Antonio Paiva for both the suggestion and the code) but require the ufenumerate.sty file to be in the same folder as your main file. It is loaded via the usepackage\{ufenumerate\} command. The itemize environment is modified by a set of commands in the usersetcommands file. 
+
+\subsection{Optional Files and Programs}
+
+If you need to add a package please remember to place it before the hyperref package in the packages file. Hyperref needs to have several modifications in place to work properly and is essential for the required links. To ensure that it works correctly it must be the last package loaded - and even then it's a delicate operation. 
+
+The following programs are not needed but may be very useful when editing documents in \LaTeX:  \begin{itemize} %
+    \item WinEDT: This text editor is recommended for use editing \TeX-files as it has many useful built in macros and is easy to use  %
+    \item This program can be found and downloaded here: \url{http://www.winedt.com/} %
+    \item The GIMP (GNU Image Manipulation Program) %
+    \begin{itemize}%
+        \item A freeware graphics editing program for picture editing and file conversions %\vspace{-12pt}%
+        \item Comparable to Adobe Photoshop %\vspace{-12pt}%
+        \item Can be downloaded here: \url{http://www.gimp.org/}%
+    \end{itemize}
+    \item A good reference of \LaTeX 2\ensuremath{\epsilon} commands%
+    \begin{itemize}
+        \item This should be included on the ETD website here: \url{http://etd.helpdesk.ufl.edu/tex.php}
+    \end{itemize}
+\end{itemize} %
+This is an example of ``nested'' lists. In the itemize environment you can choose an alternative symbol for the ``sub-list.'' The method of specifying this symbol is \verb=\item[-]= where the optional symbol is inserted into the square brackets. Unless you are referring to an item by number, itemized lists are generally preferable to enumerated ones. The difference between itemize and enumerate environments is illustrated by repeating this list below: 
+\begin{enumerate} %
+\item WinEDT: This text editor is recommended for use editing \TeX-files as it has many useful built in macros and is easy to use  %
+\item This program can be found and downloaded here: \url{http://www.winedt.com/} %
+\item The GIMP (GNU Image Manipulation Program) %
+\begin{enumerate}%
+\item A freeware graphics editing program for picture editing and file conversions \vspace{-10pt}%
+\item Comparable to Adobe Photoshop %\vspace{-10pt}%
+\item Can be downloaded here: \url{http://www.gimp.org/}%
+\end{enumerate}
+\item A good reference of \LaTeX 2\ensuremath{\epsilon} commands%
+\begin{enumerate}
+\item This should be included on the ETD website here: \url{http://etd.helpdesk.ufl.edu/tex.html}
+\end{enumerate}
+\end{enumerate} %
+
+
+\section{Test Compile Before You Start}
+\sloppy The easiest way to compile the template is to double-click the "make.bat" file included in the template folder. Unfortunately this file only works in a Windows environment. Make sure you can compile the standard template BEFORE you start putting your content into the files (just to be on the safe side). Since there is little resemblance between the standard TEX Report Class and the ufthesis.cls styles when you latex the ufsampleETD.tex file it will generate several warnings possibly even an error or two. If you latex the file and it stops compiling because of an error press ``r'' then ``enter'' and LaTeX will ignore the rest of the errors and warnings. Latex the file again, also pressing ``r'' and ``enter''. 
+When all of the warnings are done you can then dvipdfm the file. (Using WinEDT, I just click the dvi - pdf button on the toolbar).
+
+This should generate the sampleETD PDF file.  As long as you get a PDF in the correct format the errors and warnings generated by LaTeX up to this point are irrelevant.  However, if the output at this stage is garbled or non-existent we need to do some troubleshooting:  If you've simply unzipped the template and it fails to compile without having made any changes make sure you have the FULL MikTeX installation. There are many LaTeX editors available and almost as many ways to compile a TEX file.
+
+The method we use is to latex filename twice, then dvipdfm filename to create the pdf. Some Editors are more sensitive to errors than others and are unable to bypass the errors. Some others use a different method of compiling the file and can't be re-configured. The template works well on our set-up. If you can't get the template to compile on your machine using the ufthesis.cls file, change the style of the document to the standard report class. Hopefully, you will then at least be able to see the content. Once your content is ready you can come in to the ETD Lab to compile your document in the correct style. 
