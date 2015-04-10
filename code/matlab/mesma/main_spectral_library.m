@@ -1,8 +1,13 @@
 
 %% load field data
-envi = init();
+%envi = init();
+
+init();
 
 global setting;
+
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/mesma'));
+
 
 [ground_specie_titles, ground_reflectances] = extractPixels(envi, setting.FIELD_PATH);
 % only remove water absorption bands for the ones we care about

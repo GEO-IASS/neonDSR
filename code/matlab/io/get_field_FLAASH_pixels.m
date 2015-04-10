@@ -2,7 +2,7 @@ function [ species, reflectances_flaash, rois, northings, eastings, flights ] = 
 %% As field data provided by Sarah Graves are in ATCOR atmospheric correction
 % This function will retrieve the flaash atmospheric correction values.
 
-[ species, reflectances, rois, northings, eastings, flights ] = get_field_ATCOR_pixels();
+[ species, reflectances, rois, northings, eastings, flights ] = get_field_pixels();
 
 reflectances_flaash = reflectances;
 for i=1:numel(species)
@@ -16,17 +16,23 @@ for i=1:numel(species)
     
     x=0; y=0;
     for j=1:numel(envi.x')
-        if envi.x(j) < eastings(j) && envi.x(j+1) > eastings(j)
+        if envi.x(j) <= eastings(i) && j+1 <= numel(envi.x) && envi.x(j+1) >= eastings(i)
             x = j;
         end
     end
     
     for j=1:numel(envi.y')
-        if envi.y(j) < northings(j) && envi.y(j+1) > northings(j)
+        %northings(i)
+        
+        if j+1 <= numel(envi.y)
+         % disp([envi.y(1) envi.y(j) envi.y(j+1) envi.y(numel(envi.y))])
+        end
+        
+        if envi.y(j) >= northings(i) && j+1 <= numel(envi.y) && envi.y(j+1) <= northings(i) % because envi.y(1) > envi.y(2)
             y = j;
         end
     end
-    reflectances_flaash(i) = envi(x,y,:);
+    reflectances_flaash(i, :) = envi.z(round(y),round(x),:);
 end
 
 end

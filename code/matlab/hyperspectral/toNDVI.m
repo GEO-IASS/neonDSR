@@ -22,6 +22,10 @@ elseif numel(size(img)) == 2
     ndvi_denominator = nir + red;
     ndvi =  ndvi_numerator ./ ndvi_denominator;
 end
-
+    
+    ndvi_numerator = nir - red;
+    ndvi_denominator = nir + red;
+    ndvi =  ndvi_numerator ./ ndvi_denominator;
 end
 
+end

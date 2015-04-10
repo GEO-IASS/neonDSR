@@ -2,13 +2,12 @@
 % generic normalization - not suitable for hyperspectral data
 %envi.z = double((envi.z - min_num)) / double((max_num - min_num)); % scale envi.z
 
-cd('/cise/homes/msnia/zproject/neonDSR/code/matlab');
-addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/hyperspectral');
-addpath('/cise/homes/msnia/zproject/neonDSR/code/matlab/io');
-
-
 init();
 global setting;
+
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/hyperspectral'));
+addpath(strcat(setting.PREFIX,'/neonDSR/code/matlab/io'));
+
 
 % TODO I need a random index generator per crowns (for each specie there is
 % a certain number of crowns available. 
@@ -18,30 +17,17 @@ global setting;
 
 
 envi03 = load_flight_image('/cise/homes/msnia/neon/morning/f100904t01p00r03rdn_b_sc01_ort_flaashreflectance_img');
-for j = 1: size(envi03.z, 2)
-    for i = 1: size(envi03.z, 1)        
-        envi03.z(i, j, :) = scalePixel(envi03.z(i,j,:));
-    end
-end
 envi03.z = removeWaterAbsorbtionBands(envi03.z, 0);
 [~, envi03_figure, envi03_h] = toRGB(envi03.z, 'Flight 03'); 
 
+envi04 = load_flight_image(strcat(setting.HYPERSPECTRAL_DIRECTORY, 'f100904t01p00r04rdn_b_sc01_ort_flaashreflectance_img'));
+%envi04.z(i, j, :)
+temp = envi04.z%scalePixel(envi04.z(i,j,:));
+[~, envi04_figure, envi04_h] = toRGB(temp, 'Flight 04'); 
 
-envi04 = load_flight_image('/cise/homes/msnia/neon/morning//f100904t01p00r04rdn_b_sc01_ort_flaashreflectance_img');
-for j = 1: size(envi04.z, 2)
-    for i = 1: size(envi04.z, 1)        
-        envi04.z(i, j, :) = scalePixel(envi04.z(i,j,:));
-    end
-end
-envi04.z = removeWaterAbsorbtionBands(envi04.z, 0);
-[~, envi04_figure, envi04_h] = toRGB(envi04.z, 'Flight 04'); 
+temp = removeWaterAbsorbtionBands(envi04.z, 0);
 
 envi05 = load_flight_image('/cise/homes/msnia/neon/morning/f100904t01p00r05rdn_b_sc01_ort_flaashreflectance_img');
-for j = 1: size(envi05.z, 2)
-    for i = 1: size(envi05.z, 1)        
-        envi.z(i, j, :) = scalePixel(envi05.z(i,j,:));
-    end
-end
 envi05.z = removeWaterAbsorbtionBands(envi05.z, 0);
 [~, envi05_figure, envi05_h] = toRGB(envi02.z, 'Flight 05'); 
 

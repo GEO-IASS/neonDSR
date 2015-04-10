@@ -35,9 +35,10 @@ toc
 
 lidar_figure = figure; imagesc(heightMap_merge);  title('Gridded Elevation Map'); colormap(gray);
 
-
-
 get_field_data_heights(lidar_figure, heightMap_merge, baseEasting_merge, baseNorthing_merge, binResolution, specie, reflectance, roi, northing, easting, flight );
 
-% TODO: Act on lidar data pixelated and aligned wth field data.
+% Act on lidar data pixelated and aligned wth field data: DONE: when
+% compared visually there seems to be one or two pixels off, from field
+% data, but taking the maxmimum from windowsize of two neighbors take scare
+% of this.
 

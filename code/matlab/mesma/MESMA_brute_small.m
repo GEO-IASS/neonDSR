@@ -10,9 +10,9 @@ function [idx, A, rec, minerr]=MESMA_brute_small (x,L)
 % Example:
 %
 % x=rand(50,1);
-% L{1}=rand(50,5);
-% L{2}=rand(50,10);
-% L{3}=rand(50,15);
+% L{1}=rand(50,5);   % has 5  items in library each 50 dimensions
+% L{2}=rand(50,10);  % has 10 items in library each 50 dimensions
+% L{3}=rand(50,15);  % has 15 items in library each 50 dimensions
 % [idx, A, rec, minerr]=MESMA_brute_small (x,L)
 %
 % This gives you the indices into each library of the best combination, the
@@ -20,34 +20,37 @@ function [idx, A, rec, minerr]=MESMA_brute_small (x,L)
 % the error.
 
 [d,num]=size(x);
-p=numel(L);
-for i=1:p
-    N(i)=size(L{i},2);
+libsCount=numel(L); % Total # of libraries
+for i=1:libsCount
+    NLibrary(i)=size(L{i},2); % Number of items in each library
 end
 minerr=inf(1,num);
-idx=zeros(p,num);
-A=zeros(p,num);
+idx=zeros(libsCount,num);
+A=zeros(libsCount,num);
 rec=zeros(d,num);
 
-for setcnt=2:2^p-1
-    setmask=logical(de2bi(setcnt,p));
-    q=sum(setmask);
+% for all the 2^p-1 subsets of library L
+for setcnt=2:2^libsCount-1
+    temp = de2bi(setcnt,libsCount);   % Convert decimal numbers to binary vectors
+    setmask=logical(temp); % subset in logical form, called setmask
+
+    q=sum(setmask);   % number of libraries selected for this iteration
     % We treat the q=1 case separately at the end
     if q==1
         continue;
     end
-    Ni=N(setmask);
-    I=zeros(1,q);
+    Ni=NLibrary(setmask);  % select the libraries that have been picked
+    I=zeros(1,q);  % a zero per library
     pt=1;
     M=Ni-1;
-    setmask=find(setmask);
-    E=zeros(d,q);
+    setmask=find(setmask);   % ind = find(X) locates all nonzero elements of array X, and returns the linear indices of those elements in vector ind.
+    E=zeros(d,q);     % one candidate from each library each with d dimensions
     while true
         %if q==p
         %    I
         %end
         for i=1:q
-            E(:,i)=L{setmask(i)}(:,I(i)+1);
+            E(:,i)=L{setmask(i)}(:,I(i)+1);   % fill-in candidate items from each library
         end
         [y,a]=plane_project2(x,E);  
         mp=find(~(sum(a<0)>0));
@@ -55,9 +58,9 @@ for setcnt=2:2^p-1
             err=norm(y(:,mp(i))-x(:,mp(i)));
             if err<minerr(mp(i))
                 minerr(mp(i))=err;
-                idx(:,mp(i))=zeros(p,1);
+                idx(:,mp(i))=zeros(libsCount,1);
                 idx(setmask,mp(i))=I+1;
-                A(:,mp(i))=zeros(p,1);
+                A(:,mp(i))=zeros(libsCount,1);
                 A(setmask,mp(i))=a(:,mp(i));
                 rec(:,mp(i))=y(:,mp(i));
             end
@@ -75,15 +78,15 @@ for setcnt=2:2^p-1
 end
 
 % q=1 case
-for i=1:p
-    for j=1:N(i)
+for i=1:libsCount
+    for j=1:NLibrary(i)
         for k=1:num
             err=norm(x(:,k)-L{i}(:,j));
             if err<minerr(k)
                 minerr(k)=err;
-                idx(:,k)=zeros(p,1);
+                idx(:,k)=zeros(libsCount,1);
                 idx(i,k)=j;
-                A(:,k)=zeros(p,1);
+                A(:,k)=zeros(libsCount,1);
                 A(i,k)=1;
                 rec(:,k)=L{i}(:,j);
             end
@@ -100,13 +103,19 @@ end
 
 end
 
+% x is the input signal that we try to reconstruct, E contains candidate
+% signals from each library
 function [y,a]=plane_project2(x,E)
     [N,M]=size(x);
     p=size(E,2);
-    a=zeros(p,M);
-    ct=E(:,1);
-    Ep=E(:,2:p)-ct*ones(1,p-1);
-    a(2:p,:)=Ep\(x-ct*ones(1,M));
-    a(1,:)=ones(1,M)-sum(a(2:p,:),1);
+    a=zeros(p,M);   % abundance of each candidate to construct x
+    %ct=E(:,1);
+    %Ep=E(:,2:p)-ct*ones(1,p-1);
+    temp1 = E(:,1) * ones(1,p-1);   % replicate the first library signal p-1 times 
+    temp2 = E(:,2:p); % take the rest of the library
+    Ep = temp2 - temp1;
+    
+    a(2:p,:)=Ep\(x-E(:,1)*ones(1,M));     % M is used: x can have more than one signal. It coud easily be (Ep+E(:,1))\x  which just ignores the initial subtract and does the same job. It just wanted to make it more complicated. KUDOS 
+    a(1,:)=ones(1,M)-sum(a(2:p,:),1);  % a(1,:) is the negate of the rest of abundances
     y=E*a;
 end
