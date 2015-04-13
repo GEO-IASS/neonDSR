@@ -8,22 +8,30 @@ land cover %(water resources, desertification)
 
 From an ecological point of view, there are two types of remote sensing approaches: active and passive. \textit{Passive} remote sensing uses sunlight as the source of energy and sensors captures the intensity of light being reflected from earth's surface. Light intensity measurements happens at various wavelengths; if a few (usually 3 to 10) relatively broad wavelength bands are captured it is called multi-spectral. If light intensity at dozens to hundreds of narrow band signals are collected it is called hyperspectral. \textit{Active} remote sensing on the other hand uses laser light emission as its source of energy and captures the intensity of returned signals. LiDAR is a popular active remote sensing technology. Below we explain each in more details:
 
+
+
 \subsection{Hyperspectral}
 
-Spectrometers measure the amount of light reflected from surface materials: An optical dispersing element (like a prism) refracts the received light into its constituent spectrums and the energy in each band range is measured by a separate detector. Bands can be as narrow as 0.01 micrometers over a wide wavelength range of typically 0.4 to 2.5 micrometers. Figure \ref{Imaging spectrometer} shows the basic components of an imaging spectrometer.
+\begin{figure}[b!]
+  \centering
+    \includegraphics[scale=0.22]{images/spectrometer.eps}
+    \caption[Imaging spectrometer schematic diagram]{Schematic diagram of the basic elements of an imaging spectrometer where $\lambda$ is the wavelength \citep{smith2006introduction}.}
+    \label{fig:Imaging spectrometer}
+\end{figure}
 
-Raw sensor readings (digital number) can be affected by light source conditions, sensor, atmosphere, and surface material. Raw data which is a unit-less light intensity measure is then calibrated into radiance which has a  physically meaningful unit through applying a gain and offset to the pixel values. It essentially means how much light the instrument ''sees'' from the object being observed. Some reference materials like a pure white or pure black sheets can be used in this process. After adjustments for sensor, atmospheric, and terrain effects are applied, pixel reflectance value is calculated which is the proportion of the radiation striking a surface to the radiation reflected off of it. Reflectance demonstrates light abroption features of the surface material and can be compared with field or laboratory reflectance spectra in order to recognize and map surface materials such as particular types of vegetation or diagnostic minerals associated with ore deposits. Reflectance varies with wavelength for most materials because energy at certain wavelengths is scattered or absorbed to different degrees \citep{smith2006introduction}. In this project we deal with reflectance values and refer the reader to \citep{varshney2004advanced} for more details on how to compute reflectance values. Once reflectance values are determined there is a whole body of literature for species classification, determining vegetation indices, chemical composites of the surface and etc. 
+Spectrometers measure the amount of light reflected from surface materials: An optical dispersing element (like a prism) refracts the received light into its constituent spectrums and the energy in each band range is measured by a separate detector. Bands can be as narrow as 0.01 $μm$ over a wide wavelength range of typically 0.4 to 2.5 $μm$. Figure~\ref{fig:Imaging spectrometer} shows the basic components of an imaging spectrometer.
 
+Raw sensor readings (digital number) can be affected by light source conditions, sensor, atmosphere, and surface material. Raw data which is a unit-less light intensity measure is then calibrated into radiance which has a  physically meaningful unit through applying a gain and offset to the pixel values. It essentially means how much light the instrument ''sees'' from the object being observed. Some reference materials like a pure white or pure black sheets can be used in this process. After adjustments for sensor, atmospheric, and terrain effects are applied, pixel reflectance value is calculated which is the proportion of the radiation striking a surface to the radiation reflected off of it. Reflectance demonstrates light abroption features of the surface material and can be compared with field or laboratory reflectance spectra in order to recognize and map surface materials such as particular types of vegetation or diagnostic minerals associated with ore deposits. Reflectance varies with wavelength for most materials because energy at certain wavelengths is scattered or absorbed to different degrees \citep{smith2006introduction}. In this project we deal with reflectance values and refer the reader to \citep{varshney2004advanced} for more details on how to compute reflectance values.
 
+\begin{figure}[t!]
 
+  \centering
+    \includegraphics[scale=0.45]{images/reflectanceAsIndicator.eps}
+    \caption[Some reflectance examples]{Some reflectance examples as how reflectance of different material show different absroption features at differnet bands. \citep{smith2006introduction}.}
+    \label{fig:Some reflectance examples}
+\end{figure}
 
-
-In the visible portion of the spectrum, the curve shape is governed by absorption effects from chlorophyll and other leaf pigments. Chlorophyll absorbs visible light very effectively but absorbs blue and red wavelengths more strongly than green, producing a characteristic small reflectance peak within the green wavelength range. As a consequence, healthy plants appear to us as green in color. Reflectance rises sharply across the boundary between red and near infrared wavelengths (sometimes referred to as the red edge) to values of around 40 to 50\% for most plants.
-
-This high near-infrared reflectance is primarily due to interactions with the internal cellular structure of leaves. Most of the remaining energy is transmitted, and can interact with other leaves lower in the canopy. Leaf structure varies significantly
-between plant species, and can also change as a result of plant stress. Thus species type, plant stress, and canopy state all can affect near infrared reflectance measurements. Beyond 1.3 μm reflectance decreases with increasing wavelength, except for two pronounced water absorption bands near 1.4 and 1.9 μm.
-
-At the end of the growing season leaves lose water and chlorophyll. Near infrared reflectance decreases and red reflectance increases, creating the familiar yellow, brown, and red leaf colors of autumn \citep{smith2006introduction}.
+Figure~\ref{fig:Some reflectance examples} shows some example materials when observed through an spectrometer. In vegetations, chlorophyll and some leaf pigments show high absorptions in blue and red ranges and not so much in green; therefore our eyes see vegetation as green. We can see this as a small peak in green compared to other visible wavelength range. From red to near infrared there is a sharp rise known as \textit{red edge} up to a value of about 50\% for some plants. High values in the near-infrared region is mainly due to internal cellular structure of leaves which differs significantly across species but can also be different in a single specie due to plant stress. High reflectance in near-infrared can interact with other leaves in the canopy and therefore its sensor readings can be dependent on canopy structure as well. Beyond 1.3 $μm$ reflectance decreases with increasing wavelength, except for two pronounced water absorption bands near 1.4 and 1.9 $μm$. At the end of the growing season leaves lose water and chlorophyll. Near infrared reflectance decreases and red reflectance increases, creating the familiar yellow, brown, and red leaf colors of autumn \citep{smith2006introduction}.
 
 \subsection{LiDAR}
 
@@ -54,19 +62,9 @@ As of
 %    \caption[\LaTeX 2\ensuremath{\epsilon} logo(resized for no reason)]{\LaTeX 2\ensuremath{\epsilon} logo, resized for no reason. This caption is being extended in order to test that it has the correct indentation.}
 %\end{figure}
 
-\begin{figure}[htbp]
-\label{Imaging spectrometer}
-  \centering
-    \includegraphics[scale=0.22]{images/spectrometer.eps}
-    \caption[Imaging spectrometer schematic diagram]{Schematic diagram of the basic elements of an imaging spectrometer \citep{smith2006introduction}.}
-\end{figure}
 
-\begin{figure}[htbp]
-\label{Imaging spectrometer}
-  \centering
-    \includegraphics[scale=0.45]{images/reflectanceAsIndicator.eps}
-    \caption[Some reflectance examples]{Some reflectance examples as how reflectance of different material show different absroption features at differnet bands. \citep{smith2006introduction}.}
-\end{figure}
+
+
 
 %
 %\begin{figure}[htbp]
