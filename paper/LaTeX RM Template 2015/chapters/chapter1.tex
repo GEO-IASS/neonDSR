@@ -6,54 +6,66 @@ land cover %(water resources, desertification)
 
 \section{Remote Sensing}
 
-From an ecological point of view, there are two types of remote sensing approaches: active and passive. \textit{Passive} remote sensing uses sunlight as the source of energy and sensors captures the intensity of light being reflected from earth's surface. Light intensity measurements happens at various wavelengths; if a few (usually 3 to 10) relatively broad wavelength bands are captured it is called multi-spectral. If light intensity at dozens to hundreds of narrow band signals are collected it is called hyperspectral. \textit{Active} remote sensing on the other hand uses laser light emission as its source of energy and captures the intensity of return signals. LiDAR is a popular active remote sensing technology for remote sensing. Below we explain each in more details:
+From an ecological point of view, there are two types of remote sensing approaches: active and passive. \textit{Passive} remote sensing uses sunlight as the source of energy and sensors captures the intensity of light being reflected from earth's surface. Light intensity measurements happens at various wavelengths; if a few (usually 3 to 10) relatively broad wavelength bands are captured it is called multi-spectral. If light intensity at dozens to hundreds of narrow band signals are collected it is called hyperspectral. \textit{Active} remote sensing on the other hand uses laser light emission as its source of energy and captures the intensity of returned signals. LiDAR is a popular active remote sensing technology. Below we explain each in more details:
 
 \subsection{Hyperspectral}
 
-Spectrometers (spectroradiometers) are used to make ground-based or laboratory measurements of the light reflected from a test material. An optical dispersing element such as a grating or prism splits this light into many narrow, adjacent wavelength bands and the energy in each band is measured by a separate detector. Spectrometers can make spectral measurements of bands as narrow as 0.01 micrometers over a wide wavelength range, typically 0.4 to 2.4 micrometers (visible through middle infrared wavelength ranges).
+Spectrometers measure the amount of light reflected from surface materials: An optical dispersing element (like a prism) refracts the received light into its constituent spectrums and the energy in each band range is measured by a separate detector. Bands can be as narrow as 0.01 micrometers over a wide wavelength range of typically 0.4 to 2.5 micrometers. Figure \ref{Imaging spectrometer} shows the basic components of an imaging spectrometer.
+
+Raw sensor readings (digital number) can be affected by light source conditions, sensor, atmosphere, and surface material. Raw data which is a unit-less light intensity measure is then calibrated into radiance which has a  physically meaningful unit through applying a gain and offset to the pixel values. It essentially means how much light the instrument ''sees'' from the object being observed. Some reference materials like a pure white or pure black sheets can be used in this process. After adjustments for sensor, atmospheric, and terrain effects are applied, pixel reflectance value is calculated which is the proportion of the radiation striking a surface to the radiation reflected off of it. Reflectance demonstrates light abroption features of the surface material and can be compared with field or laboratory reflectance spectra in order to recognize and map surface materials such as particular types of vegetation or diagnostic minerals associated with ore deposits. Reflectance varies with wavelength for most materials because energy at certain wavelengths is scattered or absorbed to different degrees \citep{smith2006introduction}. In this project we deal with reflectance values and refer the reader to \citep{varshney2004advanced} for more details on how to compute reflectance values. Once reflectance values are determined there is a whole body of literature for species classification, determining vegetation indices, chemical composites of the surface and etc. 
 
 
 
-Raw sensor readings (digital number) can be affected by light source, sensor, atmosphere, and surface material. Raw data is then converted to radiance 
 
-After adjustments for sensor,
-atmospheric, and terrain effects are applied, these
-image spectra can be compared with field or laboratory
-reflectance spectra in order to recognize and
-map surface materials such as particular types of
-vegetation or diagnostic minerals associated with ore
-deposits.
+
+In the visible portion of the spectrum, the curve shape is governed by absorption effects from chlorophyll and other leaf pigments. Chlorophyll absorbs visible light very effectively but absorbs blue and red wavelengths more strongly than green, producing a characteristic small reflectance peak within the green wavelength range. As a consequence, healthy plants appear to us as green in color. Reflectance rises sharply across the boundary between red and near infrared wavelengths (sometimes referred to as the red edge) to values of around 40 to 50\% for most plants.
+
+This high near-infrared reflectance is primarily due to interactions with the internal cellular structure of leaves. Most of the remaining energy is transmitted, and can interact with other leaves lower in the canopy. Leaf structure varies significantly
+between plant species, and can also change as a result of plant stress. Thus species type, plant stress, and canopy state all can affect near infrared reflectance measurements. Beyond 1.3 μm reflectance decreases with increasing wavelength, except for two pronounced water absorption bands near 1.4 and 1.9 μm.
+
+At the end of the growing season leaves lose water and chlorophyll. Near infrared reflectance decreases and red reflectance increases, creating the familiar yellow, brown, and red leaf colors of autumn \citep{smith2006introduction}.
+
 \subsection{LiDAR}
+
+
 
 \section{Data Variety}
 
 As of 
 
 
-\begin{table}[h!]
-\caption{How to align decimals in a numerical column}\label{tb1}
-  \begin{tabular}{p{3 in} r@{.}l c}
- \hline
- Category & \multicolumn{2}{c}{Result}  & \hspace{2.2 in} \\
- \hline
-  first & 3&14159 & \hspace{2.2 in} \\
-  second & 16&2 & \hspace{2.2 in} \\
-  third & 123&456 & \hspace{2.2 in} \\
-  \hline
-  \end{tabular}
-\end{table}
-
+%\begin{table}[h!]
+%\caption{How to align decimals in a numerical column}\label{tb1}
+%  \begin{tabular}{p{3 in} r@{.}l c}
+% \hline
+% Category & \multicolumn{2}{c}{Result}  & \hspace{2.2 in} \\
+% \hline
+%  first & 3&14159 & \hspace{2.2 in} \\
+%  second & 16&2 & \hspace{2.2 in} \\
+%  third & 123&456 & \hspace{2.2 in} \\
+%  \hline
+%  \end{tabular}
+%\end{table}
+%
+%
+%\begin{figure}[htbp]
+%  \centering
+%    \includegraphics[width=3in, scale=0.5]{images/LaTeX2e_logo.eps}
+%    \caption[\LaTeX 2\ensuremath{\epsilon} logo(resized for no reason)]{\LaTeX 2\ensuremath{\epsilon} logo, resized for no reason. This caption is being extended in order to test that it has the correct indentation.}
+%\end{figure}
 
 \begin{figure}[htbp]
+\label{Imaging spectrometer}
   \centering
-    \includegraphics[width=3in, scale=0.5]{images/LaTeX2e_logo.eps}
-    \caption[\LaTeX 2\ensuremath{\epsilon} logo(resized for no reason)]{\LaTeX 2\ensuremath{\epsilon} logo, resized for no reason. This caption is being extended in order to test that it has the correct indentation.}
+    \includegraphics[scale=0.22]{images/spectrometer.eps}
+    \caption[Imaging spectrometer schematic diagram]{Schematic diagram of the basic elements of an imaging spectrometer \citep{smith2006introduction}.}
 \end{figure}
 
 \begin{figure}[htbp]
+\label{Imaging spectrometer}
   \centering
-    \includegraphics[scale=0.5]{images/spectrometer.eps}
-    \caption[Hey]{dsd}
+    \includegraphics[scale=0.45]{images/reflectanceAsIndicator.eps}
+    \caption[Some reflectance examples]{Some reflectance examples as how reflectance of different material show different absroption features at differnet bands. \citep{smith2006introduction}.}
 \end{figure}
 
 %
