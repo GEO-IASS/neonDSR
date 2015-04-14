@@ -38,16 +38,91 @@ One note worthy concept is the issue of mixing. Pixel size can be large based on
 
 \subsection{LiDAR}
 
-Light Detection And Ranging (LiDAR) is a form of active remote sensing where a laser beam is used to detect points on earth. LiDAR sensor is mounted on an airplane and it keeps swiping earth surface as the plane moves forward. By knowing parameters of the LiDAR sensor itself (tilt and angle of the pulse), plane GPS coorinates, and Inertial Measurement Unit coordinates (yaw, pitch and roll) and the speed of light, the exact coorinate of each point reading is calculated. LiDAR scans at pulse rates of over 300,000 pulses per second (300 kilohertz) depending on sensor technology. By subtracting plane altitude from the distance that laser has traveled we get the ground elevation.  Using some filtering techniques points on the ground are distinguished from points above the ground and this yeilds the height of the objects on the ground.
+Light Detection And Ranging (LiDAR) is a form of active remote sensing where a laser beam is used to detect points on earth. LiDAR sensor is mounted on an airplane and it keeps swiping earth surface as the plane moves forward. By knowing parameters of the LiDAR sensor itself (tilt angle of the pulse), plane GPS coorinates, and Inertial Measurement Unit (IMU) coordinates (heading, pitch and roll) and the speed of light, the exact coorinate of each point reading is calculated. LiDAR scans at pulse rates of over 300,000 pulses per second (300 kilohertz) depending on sensor technology. By subtracting plane altitude from the distance that laser has traveled we get the ground elevation.  Using some filtering techniques points on the ground are classified from points above the ground and this yeilds the height of the objects on the ground. Figure~\ref{fig:lidar} (A) demonstrates a schematic view of a LiDAR flightand its parameters \citep{schmid2008lidar}.
 
-\begin{figure}[t!]
-  \centering
-    \includegraphics[scale=0.45]{images/lidarPlane.jpg}
-    \caption[Some reflectance examples]{Some reflectance examples as how reflectance of different material show different absroption features at differnet bands. \citep{smith2006introduction}.}
-    \label{fig:Some reflectance examples}
+
+\begin{figure}[b!]
+  \begin{center}
+    \centering
+    \mbox{
+      \subfigure[]{\fbox{\epsfig{file=images/lidarPlane.eps, scale=0.6}}} \quad
+      \subfigure[]{\fbox{\epsfig{file=images/lidarMultipleReturns.eps, scale=0.38}}} \quad
+     }
+    
+    \caption[Schematic view of a LiDAR flight]{A) Schematic view of a LiDAR flight: GPS coordinates, IMU coordinates, and tilt angle of pulse together determine the position of the point on the ground (Source: Ohio Department of Transportation). B) Return waveform of a single LiDAR pulse both in its actual continuous form and its 3 discrete records (crown, understory, and ground) each as a point in the point cloud \citep{fernandez2014now}.}
+    \label{fig:lidar}
+  \end{center}
 \end{figure}
 
+
+
+
+
+%\begin{figure}[b!]
+%  \centering
+%    \includegraphics[scale=0.45]{images/lidarPlane.eps}
+%    \caption[Schematic view of a LiDAR flight]{Schematic view of a LiDAR flight: GPS coordinates, IMU coordinates, and tilt angle of pulse together determine the position of the point on the ground (Source: Ohio Department of Transportation).}
+%    \label{fig:lidar plane}
+%\end{figure}
+
+Each LiDAR pulse can have multiple returns depending if it can penetrate through and how much signal intensity is reflected back. Figure~\ref{fig:lidar} (B) shows how each LiDAR pulse can have multiple return values.
+
+%\begin{figure}[b!]
+%  \centering
+%    \includegraphics[scale=0.30]{images/lidarMultipleReturns.eps}
+%    \caption[Multiple returns of a LiDAR pulse]{Multiple returns of a LiDAR pulse \citep{fernandez2014now}.}
+%    \label{fig:lidar multiple returns}
+%\end{figure}
+
+Unlike hyperspectral imaging, LiDAR returns a long list of points <x (latitude), y (longtitude), z (elevation), i (intensity), n (number of this return for given pulse), d (direction of scan), e (edge of flight line), t (time)>
+
+
+
 For lidar usually green or near infrared is used as it has high reflectance from vegetation.
+
+
+
+
+
+%
+%
+%\begin{figure}
+%        \centering
+%        \begin{subfigure}[b]{0.3\textwidth}
+%                \includegraphics[width=\textwidth]{images/lidarPlane.eps, scale=0.6}
+%                \caption{A gull}
+%                \label{fig:gull}
+%        \end{subfigure}%
+%        ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc.
+%          %(or a blank line to force the subfigure onto a new line)
+%        \begin{subfigure}[b]{0.3\textwidth}
+%                \includegraphics[width=\textwidth]{tiger}
+%                \caption{A tiger}
+%                \label{fig:tiger}
+%        \end{subfigure}
+%        ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc.
+%          %(or a blank line to force the subfigure onto a new line)
+%        \begin{subfigure}[b]{0.3\textwidth}
+%                \includegraphics[width=\textwidth]{mouse}
+%                \caption{A mouse}
+%                \label{fig:mouse}
+%        \end{subfigure}
+%        \caption{Pictures of animals}\label{fig:animals}
+%\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Data Variety}
 
