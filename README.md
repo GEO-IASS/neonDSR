@@ -1,6 +1,6 @@
-neon
+
 ====
-Big data analytics on Neon dataset on hyperspectral images.
+Big data analytics on  dataset on hyperspectral images.
 
 
 
