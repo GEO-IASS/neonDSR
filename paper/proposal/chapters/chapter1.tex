@@ -1,4 +1,5 @@
 \chapter{Introduction}%
+\label{chapter:Introduction}
 
 Understanding the dynamics of ecological structures is very important in determining how climate, %CO\textsuperscript{2} emission, 
 land cover %(water resources, desertification)
@@ -54,10 +55,6 @@ Light Detection And Ranging (LiDAR) is a form of active remote sensing where a l
   \end{center}
 \end{figure}
 
-
-
-
-
 %\begin{figure}[b!]
 %  \centering
 %    \includegraphics[scale=0.45]{images/lidarPlane.eps}
@@ -65,7 +62,7 @@ Light Detection And Ranging (LiDAR) is a form of active remote sensing where a l
 %    \label{fig:lidar plane}
 %\end{figure}
 
-Each LiDAR pulse can have multiple returns depending if it can penetrate through and how much signal intensity is reflected back. Figure~\ref{fig:lidar} (B) shows how each LiDAR pulse can have multiple return values.
+Each LiDAR pulse can have multiple returns depending if it can penetrate through and how much signal intensity is reflected back. Figure~\ref{fig:lidar} (B) shows how each LiDAR pulse can have multiple return values. Unlike hyperspectral imaging, LiDAR returns a long list of points \textless x (latitude), y (longtitude), z (elevation), i (intensity), n (number of this return for given pulse), d (direction of scan), e (edge of flight line), t (time)\textgreater. For lidar usually green or near infrared is used as it has high reflectance from vegetation.
 
 %\begin{figure}[b!]
 %  \centering
@@ -74,108 +71,25 @@ Each LiDAR pulse can have multiple returns depending if it can penetrate through
 %    \label{fig:lidar multiple returns}
 %\end{figure}
 
-Unlike hyperspectral imaging, LiDAR returns a long list of points <x (latitude), y (longtitude), z (elevation), i (intensity), n (number of this return for given pulse), d (direction of scan), e (edge of flight line), t (time)>
 
 
+\section{Knowledge Sources}
 
-For lidar usually green or near infrared is used as it has high reflectance from vegetation.
+Ecological domain features a large variety of concepts from microbial-scale to soil, plants, animals, geology, climate, and all in between. This shows the wealth of knowledge and inter-related aspects of bio-diversity that needs to be taken into account to be able to have a comprehensive understanding of environment. This information can be found in a variety of sources: Here we would like to introduce some major peer-reviewed data repositories available online: TRY database (datasets covering a wide variety of biomes and geographic areas), TraitNet (Trait databases), USGS Land Cover (planetary diversity, trends, and aquatics), http://ecologicaldata.org and http://datadryad.org (community-driven datasets), DataOne and EarthCube (NSF-funded data archiving resources for ecological, environmental and geosciences data products), iPlant/iAnimal (gene level data portals) and NEON with over 120 high level data products (apart from hundreds of low-level data types) (\citep{keller2010neon}, \citep{lunch2014neonLevel}). There are also crowd-sourced datasets available such as UF’s iDigBio, BudBurst or Citizen Science initiative platforms.
 
+Besides well-structured data, there is a great wealth of knowledge in textual scientific content that is untapped. Resources such as the Silvics of North America \citep{burns1990silvics}, local field guides such as \citep{inventory1990guide, lillybridge1995field}, any of the thousands of peer-reviewed academic journal or conference publications and etc are good sources of knowledge.
 
-
-
-
-%
-%
-%\begin{figure}
-%        \centering
-%        \begin{subfigure}[b]{0.3\textwidth}
-%                \includegraphics[width=\textwidth]{images/lidarPlane.eps, scale=0.6}
-%                \caption{A gull}
-%                \label{fig:gull}
-%        \end{subfigure}%
-%        ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc.
-%          %(or a blank line to force the subfigure onto a new line)
-%        \begin{subfigure}[b]{0.3\textwidth}
-%                \includegraphics[width=\textwidth]{tiger}
-%                \caption{A tiger}
-%                \label{fig:tiger}
-%        \end{subfigure}
-%        ~ %add desired spacing between images, e. g. ~, \quad, \qquad, \hfill etc.
-%          %(or a blank line to force the subfigure onto a new line)
-%        \begin{subfigure}[b]{0.3\textwidth}
-%                \includegraphics[width=\textwidth]{mouse}
-%                \caption{A mouse}
-%                \label{fig:mouse}
-%        \end{subfigure}
-%        \caption{Pictures of animals}\label{fig:animals}
-%\end{figure}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Data Variety}
-
-As of 
-
-
-%\begin{table}[h!]
-%\caption{How to align decimals in a numerical column}\label{tb1}
-%  \begin{tabular}{p{3 in} r@{.}l c}
-% \hline
-% Category & \multicolumn{2}{c}{Result}  & \hspace{2.2 in} \\
-% \hline
-%  first & 3&14159 & \hspace{2.2 in} \\
-%  second & 16&2 & \hspace{2.2 in} \\
-%  third & 123&456 & \hspace{2.2 in} \\
-%  \hline
-%  \end{tabular}
-%\end{table}
-%
-%
-%\begin{figure}[htbp]
-%  \centering
-%    \includegraphics[width=3in, scale=0.5]{images/LaTeX2e_logo.eps}
-%    \caption[\LaTeX 2\ensuremath{\epsilon} logo(resized for no reason)]{\LaTeX 2\ensuremath{\epsilon} logo, resized for no reason. This caption is being extended in order to test that it has the correct indentation.}
-%\end{figure}
-
-
-
-
-
-%
-%\begin{figure}[htbp]
-%  \begin{center}
-%    \centering
-%    \mbox{
-%      \subfigure[]{\epsfig{file=images/mouse.eps, scale=0.6}} \quad
-%      \subfigure[]{\begin{turn}{20}\epsfig{file=images/mouse.eps, scale=0.6}\end{turn}} \quad
-%     }
-%    \mbox{
-%      \subfigure[]{\begin{turn}{-20}\epsfig{file=images/cat.eps, scale=3}\end{turn}} \quad
-%      \subfigure[]{\begin{turn}{-10}\epsfig{file=images/mouse.eps, scale=0.6}\end{turn}} \quad
-%      }
-%    \caption[Tom and Jerry]{Tom and Jerries? A) Mouse 1 B) mouse 2 C) Hungry Cat D) mouse 3}
-%    \label{mice}
-%  \end{center}
-%\end{figure}
-
-\subsection{Markov Logic Network}
-Markov logic network is a probabilistic logic that applies the concept of Markov network to first order logic. For inference, instead of usning intractable algorithms of prolog or lisp, it uses MCMC sampling.
+There are projects that share the same concept but tackle different domains, the most famous of which is GeoDeepDive from Hazy group at Stanford. GeoDeepDive focuses on geographical domain and collects knowledge from thousands of scientific papers.
 
 \section{Proposed Work}
 
+Based on the domain of information sources available in ecological sciences we propose a system architecture to capture the intrinsic nature of ''big data'' to enhance species classification in remote sensing applications. We propose to use the concept of probabilistic knowledge bases to contain knowledge sources as a set of probabilistic rules that we can perform inference on. The architecture will be scalable able to handle millions of facts and rules about various concept of ecological sciences. We also propose to use deep learning to act as a semi-supervised machine learning algorithm. We pretrain the network on all the pixels available both labled and unlabled and then fine-tune its weights using the few labeled data that might be available. In the following chapter we describe the details of our architecture in detail. 
+
 \section{Proposal Structure}
+
+In Chapter \ref{chapter:Introduction} we provide an over view of the problem domain. In Chapter \ref{chapter:Species Classification} we provide our preliminary results on various remote sensing species classification techniques. Chapter \ref{chapter:Information Extraction from Text} provides the details on our information extraction architecture from plain text resources. In Chapter \ref{chapter:Big Data Techniques} we elaborate state-of-the-art techniques for information extraction and deep learning architectures. Finally we descibe the details of our design for the proposed architecture using both probabilistic knowledge bases and deep learning architectures in Chapter \ref{chapter:Proposed Work}. 
+
+
 
 % Mapping the spatial distribution of plant species in savannas provides insight into the roles of competition, fire, herbivory, soils and climate in maintaining the biodiversity of these ecosystems. 
  
@@ -183,7 +97,7 @@ Markov logic network is a probabilistic logic that applies the concept of Markov
  
 %%% Invasive plant species can change entire habitats by penetrating the native canopy and eventually replacing it [1]. At times, fundamental ecosystem processes such as nitrogen (N) cycling as well as disturbance regimes such as fire frequency are altered by the introduced species, resulting in a major change in biological diversity and ecosystem functioning [2].
  
-% Effective management of introduced species starts with monitoring and mapping, which is a central component of the biological diversity protection programs of many government agencies and non- governmental organizations worldwide [3]. Remote detection and mapping of biodiversity and invasive species from airborne or spaceborne instruments is promising (review by [4]), but operational approaches are lacking because of our limited biophysical understanding of when remotely sensed signatures indicate the presence of unique species—native or invasive—within and across ecosystems. The spectra express the biochemical and structural properties of the vegetation, but translating that to species composition requires an increased understanding of the """""""spectral separability""""""""" of species at different levels of ecological and taxonomic aggregation.
+% Effective management of introduced species starts with monitoring and mapping, which is a central component of the biological diversity protection programs of many government agencies and non- governmental organizations worldwide [3]. Remote detection and mapping of biodiversity and invasive species from airborne or spaceborne instruments is promising (review by [4]), but  operational approaches are lacking because of our limited biophysical understanding of when remotely sensed signatures indicate the presence of unique species—native or invasive—within and across ecosystems. The spectra express the biochemical and structural properties of the vegetation, but translating that to species composition requires an increased understanding of the """""""spectral separability""""""""" of species at different levels of ecological and taxonomic aggregation.
  
  
 %%%% Tropical forests store a large proportion of terrestrial carbon. For example, Dixon et al. (1994) estimated that low-latitude tropical forests contain 59\% and 27\% of carbon stored in global forest vegetation and soil pools, respectively. There still remains considerable uncertainty in global and regional estimates of carbon stocks and dynamics. 

@@ -1,8 +1,18 @@
 \chapter{Big Data Techniques}
+\label{chapter:Big Data Techniques}
+
 
 In this chapter we introduce the tools that we will be using to accomplish the proposal.
 
 \section{Markov Logic Networks}
 as first order logic software systems become intractable with not so large set of rules and without even probabilities mln adds probabilities and uses mcmc to tackle scalability.
+
+
+Markov logic network is a probabilistic logic that applies the concept of Markov network to first order logic. For inference, instead of usning intractable algorithms of prolog or lisp, it uses MCMC sampling.
+
+if initial weights are wrong it is called apriori weights, over time by adding more data, aposteriory weigts and probabilities will be fixed according to data.
+
+there has been plenty of research on first order logic inference and tools such as prolog and lisp have been developed to address this need. The problem with those is that they are highly sensitive to input rule correctness or otherwise they might fall into infinite un-resolutable search spaces. even in the cases of correct rules, search space grows exponentially with the number of parameters and rules and beyond certain thresholdsthey become intractable to compute. Other techniques such as bayesian and graphical models address the rules with a probability assigned to them but they grow exponentially with the number of parameters and variabels in the number for inference purposes. What sampling techniques such as MCMC and graphical models such as MLN do is to use a statistical framwork to derive the probability of queries whether it is MAP or marginal inference. This enables us to achieve as much goodness as we are willing to wait for. Which in reality is pretty good estimates of probabilities in real applications.
+
 \section{Deep Learning}
 use large amounts of data at hand.
